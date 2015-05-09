@@ -22,10 +22,6 @@
         <postgresql.driver.version>9.3-1102-jdbc41</postgresql.driver.version>
 
         <flyway.version>3.2.1</flyway.version>
-        <db.url>jdbc:postgresql://localhost:5432/</db.url>
-        <db.user>urujdas</db.user>
-        <db.password>urujdas</db.password>
-        <db.database>urujdas</db.database>
     </properties>
 
     <dependencies>
@@ -127,10 +123,52 @@
             <scope>test</scope>
         </dependency>
         <!--Testing end-->
+
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-commandline</artifactId>
+            <version>${flyway.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>${flyway.version}</version>
+
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>migrate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <url>jdbc:postgresql://${DB_HOSTNAME}/${DB_DATABASE}</url>
+                    <user>${DB_USER}</user>
+                    <password>${DB_PASSWORD}</password>
+                    <schemas>
+                        <schema>public</schema>
+                    </schemas>
+                    <locations>
+                        <location>filesystem:${project.basedir}/flyway/deltas</location>
+                    </locations>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${postgresql.driver.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
             <plugin>
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>
@@ -146,9 +184,9 @@
                 <configuration>
                     <jdbc>
                         <driver>org.postgresql.Driver</driver>
-                        <url>${db.url}</url>
-                        <user>${db.user}</user>
-                        <password>${db.password}</password>
+                        <url>jdbc:postgresql://${DB_HOSTNAME}/${DB_DATABASE}</url>
+                        <user>${DB_USER}</user>
+                        <password>${DB_PASSWORD}</password>
                     </jdbc>
 
                     <generator>
@@ -183,6 +221,7 @@
                             <packageName>urujdas</packageName>
                             <directory>target/generated-sources/jooq</directory>
                         </target>
+
                     </generator>
 
                 </configuration>
@@ -194,7 +233,53 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4.1</version>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <finalName>deployment</finalName>
+                    <descriptors>
+                        <descriptor>src/main/resources/assembly.xml</descriptor>
+                    </descriptors>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>org.flywaydb</groupId>
+                        <artifactId>flyway-commandline</artifactId>
+                        <version>${flyway.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18.1</version>
+
+                <configuration>
+                    <environmentVariables>
+                        <DB_HOSTNAME>${DB_HOSTNAME}</DB_HOSTNAME>
+                        <DB_DATABASE>${DB_DATABASE}</DB_DATABASE>
+                        <DB_USER>${DB_USER}</DB_USER>
+                        <DB_PASSWORD>${DB_PASSWORD}</DB_PASSWORD>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -215,39 +300,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>rebuild-local-db</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.flywaydb</groupId>
-                        <artifactId>flyway-maven-plugin</artifactId>
-                        <version>${flyway.version}</version>
-                        <configuration>
-                            <url>${db.url}</url>
-                            <user>${db.user}</user>
-                            <password>${db.password}</password>
-                            <schemas>
-                                <schema>public</schema>
-                            </schemas>
-                            <locations>
-                                <location>filesystem:${project.basedir}/deltas</location>
-                            </locations>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.postgresql</groupId>
-                                <artifactId>postgresql</artifactId>
-                                <version>${postgresql.driver.version}</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
     <dependencyManagement>
         <dependencies>

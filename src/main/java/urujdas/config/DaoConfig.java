@@ -28,18 +28,26 @@ import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan("urujdas.dao")
-public class DaoConfig {
+public class  DaoConfig {
 
     @Bean
     public DataSource dataSource() {
         try {
             Class.forName("org.postgresql.ds.PGSimpleDataSource");
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot load postgres data source", e);
+        }
+        String dbHostname = System.getenv("DB_HOSTNAME");
+        String dbDatabase = System.getenv("DB_DATABASE");
+        String dbUser = System.getenv("DB_USER");
+        String dbPassword = System.getenv("DB_PASSWORD");
+
+        String jdbcUrl = "jdbc:postgresql://" + dbHostname + "/" + dbDatabase;
 
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:postgresql://localhost:5432/urujdas");
-        config.setUsername("urujdas");
-        config.setPassword("urujdas");
+        config.setJdbcUrl(jdbcUrl);
+        config.setUsername(dbUser);
+        config.setPassword(dbPassword);
 
         return new HikariDataSource(config);
     }
