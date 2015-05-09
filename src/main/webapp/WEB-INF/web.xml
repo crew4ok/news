@@ -15,7 +15,7 @@
         </init-param>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>news.config</param-value>
+            <param-value>urujdas.config</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>

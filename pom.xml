@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>news</groupId>
-    <artifactId>news</artifactId>
+    <groupId>urujdas</groupId>
+    <artifactId>urujdas-server</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
@@ -23,9 +23,9 @@
 
         <flyway.version>3.2.1</flyway.version>
         <db.url>jdbc:postgresql://localhost:5432/</db.url>
-        <db.user>news</db.user>
-        <db.password>news</db.password>
-        <db.database>news</db.database>
+        <db.user>urujdas</db.user>
+        <db.password>urujdas</db.password>
+        <db.database>urujdas</db.database>
     </properties>
 
     <dependencies>
@@ -106,19 +106,19 @@
         </dependency>
         <!--Logging end-->
 
-        <!--Common-->
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>2.5</version>
+            <groupId>net.karneim</groupId>
+            <artifactId>pojobuilder</artifactId>
+            <version>3.4.0</version>
+            <scope>provided</scope>
         </dependency>
-        <!--Common end-->
 
         <!--Testing-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
@@ -152,20 +152,35 @@
                     </jdbc>
 
                     <generator>
+
+                        <strategy>
+                            <matchers>
+                                <tables>
+                                    <table>
+                                        <expression>^(.*)$</expression>
+                                        <tableClass>
+                                            <transform>PASCAL</transform>
+                                            <expression>$0_Table</expression>
+                                        </tableClass>
+                                    </table>
+                                </tables>
+                            </matchers>
+                        </strategy>
+
                         <database>
                             <name>org.jooq.util.postgres.PostgresDatabase</name>
                             <includes>.*</includes>
                             <excludes/>
-                            <inputSchema>news</inputSchema>
+                            <inputSchema>public</inputSchema>
                         </database>
 
                         <generate>
                             <instanceFields>true</instanceFields>
-                            <pojos>true</pojos>
+                            <pojos>false</pojos>
                         </generate>
 
                         <target>
-                            <packageName>news</packageName>
+                            <packageName>urujdas</packageName>
                             <directory>target/generated-sources/jooq</directory>
                         </target>
                     </generator>
@@ -215,7 +230,7 @@
                             <user>${db.user}</user>
                             <password>${db.password}</password>
                             <schemas>
-                                <schema>${db.database}</schema>
+                                <schema>public</schema>
                             </schemas>
                             <locations>
                                 <location>filesystem:${project.basedir}/deltas</location>

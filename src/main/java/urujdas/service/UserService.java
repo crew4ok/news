@@ -1,6 +1,6 @@
-package news.service;
+package urujdas.service;
 
-import news.tables.pojos.User;
+import urujdas.model.User;
 
 public interface UserService {
 
