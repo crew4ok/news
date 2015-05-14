@@ -8,6 +8,8 @@ import urujdas.config.DaoConfig;
 import urujdas.model.Gender;
 import urujdas.model.User;
 
+import static org.junit.Assert.assertNotNull;
+
 @ContextConfiguration(classes = DaoConfig.class)
 public class UserDaoTest extends AbstractTransactionalTestNGSpringContextTests {
 
@@ -16,7 +18,7 @@ public class UserDaoTest extends AbstractTransactionalTestNGSpringContextTests {
 
     @Test
     public void getById() {
-        Long id = userDao.create(
+        userDao.create(
                 User.builder()
                         .withUsername("crew4ok")
                         .withPassword("asfd")
@@ -24,7 +26,8 @@ public class UserDaoTest extends AbstractTransactionalTestNGSpringContextTests {
                         .build()
         );
 
-        User user = userDao.getById(id);
-        System.out.println(user);
+        User user = userDao.getByUsername("crew4ok");
+
+        assertNotNull(user);
     }
 }

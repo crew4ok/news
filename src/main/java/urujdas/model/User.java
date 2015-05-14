@@ -3,38 +3,46 @@ package urujdas.model;
 import net.karneim.pojobuilder.GeneratePojoBuilder;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.OptionalLong;
 
 public class User {
-    private final Long id;
+    private final Optional<Long> id;
     private final String username;
     private final String password;
 
-    private final String firstname;
-    private final String lastname;
+    private final Optional<String> firstname;
+    private final Optional<String> lastname;
 
-    private final LocalDateTime birthDate;
+    private final Optional<LocalDateTime> birthDate;
 
-    private final String email;
+    private final Optional<String> email;
 
-    private final Gender gender;
+    private final Optional<Gender> gender;
 
-    private final String phone;
+    private final Optional<String> phone;
 
     @GeneratePojoBuilder
     User(Long id, String username, String password, String firstname, String lastname, LocalDateTime birthDate,
-                String email, Gender gender, String phone) {
-        this.id = id;
+         String email, Gender gender, String phone) {
+
+        if (username == null
+                || password == null) {
+            throw new RuntimeException("Required fields are empty");
+        }
+
+        this.id = Optional.ofNullable(id);
         this.username = username;
         this.password = password;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.birthDate = birthDate;
-        this.email = email;
-        this.gender = gender;
-        this.phone = phone;
+        this.firstname = Optional.ofNullable(firstname);
+        this.lastname = Optional.ofNullable(lastname);
+        this.birthDate = Optional.ofNullable(birthDate);
+        this.email = Optional.ofNullable(email);
+        this.gender = Optional.ofNullable(gender);
+        this.phone = Optional.ofNullable(phone);
     }
 
-    public Long getId() {
+    public Optional<Long> getId() {
         return id;
     }
 
@@ -46,27 +54,27 @@ public class User {
         return password;
     }
 
-    public String getFirstname() {
+    public Optional<String> getFirstname() {
         return firstname;
     }
 
-    public String getLastname() {
+    public Optional<String> getLastname() {
         return lastname;
     }
 
-    public LocalDateTime getBirthDate() {
+    public Optional<LocalDateTime> getBirthDate() {
         return birthDate;
     }
 
-    public String getEmail() {
+    public Optional<String> getEmail() {
         return email;
     }
 
-    public Gender getGender() {
+    public Optional<Gender> getGender() {
         return gender;
     }
 
-    public String getPhone() {
+    public Optional<String> getPhone() {
         return phone;
     }
 

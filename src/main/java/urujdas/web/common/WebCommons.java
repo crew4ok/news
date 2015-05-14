@@ -1,0 +1,7 @@
+package urujdas.web.common;
+
+public final class WebCommons {
+    private WebCommons() { }
+
+    public static final String VERSION_PREFIX = "/v1";
+}

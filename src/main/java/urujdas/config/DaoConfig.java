@@ -4,25 +4,19 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jooq.ConnectionProvider;
 import org.jooq.DSLContext;
+import org.jooq.RecordMapperProvider;
 import org.jooq.SQLDialect;
-import org.jooq.Transaction;
-import org.jooq.TransactionContext;
 import org.jooq.TransactionProvider;
-import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DataSourceConnectionProvider;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.impl.DefaultDSLContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+import urujdas.dao.impl.jooq.JooqRecordMapperProvider;
+import urujdas.dao.impl.jooq.JooqTransactionProvider;
 
 import javax.sql.DataSource;
 
@@ -43,6 +37,13 @@ public class  DaoConfig {
         String dbPassword = System.getenv("DB_PASSWORD");
 
         String jdbcUrl = "jdbc:postgresql://" + dbHostname + "/" + dbDatabase;
+
+        if (dbHostname == null
+                || dbDatabase == null
+                || dbUser == null
+                || dbPassword == null) {
+            throw new RuntimeException("Environment variables are incorrect");
+        }
 
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(jdbcUrl);
@@ -78,48 +79,17 @@ public class  DaoConfig {
                 .set(SQLDialect.POSTGRES_9_3)
                 .set(connectionProvider())
                 .set(transactionProvider())
+                .set(jooqRecordMapperProvider())
                 .derive();
     }
 
     @Bean
-    public TransactionProvider transactionProvider() {
-        return new TransactionProvider() {
-            private final Logger LOGGER = LoggerFactory.getLogger(TransactionProvider.class);
-
-            @Autowired
-            private DataSourceTransactionManager transactionManager;
-
-            @Override
-            public void begin(TransactionContext ctx) throws DataAccessException {
-                LOGGER.info("starting transaction");
-
-                TransactionStatus transaction = transactionManager.getTransaction(
-                        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_NESTED));
-
-                ctx.transaction(new SpringTransaction(transaction));
-            }
-
-            @Override
-            public void commit(TransactionContext ctx) throws DataAccessException {
-                LOGGER.info("committing transaction");
-
-                transactionManager.commit(((SpringTransaction)ctx.transaction()).tx);
-            }
-
-            @Override
-            public void rollback(TransactionContext ctx) throws DataAccessException {
-                LOGGER.info("rollbacking transaction");
-
-                transactionManager.rollback(((SpringTransaction) ctx.transaction()).tx);
-            }
-        };
+    public RecordMapperProvider jooqRecordMapperProvider() {
+        return new JooqRecordMapperProvider();
     }
 
-    private static class SpringTransaction implements Transaction {
-        final TransactionStatus tx;
-
-        public SpringTransaction(TransactionStatus tx) {
-            this.tx = tx;
-        }
+    @Bean
+    public TransactionProvider transactionProvider() {
+        return new JooqTransactionProvider();
     }
 }
