@@ -1,4 +1,4 @@
-package urujdas.web.common.model;
+package urujdas.web.common.model.error;
 
 public class ErrorResponse {
     private final ErrorType errorType;

@@ -1,39 +1,40 @@
 package urujdas.dao.impl.jooq.mappers;
 
+import org.jooq.Record;
 import org.jooq.RecordMapper;
 import urujdas.model.Gender;
 import urujdas.model.User;
+import urujdas.tables.UsersTable;
 import urujdas.tables.records.UsersRecord;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
-public class UserRecordMapper implements RecordMapper<UsersRecord, User> {
+import static urujdas.tables.UsersTable.USERS;
+
+public class UserRecordMapper implements RecordMapper<Record, User> {
 
     @Override
-    public User map(UsersRecord record) {
-        Timestamp birthdateTimestamp = record.getBirthdate();
-        LocalDateTime birthday = null;
-        if (birthdateTimestamp != null) {
-            birthday = birthdateTimestamp.toLocalDateTime();
-        }
+    public User map(Record record) {
+        LocalDateTime birthDate = Optional.ofNullable(record.getValue(USERS.BIRTH_DATE))
+                .map(Timestamp::toLocalDateTime)
+                .orElse(null);
 
-        String genderStr = record.getGender();
-        Gender gender = null;
-        if (genderStr != null) {
-            gender = Gender.valueOf(genderStr);
-        }
+        Gender gender = Optional.ofNullable(record.getValue(USERS.GENDER))
+                .map(Gender::valueOf)
+                .orElse(null);
 
         return User.builder()
-                .withId(record.getId())
-                .withUsername(record.getUsername())
-                .withPassword(record.getPassword())
-                .withFirstname(record.getFirstname())
-                .withLastname(record.getLastname())
-                .withBirthDate(birthday)
-                .withEmail(record.getEmail())
+                .withId(record.getValue(USERS.ID))
+                .withUsername(record.getValue(USERS.USERNAME))
+                .withPassword(record.getValue(USERS.PASSWORD))
+                .withFirstname(record.getValue(USERS.FIRSTNAME))
+                .withLastname(record.getValue(USERS.LASTNAME))
+                .withBirthDate(birthDate)
+                .withEmail(record.getValue(USERS.EMAIL))
                 .withGender(gender)
-                .withPhone(record.getPhonenumber())
+                .withPhone(record.getValue(USERS.PHONE))
                 .build();
     }
 }

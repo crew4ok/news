@@ -1,6 +1,9 @@
 package urujdas.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import urujdas.dao.UserDao;
@@ -15,6 +18,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Override
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        return this.getByUsername(username);
+    }
+
     @Override
     public User getById(Long id) {
         return userDao.getById(id);
@@ -22,17 +36,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getByUsername(String username) {
+        if (username == null) {
+            return null;
+        }
         return userDao.getByUsername(username);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void register(User newUser) {
-        User user = userDao.getByUsername(newUser.getUsername());
-        if (user != null){
+        if (userDao.getByUsername(newUser.getUsername()) != null){
             throw new UserAlreadyExistsException();
         }
 
-        userDao.create(newUser);
+        User userWithEncodedPassword = User.fromUser(newUser)
+                .withPassword(passwordEncoder.encode(newUser.getPassword()))
+                .build();
+
+        userDao.create(userWithEncodedPassword);
     }
 }

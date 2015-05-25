@@ -2,11 +2,11 @@ package urujdas.web.user.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sun.istack.internal.NotNull;
 import net.karneim.pojobuilder.GeneratePojoBuilder;
 import urujdas.model.Gender;
-import urujdas.web.common.model.RegisterUserRequestBuilder;
+import urujdas.model.User;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public class RegisterUserRequest {
@@ -78,6 +78,19 @@ public class RegisterUserRequest {
 
     public String getPhone() {
         return phone;
+    }
+
+    public User toUser() {
+        return User.builder()
+                .withUsername(username)
+                .withPassword(password)
+                .withFirstname(firstname)
+                .withLastname(lastname)
+                .withBirthDate(birthDate)
+                .withEmail(email)
+                .withGender(gender)
+                .withPhone(phone)
+                .build();
     }
 
     public static RegisterUserRequestBuilder builder() {

@@ -8,7 +8,9 @@
 
     <logger name="org.springframework" level="WARN"/>
 
-    <root level="warn">
+    <logger name="urujdas" level="DEBUG"/>
+
+    <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

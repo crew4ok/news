@@ -18,11 +18,13 @@ import urujdas.config.WebConfig;
 import urujdas.model.User;
 import urujdas.service.UserService;
 import urujdas.service.exception.UserAlreadyExistsException;
+import urujdas.web.common.CommonExceptionHandler;
 import urujdas.web.common.WebCommons;
-import urujdas.web.user.model.RegisterUserRequest;
 import urujdas.web.user.RegistrationController;
+import urujdas.web.user.model.RegisterUserRequest;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -68,7 +70,27 @@ public class RegistrationControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        verify(userService).register(any(User.class));
+        User expectedUser = User.builder()
+                .withUsername(registerUserRequest.getUsername())
+                .withPassword(registerUserRequest.getPassword())
+                .build();
+
+        verify(userService).register(eq(expectedUser));
+    }
+
+    @Test
+    public void register_notValid() throws Exception {
+        RegisterUserRequest registerUserRequest = RegisterUserRequest.builder()
+                .withUsername("username")
+                .build();
+
+        String requestInJson = toJson(registerUserRequest);
+
+        mockMvc.perform(post(WebCommons.VERSION_PREFIX + "/register")
+                .content(requestInJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -85,7 +107,7 @@ public class RegistrationControllerTest {
         mockMvc.perform(post(WebCommons.VERSION_PREFIX + "/register")
                 .content(requestInJson)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("errorType").value("USER_ALREADY_EXISTS"));
 
         verify(userService).register(any(User.class));
@@ -100,6 +122,11 @@ public class RegistrationControllerTest {
         @Bean
         public RegistrationController registrationController() {
             return new RegistrationController();
+        }
+
+        @Bean
+        public CommonExceptionHandler commonExceptionHandler() {
+            return new CommonExceptionHandler();
         }
 
         @Bean

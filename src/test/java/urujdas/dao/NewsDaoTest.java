@@ -1,0 +1,543 @@
+package urujdas.dao;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import urujdas.config.DaoConfig;
+import urujdas.dao.impl.NewsCategoryDaoImpl;
+import urujdas.dao.impl.NewsDaoImpl;
+import urujdas.dao.impl.SubscriptionDaoImpl;
+import urujdas.dao.impl.UserDaoImpl;
+import urujdas.model.News;
+import urujdas.model.NewsCategory;
+import urujdas.model.Subscription;
+import urujdas.model.User;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
+
+@ContextConfiguration(classes = {
+        DaoConfig.class,
+        NewsDaoTest.LocalContext.class
+})
+public class NewsDaoTest extends AbstractTransactionalTestNGSpringContextTests {
+
+    @Autowired
+    private NewsDao newsDao;
+
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private SubscriptionDao subscriptionDao;
+
+    @Autowired
+    private NewsCategoryDao newsCategoryDao;
+
+    private User defaultUser;
+    private NewsCategory defaultNewsCategory;
+
+    @BeforeMethod
+    public void setup() {
+        this.defaultUser = createDefaultUser();
+        this.defaultNewsCategory = createDefaultNewsCategory();
+    }
+
+    /*
+    *
+    * NewsDao.getById
+    *
+    */
+
+    @Test
+    public void getById_hp() throws Exception {
+        News news = News.builder()
+                .withTitle("title")
+                .withBody("body")
+                .withCreationDate(LocalDateTime.now())
+                .withLocation("location")
+                .withLikesCount(1)
+                .withAuthor(defaultUser)
+                .withCategory(defaultNewsCategory)
+                .build();
+
+        Long id = newsDao.create(news).getId();
+
+        News actualNews = newsDao.getById(id);
+
+        // likes should not be set
+        assertEquals(actualNews.getLikesCount(), Integer.valueOf(0));
+
+        assertEquals(actualNews.getTitle(), news.getTitle());
+        assertEquals(actualNews.getBody(), news.getBody());
+        assertEquals(actualNews.getCreationDate(), news.getCreationDate());
+        assertEquals(actualNews.getLocation(), news.getLocation());
+        assertEquals(actualNews.getAuthor(), defaultUser);
+        assertEquals(actualNews.getCategory(), defaultNewsCategory);
+    }
+
+    @Test
+    public void getById_notFound() throws Exception {
+        News news = newsDao.getById(1L);
+
+        assertNull(news);
+    }
+
+    /*
+    *
+    * NewsDao.getLatestAll
+    *
+    */
+
+    @Test
+    public void getLatestAll_hp() {
+        int totalCount = 5;
+        int latestCount = 2;
+
+        for (int i = 1; i <= totalCount; i++) {
+            createDefaultNews(i);
+        }
+
+        List<News> latestNews = newsDao.getLatestAll(latestCount);
+
+        assertEquals(latestNews.size(), 2);
+
+        System.out.println(latestNews);
+
+        News first = latestNews.get(0);
+        News second = latestNews.get(1);
+
+        assertEquals(first.getTitle(), "title5");
+        assertEquals(second.getTitle(), "title4");
+    }
+
+    @Test
+    public void getLatestAll_newsCountIsLesserThanRequested() throws Exception {
+        createDefaultNews(0);
+
+        List<News> latest = newsDao.getLatestAll(2);
+
+        assertEquals(latest.size(), 1);
+
+        News first = latest.get(0);
+
+        assertEquals(first.getTitle(), "title0");
+    }
+
+    @Test
+    public void getLatestAll_empty() throws Exception {
+        List<News> latest = newsDao.getLatestAll(100);
+
+        assertEquals(latest.size(), 0);
+    }
+
+    /*
+    *
+    * NewsDao.getAllFromId
+    *
+    */
+
+    @Test
+    public void getAllFromId_hp() throws Exception {
+        int totalCount = 10;
+        int to = 6;
+        int count = 5;
+
+        for (int i = 1; i <= totalCount; i++) {
+            createDefaultNews(i);
+        }
+
+        List<Long> allIds = newsDao.getLatestAll(100).stream()
+                .map(News::getId)
+                .sorted()
+                .collect(Collectors.toList());
+
+        List<Long> expectedIds = allIds.subList(to - count, to);
+
+        List<News> news = newsDao.getAllFromId(expectedIds.get(expectedIds.size() - 1), count);
+
+        assertEquals(news.size(), count);
+
+        Collections.sort(news, (News n1, News n2) -> n1.getId().compareTo(n2.getId()));
+
+        for (int i = 0; i < news.size(); i++) {
+            News actualNews = news.get(i);
+            Long expectedId = expectedIds.get(i);
+
+            assertEquals(actualNews.getId(), expectedId);
+            assertEquals(actualNews.getBody(), "body");
+            assertNotNull(actualNews.getCreationDate());
+        }
+    }
+
+    /*
+    *
+    * NewsDao.getLatestByUser
+    *
+    */
+
+    @Test
+    public void getLatestByUser_hp() throws Exception {
+        int totalCount = 5;
+        int latestCount = 2;
+
+        List<News> news = IntStream.range(0, totalCount)
+                .mapToObj(this::createDefaultNews)
+                .collect(Collectors.toList());
+
+        List<News> latestNews = news.subList(news.size() - latestCount, news.size());
+        Collections.reverse(latestNews);
+
+        List<News> actualLatestNews = newsDao.getLatestByUser(defaultUser, latestCount);
+
+        assertEquals(actualLatestNews, latestNews);
+    }
+
+    @Test
+    public void getLatestByUser_newsCountIsLesserThanRequested() throws Exception {
+        int totalCount = 3;
+        int latestCount = 5;
+
+        List<News> news = IntStream.range(0, totalCount)
+                .mapToObj(this::createDefaultNews)
+                .collect(Collectors.toList());
+
+        Collections.reverse(news);
+
+        List<News> actualLatestNews = newsDao.getLatestByUser(defaultUser, latestCount);
+
+        assertEquals(actualLatestNews, news);
+    }
+
+    @Test
+    public void getLatestByUser_noNews() throws Exception {
+        List<News> latestNews = newsDao.getLatestByUser(defaultUser, 5);
+
+        assertTrue(latestNews.isEmpty());
+    }
+
+    /*
+    *
+    * NewsDao.getByUserFromId
+    *
+    */
+
+    @Test
+    public void getByUserFromId_hp() throws Exception {
+        int totalCount = 10;
+        int from = 3;
+        int count = 5;
+
+        List<News> news = IntStream.range(0, totalCount)
+                .mapToObj(this::createDefaultNews)
+                .collect(Collectors.toList());
+
+        Collections.reverse(news);
+
+        List<News> expectedNews = news.subList(from, from + count);
+
+        Long fromId = expectedNews.get(0).getId();
+
+        List<News> actualNews = newsDao.getByUserFromId(defaultUser, fromId, count);
+
+        assertEquals(actualNews, expectedNews);
+    }
+
+    @Test
+    public void getByUserFromId_newsCountIsLesserThanRequested() throws Exception {
+        int totalCount = 5;
+        int from = 3;
+        int count = 5;
+
+        List<News> news = IntStream.range(0, totalCount)
+                .mapToObj(this::createDefaultNews)
+                .collect(Collectors.toList());
+
+        Collections.reverse(news);
+
+        List<News> expectedNews = news.subList(from, news.size());
+
+        Long fromId = expectedNews.get(0).getId();
+
+        List<News> actualNews = newsDao.getByUserFromId(defaultUser, fromId, count);
+
+        assertEquals(actualNews, expectedNews);
+    }
+
+    @Test
+    public void getByUserFromId_noNews() throws Exception {
+        List<News> news = newsDao.getByUserFromId(defaultUser, 1L, 10);
+
+        assertTrue(news.isEmpty());
+    }
+
+    /*
+    *
+    * NewsDao.getLatestBySubscription
+    *
+    */
+
+    @Test
+    public void getLatestBySubscription_hp() throws Exception {
+        User subscriber = createDefaultUser();
+
+        User firstAuthor = createDefaultUser();
+        User secondAuthor = createDefaultUser();
+
+        subscriptionDao.create(subscriber, firstAuthor);
+        subscriptionDao.create(subscriber, secondAuthor);
+
+        News firstNews = createDefaultNews(firstAuthor, defaultNewsCategory);
+        News secondNews = createDefaultNews(secondAuthor, defaultNewsCategory);
+
+        Subscription subscription = subscriptionDao.getByUser(subscriber);
+
+        List<News> newsBySubscription = newsDao.getLatestBySubscription(subscription, 100);
+
+        assertEquals(newsBySubscription.size(), 2);
+        assertEquals(newsBySubscription, Arrays.asList(secondNews, firstNews));
+    }
+
+    @Test
+    public void getLatestBySubscription_noSubscription() throws Exception {
+        User subscriber = createDefaultUser();
+
+        createDefaultNews(subscriber, defaultNewsCategory);
+        createDefaultNews(subscriber, defaultNewsCategory);
+
+        Subscription subscription = subscriptionDao.getByUser(subscriber);
+
+        List<News> newsBySubscription = newsDao.getLatestBySubscription(subscription, 100);
+
+        assertTrue(newsBySubscription.isEmpty());
+    }
+
+    @Test
+    public void getLatestBySubscription_noNews() throws Exception {
+        User subscriber = createDefaultUser();
+
+        User firstAuthor = createDefaultUser();
+        User secondAuthor = createDefaultUser();
+
+        subscriptionDao.create(subscriber, firstAuthor);
+        subscriptionDao.create(subscriber, secondAuthor);
+
+        Subscription subscription = subscriptionDao.getByUser(subscriber);
+
+        List<News> newsBySubscription = newsDao.getLatestBySubscription(subscription, 100);
+
+        assertTrue(newsBySubscription.isEmpty());
+    }
+
+    /*
+    *
+    * NewsDao.getBySubscriptionFromId
+    *
+    */
+
+    @Test
+    public void getBySubscriptionFromId_hp() throws Exception {
+        int totalCountPerAuthor = 5;
+        int from = 3;
+        int count = 5;
+
+        User firstAuthor = createDefaultUser();
+        User secondAuthor = createDefaultUser();
+
+        subscriptionDao.create(defaultUser, firstAuthor);
+        subscriptionDao.create(defaultUser, secondAuthor);
+
+        List<News> news = new ArrayList<>();
+        for (int i = 0; i < totalCountPerAuthor * 2; i++) {
+            News firstAuthorNews = createDefaultNews(firstAuthor, defaultNewsCategory);
+            News secondAuthorNews = createDefaultNews(secondAuthor, defaultNewsCategory);
+
+            news.add(firstAuthorNews);
+            news.add(secondAuthorNews);
+        }
+        Collections.reverse(news);
+        Long fromId = news.get(from).getId();
+        List<News> expectedNews = news.subList(from, from + count);
+
+        Subscription subscription = subscriptionDao.getByUser(defaultUser);
+        List<News> actualNews = newsDao.getBySubscriptionFromId(subscription, fromId, count);
+
+        assertEquals(actualNews, expectedNews);
+    }
+
+    @Test
+    public void getBySubscriptionFromId_newsCountIsLesserThanRequested() throws Exception {
+        int totalCountPerAuthor = 2;
+        int from = 3;
+        int count = 6;
+
+        User firstAuthor = createDefaultUser();
+        User secondAuthor = createDefaultUser();
+
+        subscriptionDao.create(defaultUser, firstAuthor);
+        subscriptionDao.create(defaultUser, secondAuthor);
+
+        List<News> news = new ArrayList<>();
+        for (int i = 0; i < totalCountPerAuthor * 2; i++) {
+            News firstAuthorNews = createDefaultNews(firstAuthor, defaultNewsCategory);
+            News secondAuthorNews = createDefaultNews(secondAuthor, defaultNewsCategory);
+
+            news.add(firstAuthorNews);
+            news.add(secondAuthorNews);
+        }
+        Collections.reverse(news);
+        Long fromId = news.get(from).getId();
+        List<News> expectedNews = news.subList(from, news.size());
+
+        Subscription subscription = subscriptionDao.getByUser(defaultUser);
+        List<News> actualNews = newsDao.getBySubscriptionFromId(subscription, fromId, count);
+
+        assertEquals(actualNews, expectedNews);
+    }
+
+    @Test
+    public void getBySubscriptionFromId_noSubscription() throws Exception {
+        Subscription subscription = subscriptionDao.getByUser(defaultUser);
+        List<News> news = newsDao.getBySubscriptionFromId(subscription, 1L, 10);
+
+        assertTrue(news.isEmpty());
+    }
+
+    /*
+    *
+    * NewsDao.getLatestFavourites
+    *
+    */
+
+    @Test
+    public void getLatestFavourites_hp() throws Exception {
+        int totalCount = 5;
+        int count = 3;
+
+        List<News> favourites = new ArrayList<>();
+        for (int i = 0; i < totalCount; i++) {
+            News news = createDefaultNews(defaultUser, defaultNewsCategory);
+            if (i % 2 == 0) {
+                newsDao.addToFavourites(defaultUser, news);
+                favourites.add(news);
+            }
+        }
+        Collections.reverse(favourites);
+
+        List<News> expectedFavourites = favourites.subList(0, count);
+
+        List<News> actualFavourites = newsDao.getLatestFavourites(defaultUser, count);
+
+        assertEquals(actualFavourites, expectedFavourites);
+    }
+
+    @Test
+    public void getLatestFavourites_noFavourites() throws Exception {
+        List<News> latestFavourites = newsDao.getLatestFavourites(defaultUser, 10);
+
+        assertTrue(latestFavourites.isEmpty());
+    }
+
+    /*
+    *
+    * NewsDao.getFavouritesFromId
+    *
+    */
+
+    @Test
+    public void getFavouritesFromId_hp() throws Exception {
+        int totalCount = 12;
+        int count = 3;
+        int from = 3;
+
+        List<News> favourites = new ArrayList<>();
+        for (int i = 0; i < totalCount; i++) {
+            News news = createDefaultNews(defaultUser, defaultNewsCategory);
+            if (i % 2 == 0) {
+                newsDao.addToFavourites(defaultUser, news);
+                favourites.add(news);
+            }
+        }
+        Collections.reverse(favourites);
+
+        List<News> expectedFavourites = favourites.subList(from, from + count);
+        Long fromId = expectedFavourites.get(0).getId();
+
+        List<News> actualFavourites = newsDao.getFavouritesFromId(defaultUser, fromId, count);
+
+        assertEquals(actualFavourites, expectedFavourites);
+    }
+
+    private News createDefaultNews(User author, NewsCategory newsCategory) {
+        News news = News.builder()
+                .withTitle("title")
+                .withBody("body")
+                .withCreationDate(LocalDateTime.now())
+                .withCategory(newsCategory)
+                .withAuthor(author)
+                .build();
+        return newsDao.create(news);
+    }
+
+    private News createDefaultNews(int i) {
+        News news = News.builder()
+                .withTitle("title" + i)
+                .withBody("body")
+                .withCreationDate(LocalDateTime.now())
+                .withAuthor(defaultUser)
+                .withCategory(defaultNewsCategory)
+                .build();
+        return newsDao.create(news);
+    }
+
+    private NewsCategory createDefaultNewsCategory() {
+        return newsCategoryDao.create(new NewsCategory(UUID.randomUUID().toString()));
+    }
+
+    private User createDefaultUser() {
+        User user = User.builder()
+                .withUsername(UUID.randomUUID().toString())
+                .withPassword("password")
+                .build();
+        return userDao.create(user);
+    }
+
+    @Configuration
+    static class LocalContext {
+
+        @Bean
+        public NewsDao newsDao() {
+            return new NewsDaoImpl();
+        }
+
+        @Bean
+        public UserDao userDao() {
+            return new UserDaoImpl();
+        }
+
+        @Bean
+        public SubscriptionDao subscriptionDao() {
+            return new SubscriptionDaoImpl();
+        }
+
+        @Bean
+        public NewsCategoryDao newsCategoryDao() {
+            return new NewsCategoryDaoImpl();
+        }
+    }
+}

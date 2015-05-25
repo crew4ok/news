@@ -8,7 +8,6 @@ import urujdas.model.User;
 import urujdas.tables.records.UsersRecord;
 
 import java.sql.Timestamp;
-import java.util.Optional;
 
 import static urujdas.Tables.USERS;
 
@@ -45,17 +44,19 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void create(User user) {
-        ctx.insertInto(USERS)
+    public User create(User user) {
+        return ctx.insertInto(USERS)
                 .set(USERS.USERNAME, user.getUsername())
                 .set(USERS.PASSWORD, user.getPassword())
-                .set(USERS.FIRSTNAME, user.getFirstname().orElse(null))
-                .set(USERS.LASTNAME, user.getLastname().orElse(null))
-                .set(USERS.BIRTHDATE, user.getBirthDate().map(Timestamp::valueOf).orElse(null))
-                .set(USERS.EMAIL, user.getEmail().orElse(null))
-                .set(USERS.GENDER, user.getGender().map(Enum::name).orElse(null))
-                .set(USERS.PHONENUMBER, user.getPhone().orElse(null))
-                .execute();
+                .set(USERS.FIRSTNAME, user.getFirstname())
+                .set(USERS.LASTNAME, user.getLastname())
+                .set(USERS.BIRTH_DATE, user.getBirthDate() != null ? Timestamp.valueOf(user.getBirthDate()) : null)
+                .set(USERS.EMAIL, user.getEmail())
+                .set(USERS.GENDER, user.getGender() != null ? user.getGender().name() : null)
+                .set(USERS.PHONE, user.getPhone())
+                .returning(USERS.fields())
+                .fetchOne()
+                .into(User.class);
     }
 
 

@@ -3,46 +3,38 @@ package urujdas.model;
 import net.karneim.pojobuilder.GeneratePojoBuilder;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.OptionalLong;
 
 public class User {
-    private final Optional<Long> id;
+    private final Long id;
     private final String username;
     private final String password;
 
-    private final Optional<String> firstname;
-    private final Optional<String> lastname;
+    private final String firstname;
+    private final String lastname;
 
-    private final Optional<LocalDateTime> birthDate;
+    private final LocalDateTime birthDate;
 
-    private final Optional<String> email;
+    private final String email;
 
-    private final Optional<Gender> gender;
+    private final Gender gender;
 
-    private final Optional<String> phone;
+    private final String phone;
 
     @GeneratePojoBuilder
     User(Long id, String username, String password, String firstname, String lastname, LocalDateTime birthDate,
          String email, Gender gender, String phone) {
-
-        if (username == null
-                || password == null) {
-            throw new RuntimeException("Required fields are empty");
-        }
-
-        this.id = Optional.ofNullable(id);
+        this.id = id;
         this.username = username;
         this.password = password;
-        this.firstname = Optional.ofNullable(firstname);
-        this.lastname = Optional.ofNullable(lastname);
-        this.birthDate = Optional.ofNullable(birthDate);
-        this.email = Optional.ofNullable(email);
-        this.gender = Optional.ofNullable(gender);
-        this.phone = Optional.ofNullable(phone);
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.birthDate = birthDate;
+        this.email = email;
+        this.gender = gender;
+        this.phone = phone;
     }
 
-    public Optional<Long> getId() {
+    public Long getId() {
         return id;
     }
 
@@ -54,28 +46,61 @@ public class User {
         return password;
     }
 
-    public Optional<String> getFirstname() {
+    public String getFirstname() {
         return firstname;
     }
 
-    public Optional<String> getLastname() {
+    public String getLastname() {
         return lastname;
     }
 
-    public Optional<LocalDateTime> getBirthDate() {
+    public LocalDateTime getBirthDate() {
         return birthDate;
     }
 
-    public Optional<String> getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public Optional<Gender> getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public Optional<String> getPhone() {
+    public String getPhone() {
         return phone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+        if (username != null ? !username.equals(user.username) : user.username != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (firstname != null ? !firstname.equals(user.firstname) : user.firstname != null) return false;
+        if (lastname != null ? !lastname.equals(user.lastname) : user.lastname != null) return false;
+        if (birthDate != null ? !birthDate.equals(user.birthDate) : user.birthDate != null) return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (gender != user.gender) return false;
+        return !(phone != null ? !phone.equals(user.phone) : user.phone != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (firstname != null ? firstname.hashCode() : 0);
+        result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
+        result = 31 * result + (birthDate != null ? birthDate.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (gender != null ? gender.hashCode() : 0);
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -91,6 +116,19 @@ public class User {
                 ", gender=" + gender +
                 ", phone='" + phone + '\'' +
                 '}';
+    }
+
+    public static UserBuilder fromUser(User user) {
+        return new UserBuilder()
+                .withId(user.id)
+                .withUsername(user.username)
+                .withPassword(user.password)
+                .withFirstname(user.firstname)
+                .withLastname(user.lastname)
+                .withBirthDate(user.birthDate)
+                .withEmail(user.email)
+                .withGender(user.gender)
+                .withPhone(user.phone);
     }
 
     public static UserBuilder builder() {

@@ -11,17 +11,18 @@ import org.jooq.impl.DataSourceConnectionProvider;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.impl.DefaultDSLContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import urujdas.dao.impl.jooq.JooqRecordMapperProvider;
 import urujdas.dao.impl.jooq.JooqTransactionProvider;
+import urujdas.dao.impl.jooq.mappers.NewsCategoryRecordMapper;
+import urujdas.dao.impl.jooq.mappers.NewsRecordMapper;
+import urujdas.dao.impl.jooq.mappers.UserRecordMapper;
 
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan("urujdas.dao")
 public class  DaoConfig {
 
     @Bean
@@ -85,7 +86,22 @@ public class  DaoConfig {
 
     @Bean
     public RecordMapperProvider jooqRecordMapperProvider() {
-        return new JooqRecordMapperProvider();
+        return new JooqRecordMapperProvider(userRecordMapper(), newsRecordMapper(), newsCategoryRecordMapper());
+    }
+
+    @Bean
+    public UserRecordMapper userRecordMapper() {
+        return new UserRecordMapper();
+    }
+
+    @Bean
+    public NewsRecordMapper newsRecordMapper() {
+        return new NewsRecordMapper(userRecordMapper(), newsCategoryRecordMapper());
+    }
+
+    @Bean
+    public NewsCategoryRecordMapper newsCategoryRecordMapper() {
+        return new NewsCategoryRecordMapper();
     }
 
     @Bean

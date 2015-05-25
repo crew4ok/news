@@ -1,0 +1,6 @@
+package urujdas.web.common.model.error;
+
+public enum ErrorType {
+    USER_ALREADY_EXISTS,
+    VALIDATION_ERROR
+}
