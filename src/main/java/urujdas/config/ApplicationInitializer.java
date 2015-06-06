@@ -10,17 +10,11 @@ public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherSe
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{
-                DaoConfig.class,
-                ServiceConfig.class
-        };
+        return new Class[]{ RootConfig.class };
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[]{
-                WebConfig.class,
-                WebSecurityConfig.class
-        };
+        return null;
     }
 }
