@@ -29,4 +29,10 @@ public interface NewsDao {
     News create(News news);
 
     void addToFavourites(User user, News news);
+
+    void like(User currentUser, News news);
+
+    void dislike(User currentUser, News news);
+
+    List<User> getLikers(News news);
 }

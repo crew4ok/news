@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import urujdas.config.ServiceConfig;
 import urujdas.dao.NewsDao;
 import urujdas.dao.SubscriptionDao;
+import urujdas.model.LikeType;
 import urujdas.model.News;
 import urujdas.model.User;
 import urujdas.service.impl.NewsServiceImpl;
@@ -114,6 +115,57 @@ public class NewsServiceTest extends AbstractTestNGSpringContextTests {
 
         verify(newsDao).create(any(News.class));
         verify(userService).getCurrentUser();
+    }
+
+    @Test
+    public void like_like() throws Exception {
+        long newsId = 1l;
+        User user = mock(User.class);
+        when(user.getId()).thenReturn(1L);
+        News news = mock(News.class);
+
+        when(userService.getCurrentUser()).thenReturn(user);
+        when(newsDao.getById(newsId)).thenReturn(news);
+
+        User liker = mock(User.class);
+        when(liker.getId()).thenReturn(2L);
+        when(newsDao.getLikers(news)).thenReturn(Collections.singletonList(liker));
+
+        LikeType likeType = newsService.like(newsId);
+
+        assertEquals(likeType, LikeType.LIKE);
+
+        verify(userService).getCurrentUser();
+        verify(newsDao).getById(newsId);
+        verify(newsDao).getLikers(news);
+        verify(newsDao).like(user, news);
+    }
+
+    @Test
+    public void like_dislike() throws Exception {
+        long newsId = 1l;
+        User user = mock(User.class);
+        when(user.getId()).thenReturn(1L);
+        News news = mock(News.class);
+
+        when(userService.getCurrentUser()).thenReturn(user);
+        when(newsDao.getById(newsId)).thenReturn(news);
+
+        when(newsDao.getLikers(news)).thenReturn(Collections.singletonList(user));
+
+        LikeType likeType = newsService.like(newsId);
+
+        assertEquals(likeType, LikeType.DISLIKE);
+
+        verify(userService).getCurrentUser();
+        verify(newsDao).getById(newsId);
+        verify(newsDao).getLikers(news);
+        verify(newsDao).dislike(user, news);
+    }
+
+    @Test(expectedExceptions = InvalidParamException.class)
+    public void like_newsIdIsInvalid() throws Exception {
+        newsService.like(-1L);
     }
 
     @Configuration

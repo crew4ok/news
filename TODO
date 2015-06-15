@@ -1,0 +1,4 @@
+1. Extract logic from NewsDaoImpl
+2. Make NewsDao.getById throw an exception, create corresponding exception handler
+3. Write tests for controllers
+4. Add validation to the methods of NewsService which lack it

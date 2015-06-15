@@ -483,6 +483,72 @@ public class NewsDaoTest extends AbstractTransactionalTestNGSpringContextTests {
         assertEquals(actualFavourites, expectedFavourites);
     }
 
+    /*
+    *
+    * NewsDao.like
+    *
+    */
+
+    @Test
+    public void like_hp() throws Exception {
+        NewsCategory category = createDefaultNewsCategory();
+
+        User firstUser = createDefaultUser();
+        User secondUser = createDefaultUser();
+
+        News firstNews = createDefaultNews(firstUser, category);
+        News secondNews = createDefaultNews(secondUser, category);
+
+        newsDao.like(firstUser, firstNews);
+        newsDao.like(secondUser, firstNews);
+        newsDao.like(secondUser, secondNews);
+
+        List<User> firstNewsLikers = newsDao.getLikers(firstNews);
+        assertEquals(firstNewsLikers.size(), 2);
+        assertTrue(firstNewsLikers.contains(firstUser));
+        assertTrue(firstNewsLikers.contains(secondUser));
+
+        List<User> secondNewsLikers = newsDao.getLikers(secondNews);
+        assertEquals(secondNewsLikers.size(), 1);
+        assertTrue(secondNewsLikers.contains(secondUser));
+
+        News actualFirstNews = newsDao.getById(firstNews.getId());
+        assertEquals(actualFirstNews.getLikesCount(), Integer.valueOf(2));
+
+        News actualSecondNews = newsDao.getById(secondNews.getId());
+        assertEquals(actualSecondNews.getLikesCount(), Integer.valueOf(1));
+    }
+
+    /*
+    *
+    * NewsDao.dislike
+    *
+    */
+
+
+    @Test
+    public void dislike_hp() throws Exception {
+        NewsCategory category = createDefaultNewsCategory();
+        User user = createDefaultUser();
+        News news = createDefaultNews(user, category);
+
+        newsDao.like(user, news);
+
+        for (int i = 0; i < 5; i++) {
+            if (i % 2 == 0) {
+                newsDao.dislike(user, news);
+            } else {
+                newsDao.like(user, news);
+            }
+        }
+
+        List<User> likers = newsDao.getLikers(news);
+        assertTrue(likers.isEmpty());
+
+        News actualNews = newsDao.getById(news.getId());
+        assertEquals(actualNews.getLikesCount(), Integer.valueOf(0));
+    }
+
     private News createDefaultNews(User author, NewsCategory newsCategory) {
         News news = News.builder()
                 .withTitle("title")

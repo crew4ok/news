@@ -200,4 +200,30 @@ public class NewsDaoImpl implements NewsDao {
                 .set(FAVOURITES.USER_ID, user.getId())
                 .execute();
     }
+
+    @Override
+    public void like(User currentUser, News news) {
+        ctx.insertInto(LIKES)
+                .set(LIKES.LIKER, currentUser.getId())
+                .set(LIKES.NEWS_ID, news.getId())
+                .execute();
+    }
+
+    @Override
+    public void dislike(User currentUser, News news) {
+        ctx.deleteFrom(LIKES)
+                .where(LIKES.LIKER.equal(currentUser.getId()))
+                .and(LIKES.NEWS_ID.equal(news.getId()))
+                .execute();
+    }
+
+    @Override
+    public List<User> getLikers(News news) {
+        return ctx.select(USERS.fields())
+                .from(LIKES)
+                .join(USERS).on(LIKES.LIKER.equal(USERS.ID))
+                .where(LIKES.NEWS_ID.equal(news.getId()))
+                .fetch()
+                .into(User.class);
+    }
 }
