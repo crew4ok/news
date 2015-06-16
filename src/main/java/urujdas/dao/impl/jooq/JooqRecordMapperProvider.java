@@ -4,9 +4,11 @@ import org.jooq.Record;
 import org.jooq.RecordMapper;
 import org.jooq.RecordMapperProvider;
 import org.jooq.RecordType;
+import urujdas.dao.impl.jooq.mappers.CommentRecordMapper;
 import urujdas.dao.impl.jooq.mappers.NewsCategoryRecordMapper;
 import urujdas.dao.impl.jooq.mappers.NewsRecordMapper;
 import urujdas.dao.impl.jooq.mappers.UserRecordMapper;
+import urujdas.model.Comment;
 import urujdas.model.News;
 import urujdas.model.NewsCategory;
 import urujdas.model.User;
@@ -16,13 +18,17 @@ public class JooqRecordMapperProvider implements RecordMapperProvider {
     private final UserRecordMapper userRecordMapper;
     private final NewsRecordMapper newsRecordMapper;
     private final NewsCategoryRecordMapper newsCategoryRecordMapper;
+    private final CommentRecordMapper commentRecordMapper;
 
     public JooqRecordMapperProvider(UserRecordMapper userRecordMapper,
-                                    NewsRecordMapper newsRecordMapper, NewsCategoryRecordMapper newsCategoryRecordMapper) {
+                                    NewsRecordMapper newsRecordMapper,
+                                    NewsCategoryRecordMapper newsCategoryRecordMapper,
+                                    CommentRecordMapper commentRecordMapper) {
 
         this.userRecordMapper = userRecordMapper;
         this.newsRecordMapper = newsRecordMapper;
         this.newsCategoryRecordMapper = newsCategoryRecordMapper;
+        this.commentRecordMapper = commentRecordMapper;
     }
 
     @SuppressWarnings("unchecked")
@@ -38,6 +44,10 @@ public class JooqRecordMapperProvider implements RecordMapperProvider {
 
         if (NewsCategory.class.equals(type)) {
             return (RecordMapper<R, E>) newsCategoryRecordMapper;
+        }
+
+        if (Comment.class.equals(type)) {
+            return (RecordMapper<R, E>) commentRecordMapper;
         }
 
         throw new RuntimeException("Mapper for type " + type.getName() + " is not found");

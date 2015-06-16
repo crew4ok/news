@@ -42,3 +42,11 @@ CREATE TABLE likes (
   news_id BIGSERIAL REFERENCES news (id),
   liker   BIGSERIAL REFERENCES users (id)
 );
+
+CREATE TABLE comments (
+  id            BIGSERIAL PRIMARY KEY,
+  body          TEXT      NOT NULL,
+  creation_date TIMESTAMP NOT NULL,
+  news_id       BIGSERIAL NOT NULL REFERENCES news (id),
+  author        BIGSERIAL NOT NULL REFERENCES users (id)
+);

@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import urujdas.model.Comment;
 import urujdas.model.LikeResult;
 import urujdas.model.News;
+import urujdas.service.CommentService;
 import urujdas.service.NewsService;
 import urujdas.web.common.WebCommons;
 import urujdas.web.exception.ValidationException;
+import urujdas.web.news.model.CreateCommentRequest;
 import urujdas.web.news.model.CreateNewsRequest;
 
 import javax.validation.Valid;
@@ -26,6 +29,9 @@ public class NewsController {
 
     @Autowired
     private NewsService newsService;
+
+    @Autowired
+    private CommentService commentService;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<News> getLatestFromAllNews() {
@@ -53,5 +59,22 @@ public class NewsController {
     @RequestMapping(value = "/like/{id}", method = RequestMethod.POST)
     public LikeResult likeNews(@PathVariable("id") Long newsId) {
         return newsService.like(newsId);
+    }
+
+    @RequestMapping(value = "/{id}/comments", method = RequestMethod.GET)
+    public List<Comment> getAllComments(@PathVariable("id") Long newsId) {
+        return commentService.getAll(newsId);
+    }
+
+    @RequestMapping(value = "/{id}/comments", method = RequestMethod.POST)
+    public List<Comment> createComment(@PathVariable("id") Long newsId,
+                                       @RequestBody CreateCommentRequest request) {
+        Comment comment = Comment.fromComment(request.toComment())
+                .withNewsId(newsId)
+                .build();
+
+        commentService.create(comment);
+
+        return commentService.getAll(newsId);
     }
 }
