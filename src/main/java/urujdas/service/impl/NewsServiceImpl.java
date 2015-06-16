@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import urujdas.dao.NewsDao;
 import urujdas.dao.SubscriptionDao;
+import urujdas.model.LikeResult;
 import urujdas.model.LikeType;
 import urujdas.model.News;
 import urujdas.model.Subscription;
@@ -137,7 +138,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional(readOnly = false)
-    public LikeType like(Long newsId) {
+    public LikeResult like(Long newsId) {
         Validation.isGreaterThanZero(newsId);
 
         User currentUser = userService.getCurrentUser();
@@ -146,10 +147,12 @@ public class NewsServiceImpl implements NewsService {
         List<User> likers = newsDao.getLikers(news);
         if (likers.contains(currentUser)) {
             newsDao.dislike(currentUser, news);
-            return LikeType.DISLIKE;
+
+            return new LikeResult(LikeType.DISLIKE, likers.size() - 1);
         } else {
             newsDao.like(currentUser, news);
-            return LikeType.LIKE;
+
+            return new LikeResult(LikeType.LIKE, likers.size() + 1);
         }
     }
 }

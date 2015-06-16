@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import urujdas.config.ServiceConfig;
 import urujdas.dao.NewsDao;
 import urujdas.dao.SubscriptionDao;
+import urujdas.model.LikeResult;
 import urujdas.model.LikeType;
 import urujdas.model.News;
 import urujdas.model.User;
@@ -131,9 +132,10 @@ public class NewsServiceTest extends AbstractTestNGSpringContextTests {
         when(liker.getId()).thenReturn(2L);
         when(newsDao.getLikers(news)).thenReturn(Collections.singletonList(liker));
 
-        LikeType likeType = newsService.like(newsId);
+        LikeResult likeResult = newsService.like(newsId);
 
-        assertEquals(likeType, LikeType.LIKE);
+        assertEquals(likeResult.getLikeType(), LikeType.LIKE);
+        assertEquals(likeResult.getLikesCount(), Integer.valueOf(2));
 
         verify(userService).getCurrentUser();
         verify(newsDao).getById(newsId);
@@ -153,9 +155,10 @@ public class NewsServiceTest extends AbstractTestNGSpringContextTests {
 
         when(newsDao.getLikers(news)).thenReturn(Collections.singletonList(user));
 
-        LikeType likeType = newsService.like(newsId);
+        LikeResult likeResult = newsService.like(newsId);
 
-        assertEquals(likeType, LikeType.DISLIKE);
+        assertEquals(likeResult.getLikeType(), LikeType.DISLIKE);
+        assertEquals(likeResult.getLikesCount(), Integer.valueOf(0));
 
         verify(userService).getCurrentUser();
         verify(newsDao).getById(newsId);

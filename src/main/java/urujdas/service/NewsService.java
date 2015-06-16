@@ -1,6 +1,6 @@
 package urujdas.service;
 
-import urujdas.model.LikeType;
+import urujdas.model.LikeResult;
 import urujdas.model.News;
 
 import java.util.List;
@@ -29,5 +29,5 @@ public interface NewsService {
 
     void subscribe(Long userId);
 
-    LikeType like(Long newsId);
+    LikeResult like(Long newsId);
 }

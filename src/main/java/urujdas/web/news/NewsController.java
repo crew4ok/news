@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import urujdas.model.LikeResult;
 import urujdas.model.News;
 import urujdas.service.NewsService;
 import urujdas.web.common.WebCommons;
@@ -50,9 +51,7 @@ public class NewsController {
     }
 
     @RequestMapping(value = "/like/{id}", method = RequestMethod.POST)
-    public ResponseEntity<String> likeNews(@PathVariable("id") Long newsId) {
-        newsService.like(newsId);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    public LikeResult likeNews(@PathVariable("id") Long newsId) {
+        return newsService.like(newsId);
     }
 }
