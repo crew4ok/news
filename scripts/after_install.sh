@@ -42,5 +42,6 @@ if [ $? -ne 0 ]; then
     cleanup 1
 fi
 
-
 popd
+
+cleanup 0
