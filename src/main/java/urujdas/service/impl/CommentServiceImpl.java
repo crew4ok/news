@@ -42,11 +42,12 @@ public class CommentServiceImpl implements CommentService {
     public void create(Comment comment) {
         LocalDateTime creationDate = LocalDateTime.now(Clock.systemUTC());
         User currentUser = userService.getCurrentUser();
+        News news = newsDao.getById(comment.getNewsId());
 
         Comment commentToCreate = Comment.builder()
                 .withBody(comment.getBody())
                 .withCreationDate(creationDate)
-                .withNewsId(comment.getNewsId())
+                .withNewsId(news.getId())
                 .withAuthor(currentUser)
                 .build();
 

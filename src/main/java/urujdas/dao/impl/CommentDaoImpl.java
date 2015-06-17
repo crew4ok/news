@@ -59,7 +59,7 @@ public class CommentDaoImpl implements CommentDao {
                 .from(COMMENTS)
                 .join(USERS).on(COMMENTS.AUTHOR.equal(USERS.ID))
                 .where(conditions)
-                .orderBy(COMMENTS.ID.desc())
+                .orderBy(COMMENTS.ID.asc())
                 .fetch()
                 .into(Comment.class);
     }
