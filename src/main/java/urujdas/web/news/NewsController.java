@@ -68,7 +68,12 @@ public class NewsController {
 
     @RequestMapping(value = "/{id}/comments", method = RequestMethod.POST)
     public List<Comment> createComment(@PathVariable("id") Long newsId,
-                                       @RequestBody CreateCommentRequest request) {
+                                       @Valid @RequestBody CreateCommentRequest request,
+                                       BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new ValidationException(bindingResult);
+        }
+
         Comment comment = Comment.fromComment(request.toComment())
                 .withNewsId(newsId)
                 .build();
