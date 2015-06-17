@@ -207,7 +207,7 @@
                     <user>${DB_USER}</user>
                     <password>${DB_PASSWORD}</password>
                     <schemas>
-                        <schema>public</schema>
+                        <schema>urujdas</schema>
                     </schemas>
                     <locations>
                         <location>filesystem:${project.basedir}/flyway/deltas</location>
@@ -262,7 +262,7 @@
                             <name>org.jooq.util.postgres.PostgresDatabase</name>
                             <includes>.*</includes>
                             <excludes/>
-                            <inputSchema>public</inputSchema>
+                            <inputSchema>urujdas</inputSchema>
                         </database>
 
                         <generate>

@@ -24,7 +24,7 @@ echo "Migrating"
     -url=jdbc:postgresql://${DB_HOSTNAME}/${DB_DATABASE} \
     -user=${DB_USER} \
     -password=${DB_PASSWORD} \
-    -schema=public \
+    -schema=urujdas \
     -locations=filesystem:deltas \
     -jarDirs=drivers \
     clean migrate
