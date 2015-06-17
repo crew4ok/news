@@ -1,17 +1,7 @@
 package urujdas.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import urujdas.config.DaoConfig;
-import urujdas.dao.impl.NewsCategoryDaoImpl;
-import urujdas.dao.impl.NewsDaoImpl;
-import urujdas.dao.impl.SubscriptionDaoImpl;
-import urujdas.dao.impl.UserDaoImpl;
 import urujdas.model.News;
 import urujdas.model.NewsCategory;
 import urujdas.model.Subscription;
@@ -22,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -31,27 +20,7 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
-@ContextConfiguration(classes = {
-        DaoConfig.class,
-        NewsDaoTest.LocalContext.class
-})
-public class NewsDaoTest extends AbstractTransactionalTestNGSpringContextTests {
-
-    @Autowired
-    private NewsDao newsDao;
-
-    @Autowired
-    private UserDao userDao;
-
-    @Autowired
-    private SubscriptionDao subscriptionDao;
-
-    @Autowired
-    private NewsCategoryDao newsCategoryDao;
-
-    private User defaultUser;
-    private NewsCategory defaultNewsCategory;
-
+public class NewsDaoTest extends DaoBaseTest {
     @BeforeMethod
     public void setup() {
         this.defaultUser = createDefaultUser();
@@ -547,67 +516,5 @@ public class NewsDaoTest extends AbstractTransactionalTestNGSpringContextTests {
 
         News actualNews = newsDao.getById(news.getId());
         assertEquals(actualNews.getLikesCount(), Integer.valueOf(0));
-    }
-
-    private News createDefaultNews(User author, NewsCategory newsCategory) {
-        News news = News.builder()
-                .withTitle("title")
-                .withBody("body")
-                .withCreationDate(LocalDateTime.now())
-                .withCategory(newsCategory)
-                .withAuthor(author)
-                .build();
-        return newsDao.create(news);
-    }
-
-    private News createDefaultNews(int i) {
-        News news = News.builder()
-                .withTitle("title" + i)
-                .withBody("body")
-                .withCreationDate(LocalDateTime.now())
-                .withAuthor(defaultUser)
-                .withCategory(defaultNewsCategory)
-                .build();
-        return newsDao.create(news);
-    }
-
-    private NewsCategory createDefaultNewsCategory() {
-        return newsCategoryDao.create(new NewsCategory(UUID.randomUUID().toString()));
-    }
-
-    private User createDefaultUser() {
-        User user = User.builder()
-                .withUsername(UUID.randomUUID().toString())
-                .withPassword("password")
-                .build();
-        user = userDao.create(user);
-
-        return User.fromUser(user)
-                .withPassword(null)
-                .build();
-    }
-
-    @Configuration
-    static class LocalContext {
-
-        @Bean
-        public NewsDao newsDao() {
-            return new NewsDaoImpl();
-        }
-
-        @Bean
-        public UserDao userDao() {
-            return new UserDaoImpl();
-        }
-
-        @Bean
-        public SubscriptionDao subscriptionDao() {
-            return new SubscriptionDaoImpl();
-        }
-
-        @Bean
-        public NewsCategoryDao newsCategoryDao() {
-            return new NewsCategoryDaoImpl();
-        }
     }
 }

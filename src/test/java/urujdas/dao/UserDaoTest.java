@@ -1,27 +1,13 @@
 package urujdas.dao;
 
 import org.jooq.exception.DataAccessException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.testng.annotations.Test;
-import urujdas.config.DaoConfig;
-import urujdas.dao.impl.UserDaoImpl;
 import urujdas.model.Gender;
 import urujdas.model.User;
 
 import static org.junit.Assert.assertNotNull;
 
-@ContextConfiguration(classes = {
-        DaoConfig.class,
-        UserDaoTest.LocalContext.class
-})
-public class UserDaoTest extends AbstractTransactionalTestNGSpringContextTests {
-
-    @Autowired
-    private UserDao userDao;
+public class UserDaoTest extends DaoBaseTest {
 
     @Test
     public void getByUsername_hp() {
@@ -47,13 +33,4 @@ public class UserDaoTest extends AbstractTransactionalTestNGSpringContextTests {
         userDao.create(user);
         userDao.create(user);
     }
-
-    @Configuration
-    static class LocalContext {
-        @Bean
-        public UserDao userDao() {
-            return new UserDaoImpl();
-        }
-    }
-
 }

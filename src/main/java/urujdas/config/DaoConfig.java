@@ -11,6 +11,7 @@ import org.jooq.impl.DataSourceConnectionProvider;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.impl.DefaultDSLContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
@@ -24,6 +25,7 @@ import urujdas.dao.impl.jooq.mappers.UserRecordMapper;
 import javax.sql.DataSource;
 
 @Configuration
+@ComponentScan(basePackages = "urujdas.dao")
 public class  DaoConfig {
 
     @Bean

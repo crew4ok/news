@@ -1,15 +1,8 @@
 package urujdas.dao;
 
 import org.jooq.exception.DataAccessException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.testng.annotations.Test;
-import urujdas.config.DaoConfig;
 import urujdas.dao.exception.NotFoundException;
-import urujdas.dao.impl.NewsCategoryDaoImpl;
 import urujdas.model.NewsCategory;
 
 import java.util.ArrayList;
@@ -19,14 +12,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-@ContextConfiguration(classes = {
-        DaoConfig.class,
-        NewsCategoryDaoTest.LocalContext.class
-})
-public class NewsCategoryDaoTest extends AbstractTransactionalTestNGSpringContextTests {
-
-    @Autowired
-    private NewsCategoryDao newsCategoryDao;
+public class NewsCategoryDaoTest extends DaoBaseTest {
 
     @Test
     public void create_hp() throws Exception {
@@ -89,15 +75,5 @@ public class NewsCategoryDaoTest extends AbstractTransactionalTestNGSpringContex
     @Test(expectedExceptions = NotFoundException.class)
     public void getById_notFound() throws Exception {
         newsCategoryDao.getById(-1L);
-    }
-
-    @Configuration
-    static class LocalContext {
-
-        @Bean
-        public NewsCategoryDao newsCategoryDao() {
-            return new NewsCategoryDaoImpl();
-        }
-
     }
 }
