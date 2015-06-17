@@ -3,11 +3,13 @@ package urujdas.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import urujdas.dao.NewsCategoryDao;
 import urujdas.dao.NewsDao;
 import urujdas.dao.SubscriptionDao;
 import urujdas.model.LikeResult;
 import urujdas.model.LikeType;
 import urujdas.model.News;
+import urujdas.model.NewsCategory;
 import urujdas.model.Subscription;
 import urujdas.model.User;
 import urujdas.service.NewsService;
@@ -30,6 +32,9 @@ public class NewsServiceImpl implements NewsService {
 
     @Autowired
     private SubscriptionDao subscriptionDao;
+
+    @Autowired
+    private NewsCategoryDao newsCategoryDao;
 
     @Override
     public List<News> getLatestAll(int latestCount) {
@@ -108,10 +113,12 @@ public class NewsServiceImpl implements NewsService {
     @Transactional(readOnly = false)
     public void create(News news) {
         User currentUser = userService.getCurrentUser();
+        NewsCategory newsCategory = newsCategoryDao.getById(news.getCategory().getId());
 
         news = News.fromNews(news)
                 .withCreationDate(LocalDateTime.now(Clock.systemUTC()))
                 .withAuthor(currentUser)
+                .withCategory(newsCategory)
                 .build();
 
         newsDao.create(news);
