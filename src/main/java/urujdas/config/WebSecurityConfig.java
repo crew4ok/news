@@ -40,6 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers(VERSION_PREFIX + "/register").anonymous()
                     .antMatchers(VERSION_PREFIX + "/auth").anonymous()
+                    .antMatchers(VERSION_PREFIX + "/healthcheck").anonymous()
                     .antMatchers(VERSION_PREFIX + "/*").hasRole("USER")
                 .and()
                 .exceptionHandling()
