@@ -8,11 +8,13 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import urujdas.config.ServiceConfig;
+import urujdas.dao.NewsCategoryDao;
 import urujdas.dao.NewsDao;
 import urujdas.dao.SubscriptionDao;
 import urujdas.model.LikeResult;
 import urujdas.model.LikeType;
 import urujdas.model.News;
+import urujdas.model.NewsCategory;
 import urujdas.model.User;
 import urujdas.service.impl.NewsServiceImpl;
 import urujdas.util.InvalidParamException;
@@ -43,10 +45,13 @@ public class NewsServiceTest extends AbstractTestNGSpringContextTests {
     @Autowired
     private NewsDao newsDao;
 
+    @Autowired
+    private NewsCategoryDao newsCategoryDao;
+
     @AfterMethod
     public void tearDown() throws Exception {
-        verifyNoMoreInteractions(newsDao, userService);
-        reset(newsDao, userService);
+        verifyNoMoreInteractions(newsDao, userService, newsCategoryDao);
+        reset(newsDao, userService, newsCategoryDao);
     }
 
     @Test
@@ -108,13 +113,20 @@ public class NewsServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void create_hp() throws Exception {
+        long newsCategoryId = 1L;
         User user = mock(User.class);
+        NewsCategory newsCategory = mock(NewsCategory.class);
+        when(newsCategory.getId()).thenReturn(newsCategoryId);
 
         when(userService.getCurrentUser()).thenReturn(user);
+        when(newsCategoryDao.getById(newsCategoryId)).thenReturn(newsCategory);
 
-        newsService.create(mock(News.class));
+        News news = mock(News.class);
+        when(news.getCategory()).thenReturn(newsCategory);
+        newsService.create(news);
 
         verify(newsDao).create(any(News.class));
+        verify(newsCategoryDao).getById(newsCategoryId);
         verify(userService).getCurrentUser();
     }
 
@@ -192,6 +204,11 @@ public class NewsServiceTest extends AbstractTestNGSpringContextTests {
         @Bean
         public SubscriptionDao subscriptionDao() {
             return mock(SubscriptionDao.class);
+        }
+
+        @Bean
+        public NewsCategoryDao newsCategoryDao() {
+            return mock(NewsCategoryDao.class);
         }
     }
 }
