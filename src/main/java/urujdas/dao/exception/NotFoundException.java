@@ -1,11 +1,10 @@
 package urujdas.dao.exception;
 
 public class NotFoundException extends RuntimeException {
-
-    private final Long id;
     private final Class<?> entityClass;
+    private final Long id;
 
-    public NotFoundException(Long id, Class<?> entityClass) {
+    public NotFoundException(Class<?> entityClass, Long id) {
         this.id = id;
         this.entityClass = entityClass;
     }

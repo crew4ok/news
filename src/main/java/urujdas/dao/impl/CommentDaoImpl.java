@@ -37,7 +37,7 @@ public class CommentDaoImpl implements CommentDao {
             return comments.get(0);
         }
 
-        throw new NotFoundException(id, Comment.class);
+        throw new NotFoundException(Comment.class, id);
     }
 
     @Override

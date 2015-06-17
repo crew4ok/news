@@ -37,7 +37,7 @@ public class NewsCategoryDaoImpl implements NewsCategoryDao {
             return record.into(NewsCategory.class);
         }
 
-        throw new NotFoundException(categoryId, NewsCategory.class);
+        throw new NotFoundException(NewsCategory.class, categoryId);
     }
 
     @Override

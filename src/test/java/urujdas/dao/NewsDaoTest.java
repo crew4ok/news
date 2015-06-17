@@ -2,6 +2,7 @@ package urujdas.dao;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import urujdas.dao.exception.NotFoundException;
 import urujdas.model.News;
 import urujdas.model.NewsCategory;
 import urujdas.model.Subscription;
@@ -17,7 +18,6 @@ import java.util.stream.IntStream;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 public class NewsDaoTest extends DaoBaseTest {
@@ -60,11 +60,9 @@ public class NewsDaoTest extends DaoBaseTest {
         assertEquals(actualNews.getCategory(), defaultNewsCategory);
     }
 
-    @Test
+    @Test(expectedExceptions = NotFoundException.class)
     public void getById_notFound() throws Exception {
-        News news = newsDao.getById(1L);
-
-        assertNull(news);
+        newsDao.getById(-1L);
     }
 
     /*

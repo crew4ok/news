@@ -10,6 +10,7 @@ import org.jooq.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import urujdas.dao.NewsDao;
+import urujdas.dao.exception.NotFoundException;
 import urujdas.model.News;
 import urujdas.model.Subscription;
 import urujdas.model.User;
@@ -51,7 +52,7 @@ public class NewsDaoImpl implements NewsDao {
         if (!result.isEmpty()) {
             return result.get(0);
         }
-        return null;
+        throw new NotFoundException(News.class, id);
     }
 
     private List<News> select(Collection<Condition> conditions,

@@ -7,10 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import urujdas.dao.exception.NotFoundException;
 import urujdas.web.common.model.error.ErrorResponse;
 import urujdas.web.common.model.error.ErrorType;
+import urujdas.web.common.model.error.NotFoundErrorResponse;
 import urujdas.web.common.model.error.ValidationErrorResponse;
 import urujdas.web.exception.ValidationException;
 
@@ -20,18 +21,33 @@ public class CommonExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(CommonExceptionHandler.class);
 
     @ExceptionHandler(ValidationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ValidationErrorResponse validationException(ValidationException e) {
+    public ResponseEntity<ValidationErrorResponse> validationException(ValidationException e) {
         LOG.debug("Validation error", e);
-        return new ValidationErrorResponse(e.getErrors());
+
+        return new ResponseEntity<>(
+                new ValidationErrorResponse(e.getErrors()),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<NotFoundErrorResponse> notFoundException(NotFoundException e) {
+        LOG.debug("Entity of class = {} with id = {} was not found");
+
+        return new ResponseEntity<>(
+                new NotFoundErrorResponse(e.getEntityClass().getSimpleName(), e.getId()),
+                HttpStatus.BAD_REQUEST
+        );
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse messageNotReadable(HttpMessageNotReadableException e) {
+    public ResponseEntity<ErrorResponse> messageNotReadable(HttpMessageNotReadableException e) {
         LOG.debug("Message is not readable", e);
 
-        return new ErrorResponse(ErrorType.WRONG_FORMAT, "Payload is incorrect");
+        return new ResponseEntity<>(
+                new ErrorResponse(ErrorType.WRONG_FORMAT, "Payload is incorrect"),
+                HttpStatus.BAD_REQUEST
+        );
     }
 
     @ExceptionHandler(Exception.class)
