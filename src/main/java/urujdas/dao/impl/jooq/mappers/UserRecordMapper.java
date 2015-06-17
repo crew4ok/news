@@ -4,8 +4,6 @@ import org.jooq.Record;
 import org.jooq.RecordMapper;
 import urujdas.model.Gender;
 import urujdas.model.User;
-import urujdas.tables.UsersTable;
-import urujdas.tables.records.UsersRecord;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -28,7 +26,6 @@ public class UserRecordMapper implements RecordMapper<Record, User> {
         return User.builder()
                 .withId(record.getValue(USERS.ID))
                 .withUsername(record.getValue(USERS.USERNAME))
-                .withPassword(record.getValue(USERS.PASSWORD))
                 .withFirstname(record.getValue(USERS.FIRSTNAME))
                 .withLastname(record.getValue(USERS.LASTNAME))
                 .withBirthDate(birthDate)

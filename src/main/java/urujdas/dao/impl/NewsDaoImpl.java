@@ -16,6 +16,7 @@ import urujdas.model.User;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -57,10 +58,7 @@ public class NewsDaoImpl implements NewsDao {
                               Map<Table<?>, Condition> joins,
                               Optional<Integer> limit) {
 
-        List<Field<?>> fields = new ArrayList<>(asList(NEWS.fields()));
-        fields.addAll(asList(USERS.fields()));
-        fields.addAll(asList(NEWS_CATEGORIES.fields()));
-        fields.add(count(LIKES.ID));
+        List<Field<?>> fields = getNewsFields();
 
         SelectOnConditionStep<Record> step = ctx.select(fields)
                 .from(NEWS)
@@ -79,6 +77,16 @@ public class NewsDaoImpl implements NewsDao {
         }
         return step.fetch()
                 .into(News.class);
+    }
+
+    private List<Field<?>> getNewsFields() {
+        List<Field<?>> fields = new ArrayList<>(asList(NEWS.fields()));
+        // all user fields excluding password
+        fields.addAll(asList(USERS.fields()));
+        fields.remove(USERS.PASSWORD);
+        fields.addAll(asList(NEWS_CATEGORIES.fields()));
+        fields.add(count(LIKES.ID));
+        return fields;
     }
 
     @Override
@@ -219,7 +227,10 @@ public class NewsDaoImpl implements NewsDao {
 
     @Override
     public List<User> getLikers(News news) {
-        return ctx.select(USERS.fields())
+        ArrayList<Field<?>> fields = new ArrayList<>(Arrays.asList(USERS.fields()));
+        fields.remove(USERS.PASSWORD);
+
+        return ctx.select(fields)
                 .from(LIKES)
                 .join(USERS).on(LIKES.LIKER.equal(USERS.ID))
                 .where(LIKES.NEWS_ID.equal(news.getId()))

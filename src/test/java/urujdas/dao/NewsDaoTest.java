@@ -580,7 +580,11 @@ public class NewsDaoTest extends AbstractTransactionalTestNGSpringContextTests {
                 .withUsername(UUID.randomUUID().toString())
                 .withPassword("password")
                 .build();
-        return userDao.create(user);
+        user = userDao.create(user);
+
+        return User.fromUser(user)
+                .withPassword(null)
+                .build();
     }
 
     @Configuration
