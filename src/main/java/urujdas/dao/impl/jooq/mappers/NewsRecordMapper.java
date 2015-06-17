@@ -16,15 +16,6 @@ import static urujdas.tables.NewsTable.NEWS;
 
 public class NewsRecordMapper implements RecordMapper<Record, News> {
 
-    private final UserRecordMapper userRecordMapper;
-    private final NewsCategoryRecordMapper newsCategoryRecordMapper;
-
-    public NewsRecordMapper(UserRecordMapper userRecordMapper,
-                            NewsCategoryRecordMapper newsCategoryRecordMapper) {
-        this.userRecordMapper = userRecordMapper;
-        this.newsCategoryRecordMapper = newsCategoryRecordMapper;
-    }
-
     @Override
     public News map(Record record) {
         Timestamp creationDateTimestamp = record.getValue(NEWS.CREATION_DATE);
@@ -48,10 +39,10 @@ public class NewsRecordMapper implements RecordMapper<Record, News> {
     }
 
     private User buildUser(Record record) {
-        return userRecordMapper.map(record);
+        return record.into(User.class);
     }
 
     private NewsCategory buildNewsCategory(Record record) {
-        return newsCategoryRecordMapper.map(record);
+        return record.into(NewsCategory.class);
     }
 }

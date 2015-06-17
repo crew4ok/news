@@ -13,15 +13,9 @@ import static urujdas.tables.CommentsTable.COMMENTS;
 
 public class CommentRecordMapper implements RecordMapper<Record, Comment> {
 
-    private final UserRecordMapper userRecordMapper;
-
-    public CommentRecordMapper(UserRecordMapper userRecordMapper) {
-        this.userRecordMapper = userRecordMapper;
-    }
-
     @Override
     public Comment map(Record record) {
-        User author = userRecordMapper.map(record);
+        User author = record.into(User.class);
 
         LocalDateTime creationDate = Optional.ofNullable(record.getValue(COMMENTS.CREATION_DATE))
                 .map(Timestamp::toLocalDateTime)

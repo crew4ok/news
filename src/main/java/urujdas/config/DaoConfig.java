@@ -104,7 +104,7 @@ public class  DaoConfig {
 
     @Bean
     public NewsRecordMapper newsRecordMapper() {
-        return new NewsRecordMapper(userRecordMapper(), newsCategoryRecordMapper());
+        return new NewsRecordMapper();
     }
 
     @Bean
@@ -114,7 +114,7 @@ public class  DaoConfig {
 
     @Bean
     public CommentRecordMapper commentRecordMapper() {
-        return new CommentRecordMapper(userRecordMapper());
+        return new CommentRecordMapper();
     }
 
     @Bean
