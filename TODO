@@ -1,6 +1,5 @@
 1. Extract logic from NewsDaoImpl
-2. Make NewsDao.getById throw an exception, create corresponding exception handler
-3. Write tests for controllers
-4. Add validation to the methods of NewsService which lack it
-5. Validation errors return 404 instead of 400 for some reason - fix.
-6. Remember me.
+2. Write tests for controllers
+3. Remember me.
+4. Valid creation_date in all entities.
+5. Comments count in the news.
