@@ -4,6 +4,7 @@ import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record;
+import org.jooq.Record2;
 import org.jooq.SelectOnConditionStep;
 import org.jooq.SortField;
 import org.jooq.Table;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import urujdas.dao.NewsDao;
 import urujdas.dao.exception.NotFoundException;
 import urujdas.model.News;
+import urujdas.model.NewsLight;
 import urujdas.model.Subscription;
 import urujdas.model.User;
 
@@ -29,7 +31,9 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
+import static org.jooq.impl.DSL.coalesce;
 import static org.jooq.impl.DSL.count;
+import static urujdas.tables.CommentsTable.COMMENTS;
 import static urujdas.tables.FavouritesTable.FAVOURITES;
 import static urujdas.tables.LikesTable.LIKES;
 import static urujdas.tables.NewsCategoriesTable.NEWS_CATEGORIES;
@@ -55,6 +59,11 @@ public class NewsDaoImpl implements NewsDao {
         throw new NotFoundException(News.class, id);
     }
 
+    @Override
+    public List<NewsLight> getLatestAllLight(int latestCount) {
+        return selectLightNews(Optional.of(latestCount));
+    }
+
     private List<News> select(Collection<Condition> conditions,
                               Map<Table<?>, Condition> joins,
                               Optional<Integer> limit) {
@@ -78,6 +87,34 @@ public class NewsDaoImpl implements NewsDao {
         }
         return step.fetch()
                 .into(News.class);
+    }
+
+    private List<NewsLight> selectLightNews(Optional<Integer> limit) {
+        Table<Record2<Integer, Long>> commentsCount = ctx.select(count(COMMENTS.ID).as("c_count"), COMMENTS.NEWS_ID)
+                .from(COMMENTS)
+                .groupBy(COMMENTS.NEWS_ID)
+                .asTable("comments_count");
+
+        Table<Record2<Integer, Long>> likesCount = ctx.select(count(LIKES.ID).as("l_count"), LIKES.NEWS_ID)
+                .from(LIKES)
+                .groupBy(LIKES.NEWS_ID)
+                .asTable("likes_count");
+
+        List<Field<?>> fields = Arrays.asList(NEWS.ID, NEWS.TITLE, NEWS.BODY,
+                USERS.USERNAME, USERS.FIRSTNAME, USERS.LASTNAME,
+                coalesce(commentsCount.field("c_count"), 0).as("comments_count"),
+                coalesce(likesCount.field("l_count"), 0).as("likes_count")
+        );
+
+        return ctx.select(fields)
+                .from(NEWS)
+                .join(USERS).on(NEWS.AUTHOR.equal(USERS.ID))
+                .leftOuterJoin(commentsCount).on(commentsCount.field(COMMENTS.NEWS_ID).equal(NEWS.ID))
+                .leftOuterJoin(likesCount).on(likesCount.field(LIKES.NEWS_ID).equal(NEWS.ID))
+                .orderBy(NEWS.ID.desc())
+                .limit(limit.get())
+                .fetch()
+                .into(NewsLight.class);
     }
 
     private List<Field<?>> getNewsFields() {

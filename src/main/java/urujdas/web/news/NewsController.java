@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import urujdas.model.Comment;
 import urujdas.model.LikeResult;
 import urujdas.model.News;
+import urujdas.model.NewsLight;
 import urujdas.service.CommentService;
 import urujdas.service.NewsService;
 import urujdas.web.common.WebCommons;
@@ -34,8 +35,8 @@ public class NewsController {
     private CommentService commentService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<News> getLatestFromAllNews() {
-        return newsService.getLatestAll(WebCommons.PAGING_COUNT);
+    public List<NewsLight> getLatestFromAllNews() {
+        return newsService.getLatestAllLight(WebCommons.PAGING_COUNT);
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "id")

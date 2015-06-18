@@ -2,10 +2,13 @@ package urujdas.service;
 
 import urujdas.model.LikeResult;
 import urujdas.model.News;
+import urujdas.model.NewsLight;
 
 import java.util.List;
 
 public interface NewsService {
+
+    List<NewsLight> getLatestAllLight(int latestCount);
 
     List<News> getLatestAll(int latestCount);
 

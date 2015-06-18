@@ -1,6 +1,7 @@
 package urujdas.dao;
 
 import urujdas.model.News;
+import urujdas.model.NewsLight;
 import urujdas.model.Subscription;
 import urujdas.model.User;
 
@@ -9,6 +10,8 @@ import java.util.List;
 public interface NewsDao {
 
     News getById(Long id);
+
+    List<NewsLight> getLatestAllLight(int latestCount);
 
     List<News> getLatestAll(int latestCount);
 

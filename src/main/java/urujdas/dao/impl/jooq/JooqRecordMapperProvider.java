@@ -6,11 +6,13 @@ import org.jooq.RecordMapperProvider;
 import org.jooq.RecordType;
 import urujdas.dao.impl.jooq.mappers.CommentRecordMapper;
 import urujdas.dao.impl.jooq.mappers.NewsCategoryRecordMapper;
+import urujdas.dao.impl.jooq.mappers.NewsLightRecordMapper;
 import urujdas.dao.impl.jooq.mappers.NewsRecordMapper;
 import urujdas.dao.impl.jooq.mappers.UserRecordMapper;
 import urujdas.model.Comment;
 import urujdas.model.News;
 import urujdas.model.NewsCategory;
+import urujdas.model.NewsLight;
 import urujdas.model.User;
 
 public class JooqRecordMapperProvider implements RecordMapperProvider {
@@ -48,6 +50,10 @@ public class JooqRecordMapperProvider implements RecordMapperProvider {
 
         if (Comment.class.equals(type)) {
             return (RecordMapper<R, E>) commentRecordMapper;
+        }
+
+        if (NewsLight.class.equals(type)) {
+            return (RecordMapper<R, E>) new NewsLightRecordMapper();
         }
 
         throw new RuntimeException("Mapper for type " + type.getName() + " is not found");

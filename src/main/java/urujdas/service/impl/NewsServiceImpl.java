@@ -10,6 +10,7 @@ import urujdas.model.LikeResult;
 import urujdas.model.LikeType;
 import urujdas.model.News;
 import urujdas.model.NewsCategory;
+import urujdas.model.NewsLight;
 import urujdas.model.Subscription;
 import urujdas.model.User;
 import urujdas.service.NewsService;
@@ -35,6 +36,13 @@ public class NewsServiceImpl implements NewsService {
 
     @Autowired
     private NewsCategoryDao newsCategoryDao;
+
+    @Override
+    public List<NewsLight> getLatestAllLight(int latestCount) {
+        Validation.isGreaterThanZero(latestCount);
+
+        return newsDao.getLatestAllLight(latestCount);
+    }
 
     @Override
     public List<News> getLatestAll(int latestCount) {
