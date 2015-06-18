@@ -1,5 +1,7 @@
 package urujdas.config;
 
+import com.vladmihalcea.flexypool.FlexyPoolDataSource;
+import com.vladmihalcea.flexypool.adaptor.HikariCPPoolAdapter;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jooq.ConnectionProvider;
@@ -35,6 +37,11 @@ public class  DaoConfig {
         } catch (Exception e) {
             throw new RuntimeException("Cannot load postgres data source", e);
         }
+
+        return new FlexyPoolDataSource<>(flexyPoolConfiguration());
+    }
+
+    private HikariConfig hikariConfig() {
         String dbHostname = System.getenv("DB_HOSTNAME");
         String dbDatabase = System.getenv("DB_DATABASE");
         String dbUser = System.getenv("DB_USER");
@@ -53,8 +60,15 @@ public class  DaoConfig {
         config.setJdbcUrl(jdbcUrl);
         config.setUsername(dbUser);
         config.setPassword(dbPassword);
+        return config;
+    }
 
-        return new HikariDataSource(config);
+    private com.vladmihalcea.flexypool.config.Configuration<HikariDataSource> flexyPoolConfiguration() {
+        return new com.vladmihalcea.flexypool.config.Configuration.Builder<>(
+                "flexy-pool",
+                new HikariDataSource(hikariConfig()),
+                HikariCPPoolAdapter.FACTORY
+        ).build();
     }
 
     @Bean
