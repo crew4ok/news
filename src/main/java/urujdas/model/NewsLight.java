@@ -11,10 +11,12 @@ public class NewsLight {
     private final String lastname;
     private final Integer commentsCount;
     private final Integer likesCount;
+    private final boolean currentUserLiked;
+    private final boolean currentUserFavoured;
 
     @GeneratePojoBuilder
     public NewsLight(Long id, String title, String body, String username, String firstname, String lastname,
-                     Integer commentsCount, Integer likesCount) {
+                     Integer commentsCount, Integer likesCount, boolean currentUserLiked, boolean currentUserFavoured) {
         this.id = id;
         this.title = title;
         this.body = body;
@@ -23,6 +25,8 @@ public class NewsLight {
         this.lastname = lastname;
         this.commentsCount = commentsCount;
         this.likesCount = likesCount;
+        this.currentUserLiked = currentUserLiked;
+        this.currentUserFavoured = currentUserFavoured;
     }
 
     public Long getId() {
@@ -53,11 +57,20 @@ public class NewsLight {
         return likesCount;
     }
 
+    public String getBody() {
+        return body;
+    }
+
+    public boolean isCurrentUserLiked() {
+        return currentUserLiked;
+    }
+
+    public boolean isCurrentUserFavoured() {
+        return currentUserFavoured;
+    }
+
     public static NewsLightBuilder builder() {
         return new NewsLightBuilder();
     }
 
-    public String getBody() {
-        return body;
-    }
 }

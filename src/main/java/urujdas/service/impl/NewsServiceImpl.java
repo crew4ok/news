@@ -41,7 +41,9 @@ public class NewsServiceImpl implements NewsService {
     public List<NewsLight> getLatestAllLight(int latestCount) {
         Validation.isGreaterThanZero(latestCount);
 
-        return newsDao.getLatestAllLight(latestCount);
+        User currentUser = userService.getCurrentUser();
+
+        return newsDao.getLatestAllLight(currentUser, latestCount);
     }
 
     @Override

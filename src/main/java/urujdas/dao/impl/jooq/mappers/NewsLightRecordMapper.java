@@ -19,6 +19,8 @@ public class NewsLightRecordMapper implements RecordMapper<Record, NewsLight> {
                 .withLastname(record.getValue(USERS.LASTNAME))
                 .withCommentsCount(record.getValue("comments_count", Integer.class))
                 .withLikesCount(record.getValue("likes_count", Integer.class))
+                .withCurrentUserFavoured(record.getValue("user_favoured", Boolean.class))
+                .withCurrentUserLiked(record.getValue("user_liked", Boolean.class))
                 .build();
     }
 }

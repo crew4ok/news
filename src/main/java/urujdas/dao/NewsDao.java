@@ -11,7 +11,7 @@ public interface NewsDao {
 
     News getById(Long id);
 
-    List<NewsLight> getLatestAllLight(int latestCount);
+    List<NewsLight> getLatestAllLight(User currentUser, int latestCount);
 
     List<News> getLatestAll(int latestCount);
 

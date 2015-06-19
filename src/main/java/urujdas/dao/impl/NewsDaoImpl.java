@@ -4,7 +4,7 @@ import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record;
-import org.jooq.Record2;
+import org.jooq.Select;
 import org.jooq.SelectOnConditionStep;
 import org.jooq.SortField;
 import org.jooq.Table;
@@ -33,6 +33,8 @@ import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static org.jooq.impl.DSL.coalesce;
 import static org.jooq.impl.DSL.count;
+import static org.jooq.impl.DSL.exists;
+import static org.jooq.impl.DSL.when;
 import static urujdas.tables.CommentsTable.COMMENTS;
 import static urujdas.tables.FavouritesTable.FAVOURITES;
 import static urujdas.tables.LikesTable.LIKES;
@@ -60,8 +62,8 @@ public class NewsDaoImpl implements NewsDao {
     }
 
     @Override
-    public List<NewsLight> getLatestAllLight(int latestCount) {
-        return selectLightNews(Optional.of(latestCount));
+    public List<NewsLight> getLatestAllLight(User currentUser, int latestCount) {
+        return selectLightNews(currentUser.getId(), Optional.of(latestCount));
     }
 
     private List<News> select(Collection<Condition> conditions,
@@ -89,28 +91,41 @@ public class NewsDaoImpl implements NewsDao {
                 .into(News.class);
     }
 
-    private List<NewsLight> selectLightNews(Optional<Integer> limit) {
-        Table<Record2<Integer, Long>> commentsCount = ctx.select(count(COMMENTS.ID).as("c_count"), COMMENTS.NEWS_ID)
+    private List<NewsLight> selectLightNews(Long currentUserId, Optional<Integer> limit) {
+        Field<Object> commentsCount = ctx.select(count(COMMENTS.ID))
                 .from(COMMENTS)
+                .where(COMMENTS.NEWS_ID.equal(NEWS.ID))
                 .groupBy(COMMENTS.NEWS_ID)
-                .asTable("comments_count");
+                .asField();
 
-        Table<Record2<Integer, Long>> likesCount = ctx.select(count(LIKES.ID).as("l_count"), LIKES.NEWS_ID)
+        Field<Object> likesCount = ctx.select(count(LIKES.ID))
                 .from(LIKES)
+                .where(LIKES.NEWS_ID.equal(NEWS.ID))
                 .groupBy(LIKES.NEWS_ID)
-                .asTable("likes_count");
+                .asField();
 
-        List<Field<?>> fields = Arrays.asList(NEWS.ID, NEWS.TITLE, NEWS.BODY,
+        Select<?> favoured = ctx.selectOne()
+                .from(FAVOURITES)
+                .where(FAVOURITES.USER_ID.equal(currentUserId))
+                .and(FAVOURITES.NEWS_ID.equal(NEWS.ID));
+
+        Select<?> liked = ctx.selectOne()
+                .from(LIKES)
+                .where(LIKES.LIKER.equal(currentUserId))
+                .and(LIKES.NEWS_ID.equal(NEWS.ID));
+
+        List<Field<?>> fields = Arrays.asList(
+                NEWS.ID, NEWS.TITLE, NEWS.BODY,
                 USERS.USERNAME, USERS.FIRSTNAME, USERS.LASTNAME,
-                coalesce(commentsCount.field("c_count"), 0).as("comments_count"),
-                coalesce(likesCount.field("l_count"), 0).as("likes_count")
+                coalesce(commentsCount, 0).as("comments_count"),
+                coalesce(likesCount, 0).as("likes_count"),
+                when(exists(favoured), "true").otherwise("false").as("user_favoured"),
+                when(exists(liked), "true").otherwise("false").as("user_liked")
         );
 
         return ctx.select(fields)
                 .from(NEWS)
                 .join(USERS).on(NEWS.AUTHOR.equal(USERS.ID))
-                .leftOuterJoin(commentsCount).on(commentsCount.field(COMMENTS.NEWS_ID).equal(NEWS.ID))
-                .leftOuterJoin(likesCount).on(likesCount.field(LIKES.NEWS_ID).equal(NEWS.ID))
                 .orderBy(NEWS.ID.desc())
                 .limit(limit.get())
                 .fetch()
