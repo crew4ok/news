@@ -8,7 +8,6 @@ import urujdas.model.News;
 import urujdas.model.NewsCategory;
 import urujdas.model.User;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @ContextConfiguration(classes = DaoConfig.class)
@@ -36,7 +35,6 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
         News news = News.builder()
                 .withTitle("title")
                 .withBody("body")
-                .withCreationDate(LocalDateTime.now())
                 .withCategory(newsCategory)
                 .withAuthor(author)
                 .build();
@@ -47,7 +45,6 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
         News news = News.builder()
                 .withTitle("title" + i)
                 .withBody("body")
-                .withCreationDate(LocalDateTime.now())
                 .withAuthor(defaultUser)
                 .withCategory(defaultNewsCategory)
                 .build();

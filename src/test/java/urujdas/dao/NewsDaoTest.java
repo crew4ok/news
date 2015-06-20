@@ -8,7 +8,6 @@ import urujdas.model.NewsCategory;
 import urujdas.model.Subscription;
 import urujdas.model.User;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,7 +37,6 @@ public class NewsDaoTest extends DaoBaseTest {
         News news = News.builder()
                 .withTitle("title")
                 .withBody("body")
-                .withCreationDate(LocalDateTime.now())
                 .withLocation("location")
                 .withLikesCount(1)
                 .withAuthor(defaultUser)
@@ -54,7 +52,7 @@ public class NewsDaoTest extends DaoBaseTest {
 
         assertEquals(actualNews.getTitle(), news.getTitle());
         assertEquals(actualNews.getBody(), news.getBody());
-        assertEquals(actualNews.getCreationDate(), news.getCreationDate());
+        assertNotNull(actualNews.getCreationDate());
         assertEquals(actualNews.getLocation(), news.getLocation());
         assertEquals(actualNews.getAuthor(), defaultUser);
         assertEquals(actualNews.getCategory(), defaultNewsCategory);

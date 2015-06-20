@@ -16,8 +16,6 @@ import urujdas.service.NewsService;
 import urujdas.service.UserService;
 import urujdas.util.Validation;
 
-import java.time.Clock;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -116,7 +114,6 @@ public class NewsServiceImpl implements NewsService {
         NewsCategory newsCategory = newsCategoryDao.getById(news.getCategory().getId());
 
         news = News.fromNews(news)
-                .withCreationDate(LocalDateTime.now(Clock.systemUTC()))
                 .withAuthor(currentUser)
                 .withCategory(newsCategory)
                 .build();

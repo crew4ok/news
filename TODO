@@ -1,5 +1,4 @@
 1. Extract logic from NewsDaoImpl
 2. Write tests for controllers
 3. Remember me.
-4. Valid creation_date in all entities.
-5. Comments count in the news.
+4. Comments count in the news.

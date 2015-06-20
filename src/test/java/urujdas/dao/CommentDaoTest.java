@@ -6,12 +6,12 @@ import urujdas.dao.exception.NotFoundException;
 import urujdas.model.Comment;
 import urujdas.model.News;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 public class CommentDaoTest extends DaoBaseTest {
@@ -30,7 +30,6 @@ public class CommentDaoTest extends DaoBaseTest {
         Comment comment = Comment.builder()
                 .withId(-1L)
                 .withBody("body")
-                .withCreationDate(LocalDateTime.now())
                 .withNewsId(defaultNews.getId())
                 .withAuthor(defaultUser)
                 .build();
@@ -40,7 +39,7 @@ public class CommentDaoTest extends DaoBaseTest {
         assertNotEquals(createdComment.getId(), comment.getId());
 
         assertEquals(createdComment.getBody(), createdComment.getBody());
-        assertEquals(createdComment.getCreationDate(), createdComment.getCreationDate());
+        assertNotNull(createdComment.getCreationDate());
         assertEquals(createdComment.getNewsId(), createdComment.getNewsId());
         assertEquals(createdComment.getAuthor(), createdComment.getAuthor());
     }
@@ -58,7 +57,6 @@ public class CommentDaoTest extends DaoBaseTest {
         for (int i = 0; i < totalCount; i++) {
             Comment comment = Comment.builder()
                     .withBody("body" + i)
-                    .withCreationDate(LocalDateTime.now())
                     .withNewsId(defaultNews.getId())
                     .withAuthor(defaultUser)
                     .build();

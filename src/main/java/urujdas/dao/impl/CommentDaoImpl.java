@@ -10,7 +10,6 @@ import urujdas.dao.exception.NotFoundException;
 import urujdas.model.Comment;
 import urujdas.model.News;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +43,6 @@ public class CommentDaoImpl implements CommentDao {
     public Comment create(Comment comment) {
         Long id = ctx.insertInto(COMMENTS)
                 .set(COMMENTS.BODY, comment.getBody())
-                .set(COMMENTS.CREATION_DATE, Timestamp.valueOf(comment.getCreationDate()))
                 .set(COMMENTS.NEWS_ID, comment.getNewsId())
                 .set(COMMENTS.AUTHOR, comment.getAuthor().getId())
                 .returning(COMMENTS.ID)

@@ -19,7 +19,7 @@ CREATE TABLE news (
   id            BIGSERIAL PRIMARY KEY,
   title         VARCHAR   NOT NULL,
   body          TEXT,
-  creation_date TIMESTAMP NOT NULL,
+  creation_date TIMESTAMP NOT NULL DEFAULT (now() at TIME ZONE 'UTC'),
   location      VARCHAR,
   author        BIGSERIAL NOT NULL REFERENCES users (id),
   category_id   BIGSERIAL NOT NULL REFERENCES news_categories (id)
@@ -46,7 +46,7 @@ CREATE TABLE likes (
 CREATE TABLE comments (
   id            BIGSERIAL PRIMARY KEY,
   body          TEXT      NOT NULL,
-  creation_date TIMESTAMP NOT NULL,
+  creation_date TIMESTAMP NOT NULL DEFAULT (now() at TIME ZONE 'UTC'),
   news_id       BIGSERIAL NOT NULL REFERENCES news (id),
   author        BIGSERIAL NOT NULL REFERENCES users (id)
 );

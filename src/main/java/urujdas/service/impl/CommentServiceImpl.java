@@ -12,8 +12,6 @@ import urujdas.service.CommentService;
 import urujdas.service.UserService;
 import urujdas.util.Validation;
 
-import java.time.Clock;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -40,13 +38,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void create(Comment comment) {
-        LocalDateTime creationDate = LocalDateTime.now(Clock.systemUTC());
         User currentUser = userService.getCurrentUser();
         News news = newsDao.getById(comment.getNewsId());
 
         Comment commentToCreate = Comment.builder()
                 .withBody(comment.getBody())
-                .withCreationDate(creationDate)
                 .withNewsId(news.getId())
                 .withAuthor(currentUser)
                 .build();

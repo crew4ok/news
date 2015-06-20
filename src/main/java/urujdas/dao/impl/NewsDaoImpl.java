@@ -15,7 +15,6 @@ import urujdas.model.News;
 import urujdas.model.Subscription;
 import urujdas.model.User;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -191,7 +190,6 @@ public class NewsDaoImpl implements NewsDao {
         Long id = ctx.insertInto(NEWS)
                 .set(NEWS.TITLE, news.getTitle())
                 .set(NEWS.BODY, news.getBody())
-                .set(NEWS.CREATION_DATE, Timestamp.valueOf(news.getCreationDate()))
                 .set(NEWS.LOCATION, news.getLocation())
                 .set(NEWS.AUTHOR, news.getAuthor().getId())
                 .set(NEWS.CATEGORY_ID, news.getCategory().getId())
