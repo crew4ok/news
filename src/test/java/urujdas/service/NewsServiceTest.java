@@ -18,7 +18,7 @@ import urujdas.model.news.News;
 import urujdas.model.news.NewsCategory;
 import urujdas.model.users.User;
 import urujdas.service.impl.NewsServiceImpl;
-import urujdas.util.InvalidParamException;
+import urujdas.util.exception.InvalidParamException;
 
 import java.util.Collections;
 import java.util.List;

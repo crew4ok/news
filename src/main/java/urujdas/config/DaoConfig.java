@@ -20,6 +20,7 @@ import urujdas.dao.impl.jooq.JooqTransactionProvider;
 import urujdas.dao.impl.jooq.mappers.CommentRecordMapper;
 import urujdas.dao.impl.jooq.mappers.NewsCategoryRecordMapper;
 import urujdas.dao.impl.jooq.mappers.NewsRecordMapper;
+import urujdas.dao.impl.jooq.mappers.UserFilterRecordMapper;
 import urujdas.dao.impl.jooq.mappers.UserRecordMapper;
 
 import javax.sql.DataSource;
@@ -91,6 +92,7 @@ public class  DaoConfig {
     public RecordMapperProvider jooqRecordMapperProvider() {
         return new JooqRecordMapperProvider(
                 userRecordMapper(),
+                userFilterRecordMapper(),
                 newsRecordMapper(),
                 newsCategoryRecordMapper(),
                 commentRecordMapper()
@@ -100,6 +102,11 @@ public class  DaoConfig {
     @Bean
     public UserRecordMapper userRecordMapper() {
         return new UserRecordMapper();
+    }
+
+    @Bean
+    public UserFilterRecordMapper userFilterRecordMapper() {
+        return new UserFilterRecordMapper();
     }
 
     @Bean

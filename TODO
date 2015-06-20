@@ -3,3 +3,9 @@
 3. Remember me.
 4. Comments count in the news.
 5. Add length validation for username and password in registration.
+6. Fix getCurrentUser returning null after server restart.
+7. Fix news paging - use lesserThan instead of lesserThanOrEqualTo.
+8. Add new user fields to creation methods.
+9. Add user update method.
+10. Write thorough tests for UserDao.
+11. Move minimum pull up interval from DatingServiceImpl into property file or another settings source.

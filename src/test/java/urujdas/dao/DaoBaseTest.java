@@ -6,8 +6,12 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import urujdas.config.DaoConfig;
 import urujdas.model.news.News;
 import urujdas.model.news.NewsCategory;
+import urujdas.model.users.Gender;
+import urujdas.model.users.GenderPreferences;
+import urujdas.model.users.RelationsPreferences;
 import urujdas.model.users.User;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @ContextConfiguration(classes = DaoConfig.class)
@@ -27,6 +31,9 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
 
     @Autowired
     protected UserDao userDao;
+
+    @Autowired
+    protected DatingDao datingDao;
 
     protected User defaultUser;
     protected NewsCategory defaultNewsCategory;
@@ -67,4 +74,20 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
                 .build();
     }
 
+    protected User createDefaultUser(Gender gender, GenderPreferences genderPreferences,
+                                     RelationsPreferences relationsPreferences, LocalDateTime birthDate) {
+        User user = User.builder()
+                .withUsername(UUID.randomUUID().toString())
+                .withPassword("password")
+                .withGender(gender)
+                .withGenderPreferences(genderPreferences)
+                .withRelationsPreferences(relationsPreferences)
+                .withBirthDate(birthDate)
+                .build();
+        user = userDao.create(user);
+
+        return User.fromUser(user)
+                .withPassword(null)
+                .build();
+    }
 }

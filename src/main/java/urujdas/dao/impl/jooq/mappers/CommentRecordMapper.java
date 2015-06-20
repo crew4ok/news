@@ -7,9 +7,9 @@ import urujdas.model.users.User;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static urujdas.tables.CommentsTable.COMMENTS;
+import static urujdas.util.MapperUtils.fromNullable;
 
 public class CommentRecordMapper implements RecordMapper<Record, Comment> {
 
@@ -17,9 +17,7 @@ public class CommentRecordMapper implements RecordMapper<Record, Comment> {
     public Comment map(Record record) {
         User author = record.into(User.class);
 
-        LocalDateTime creationDate = Optional.ofNullable(record.getValue(COMMENTS.CREATION_DATE))
-                .map(Timestamp::toLocalDateTime)
-                .orElse(null);
+        LocalDateTime creationDate = fromNullable(record.getValue(COMMENTS.CREATION_DATE), Timestamp::toLocalDateTime);
 
         return Comment.builder()
                 .withId(record.getValue(COMMENTS.ID))

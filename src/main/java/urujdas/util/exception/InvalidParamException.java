@@ -1,4 +1,4 @@
-package urujdas.util;
+package urujdas.util.exception;
 
 public class InvalidParamException extends RuntimeException {
 

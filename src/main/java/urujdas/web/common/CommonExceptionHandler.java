@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import urujdas.dao.exception.NotFoundException;
+import urujdas.service.exception.PullUpTooFrequentException;
 import urujdas.web.common.model.error.ErrorResponse;
 import urujdas.web.common.model.error.ErrorType;
 import urujdas.web.common.model.error.NotFoundErrorResponse;
@@ -27,6 +28,16 @@ public class CommonExceptionHandler {
         return new ResponseEntity<>(
                 new ValidationErrorResponse(e.getErrors()),
                 HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(PullUpTooFrequentException.class)
+    public ResponseEntity<ErrorResponse> pullUpToFrequentException(PullUpTooFrequentException e) {
+        LOG.debug("Pull to frequent");
+
+        return new ResponseEntity<>(
+                new ErrorResponse(ErrorType.PULL_UP_TOO_FREQUENT, "Pull up is too frequent"),
+                HttpStatus.BAD_GATEWAY
         );
     }
 

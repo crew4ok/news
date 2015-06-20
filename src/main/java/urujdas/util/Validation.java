@@ -1,5 +1,7 @@
 package urujdas.util;
 
+import urujdas.util.exception.InvalidParamException;
+
 public final class Validation {
 
     private Validation() { }
@@ -22,6 +24,15 @@ public final class Validation {
     public static void isNotNull(Object value) {
         if (value == null) {
             throw new InvalidParamException("Value is null");
+        }
+    }
+
+    public static void checkRangeNonStrict(Number lower, Number higher) {
+        isNotNull(lower);
+        isNotNull(higher);
+
+        if (lower.doubleValue() > higher.doubleValue()) {
+            throw new InvalidParamException("Range is invalid: " + lower + " is bigger than " + higher);
         }
     }
 }

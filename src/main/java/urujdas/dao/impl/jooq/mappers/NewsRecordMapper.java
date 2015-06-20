@@ -9,10 +9,10 @@ import urujdas.tables.LikesTable;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.jooq.impl.DSL.count;
 import static urujdas.tables.NewsTable.NEWS;
+import static urujdas.util.MapperUtils.fromNullable;
 
 public class NewsRecordMapper implements RecordMapper<Record, News> {
 
@@ -20,10 +20,7 @@ public class NewsRecordMapper implements RecordMapper<Record, News> {
     public News map(Record record) {
         Timestamp creationDateTimestamp = record.getValue(NEWS.CREATION_DATE);
 
-        LocalDateTime creationDate = Optional.ofNullable(creationDateTimestamp)
-                .map(Timestamp::toLocalDateTime)
-                .orElse(null);
-
+        LocalDateTime creationDate = fromNullable(record.getValue(NEWS.CREATION_DATE), Timestamp::toLocalDateTime);
         Integer likesCount = record.getValue(count(LikesTable.LIKES.ID));
 
         return News.builder()

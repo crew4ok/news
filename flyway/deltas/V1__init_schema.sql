@@ -1,13 +1,26 @@
 CREATE TABLE users (
-  id         BIGSERIAL PRIMARY KEY,
-  username   VARCHAR     NOT NULL UNIQUE,
-  password   VARCHAR(64) NOT NULL,
-  firstname  VARCHAR,
-  lastname   VARCHAR,
-  birth_date TIMESTAMP,
-  gender     VARCHAR,
-  phone      VARCHAR,
-  email      VARCHAR
+  id                    BIGSERIAL PRIMARY KEY,
+  username              VARCHAR     NOT NULL UNIQUE,
+  password              VARCHAR(64) NOT NULL,
+  firstname             VARCHAR,
+  lastname              VARCHAR,
+  birth_date            TIMESTAMP,
+  gender                VARCHAR,
+  phone                 VARCHAR,
+  email                 VARCHAR,
+  pull_up_date          TIMESTAMP   NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
+  gender_preferences    VARCHAR,
+  relations_preferences VARCHAR
+);
+
+CREATE TABLE user_filters (
+  user_id               BIGINT REFERENCES users (id),
+  gender                VARCHAR,
+  gender_preferences    VARCHAR,
+  relations_preferences VARCHAR,
+  age_lower             INT,
+  age_higher            INT,
+  PRIMARY KEY (user_id)
 );
 
 CREATE TABLE news_categories (
@@ -19,7 +32,7 @@ CREATE TABLE news (
   id            BIGSERIAL PRIMARY KEY,
   title         VARCHAR   NOT NULL,
   body          TEXT,
-  creation_date TIMESTAMP NOT NULL DEFAULT (now() at TIME ZONE 'UTC'),
+  creation_date TIMESTAMP NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
   location      VARCHAR,
   author        BIGSERIAL NOT NULL REFERENCES users (id),
   category_id   BIGSERIAL NOT NULL REFERENCES news_categories (id)
@@ -46,7 +59,7 @@ CREATE TABLE likes (
 CREATE TABLE comments (
   id            BIGSERIAL PRIMARY KEY,
   body          TEXT      NOT NULL,
-  creation_date TIMESTAMP NOT NULL DEFAULT (now() at TIME ZONE 'UTC'),
+  creation_date TIMESTAMP NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
   news_id       BIGSERIAL NOT NULL REFERENCES news (id),
   author        BIGSERIAL NOT NULL REFERENCES users (id)
 );

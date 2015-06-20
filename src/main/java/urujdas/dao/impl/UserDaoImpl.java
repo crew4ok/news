@@ -8,8 +8,10 @@ import urujdas.model.users.User;
 import urujdas.tables.records.UsersRecord;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import static urujdas.Tables.USERS;
+import static urujdas.util.MapperUtils.fromNullable;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -45,15 +47,22 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User create(User user) {
+        Timestamp birthDateTimestamp = fromNullable(user.getBirthDate(), (LocalDateTime ldt) -> Timestamp.valueOf(ldt));
+        String genderName = fromNullable(user.getGender(), Enum::name);
+        String genderPreferencesName = fromNullable(user.getGenderPreferences(), Enum::name);
+        String relationsPreferences = fromNullable(user.getRelationsPreferences(), Enum::name);
+
         return ctx.insertInto(USERS)
                 .set(USERS.USERNAME, user.getUsername())
                 .set(USERS.PASSWORD, user.getPassword())
                 .set(USERS.FIRSTNAME, user.getFirstname())
                 .set(USERS.LASTNAME, user.getLastname())
-                .set(USERS.BIRTH_DATE, user.getBirthDate() != null ? Timestamp.valueOf(user.getBirthDate()) : null)
+                .set(USERS.BIRTH_DATE, birthDateTimestamp)
                 .set(USERS.EMAIL, user.getEmail())
-                .set(USERS.GENDER, user.getGender() != null ? user.getGender().name() : null)
+                .set(USERS.GENDER, genderName)
                 .set(USERS.PHONE, user.getPhone())
+                .set(USERS.GENDER_PREFERENCES, genderPreferencesName)
+                .set(USERS.RELATIONS_PREFERENCES, relationsPreferences)
                 .returning(USERS.fields())
                 .fetchOne()
                 .into(User.class);

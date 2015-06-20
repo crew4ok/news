@@ -20,9 +20,14 @@ public class User {
 
     private final String phone;
 
+    private final LocalDateTime pullUpDate;
+    private final GenderPreferences genderPreferences;
+    private final RelationsPreferences relationsPreferences;
+
     @GeneratePojoBuilder
     User(Long id, String username, String password, String firstname, String lastname, LocalDateTime birthDate,
-         String email, Gender gender, String phone) {
+         String email, Gender gender, String phone, LocalDateTime pullUpDate, GenderPreferences genderPreferences,
+         RelationsPreferences relationsPreferences) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -32,6 +37,9 @@ public class User {
         this.email = email;
         this.gender = gender;
         this.phone = phone;
+        this.pullUpDate = pullUpDate;
+        this.genderPreferences = genderPreferences;
+        this.relationsPreferences = relationsPreferences;
     }
 
     public Long getId() {
@@ -70,6 +78,18 @@ public class User {
         return phone;
     }
 
+    public GenderPreferences getGenderPreferences() {
+        return genderPreferences;
+    }
+
+    public RelationsPreferences getRelationsPreferences() {
+        return relationsPreferences;
+    }
+
+    public LocalDateTime getPullUpDate() {
+        return pullUpDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -85,8 +105,10 @@ public class User {
         if (birthDate != null ? !birthDate.equals(user.birthDate) : user.birthDate != null) return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
         if (gender != user.gender) return false;
-        return !(phone != null ? !phone.equals(user.phone) : user.phone != null);
-
+        if (phone != null ? !phone.equals(user.phone) : user.phone != null) return false;
+        if (pullUpDate != null ? !pullUpDate.equals(user.pullUpDate) : user.pullUpDate != null) return false;
+        if (genderPreferences != user.genderPreferences) return false;
+        return relationsPreferences == user.relationsPreferences;
     }
 
     @Override
@@ -100,6 +122,9 @@ public class User {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (pullUpDate != null ? pullUpDate.hashCode() : 0);
+        result = 31 * result + (genderPreferences != null ? genderPreferences.hashCode() : 0);
+        result = 31 * result + (relationsPreferences != null ? relationsPreferences.hashCode() : 0);
         return result;
     }
 
@@ -115,6 +140,9 @@ public class User {
                 ", email='" + email + '\'' +
                 ", gender=" + gender +
                 ", phone='" + phone + '\'' +
+                ", pullUpDate=" + pullUpDate +
+                ", genderPreferences=" + genderPreferences +
+                ", relationsPreferences=" + relationsPreferences +
                 '}';
     }
 
@@ -128,7 +156,10 @@ public class User {
                 .withBirthDate(user.birthDate)
                 .withEmail(user.email)
                 .withGender(user.gender)
-                .withPhone(user.phone);
+                .withPhone(user.phone)
+                .withGenderPreferences(user.getGenderPreferences())
+                .withRelationsPreferences(user.getRelationsPreferences())
+                .withPullUpDate(user.getPullUpDate());
     }
 
     public static UserBuilder builder() {
