@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import urujdas.dao.NewsDao;
 import urujdas.dao.exception.NotFoundException;
-import urujdas.model.News;
-import urujdas.model.Subscription;
-import urujdas.model.User;
+import urujdas.model.news.News;
+import urujdas.model.subscriptions.Subscription;
+import urujdas.model.users.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;

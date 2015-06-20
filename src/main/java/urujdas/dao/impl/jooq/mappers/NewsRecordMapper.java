@@ -2,9 +2,9 @@ package urujdas.dao.impl.jooq.mappers;
 
 import org.jooq.Record;
 import org.jooq.RecordMapper;
-import urujdas.model.News;
-import urujdas.model.NewsCategory;
-import urujdas.model.User;
+import urujdas.model.news.News;
+import urujdas.model.news.NewsCategory;
+import urujdas.model.users.User;
 import urujdas.tables.LikesTable;
 
 import java.sql.Timestamp;

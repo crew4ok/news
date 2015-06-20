@@ -2,7 +2,7 @@ package urujdas.web.news.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import urujdas.model.Comment;
+import urujdas.model.comments.Comment;
 
 import javax.validation.constraints.NotNull;
 

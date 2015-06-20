@@ -11,12 +11,12 @@ import urujdas.config.ServiceConfig;
 import urujdas.dao.NewsCategoryDao;
 import urujdas.dao.NewsDao;
 import urujdas.dao.SubscriptionDao;
-import urujdas.model.FavourResult;
-import urujdas.model.LikeResult;
-import urujdas.model.LikeType;
-import urujdas.model.News;
-import urujdas.model.NewsCategory;
-import urujdas.model.User;
+import urujdas.model.favourites.FavourResult;
+import urujdas.model.likes.LikeResult;
+import urujdas.model.likes.LikeType;
+import urujdas.model.news.News;
+import urujdas.model.news.NewsCategory;
+import urujdas.model.users.User;
 import urujdas.service.impl.NewsServiceImpl;
 import urujdas.util.InvalidParamException;
 

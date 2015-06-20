@@ -2,8 +2,8 @@ package urujdas.dao;
 
 import org.jooq.exception.DataAccessException;
 import org.testng.annotations.Test;
-import urujdas.model.Gender;
-import urujdas.model.User;
+import urujdas.model.users.Gender;
+import urujdas.model.users.User;
 
 import static org.junit.Assert.assertNotNull;
 

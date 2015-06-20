@@ -1,4 +1,4 @@
-package urujdas.model;
+package urujdas.model.likes;
 
 public class LikeResult {
     private final LikeType likeType;

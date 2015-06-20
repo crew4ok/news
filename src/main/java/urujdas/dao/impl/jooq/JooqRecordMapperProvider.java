@@ -8,10 +8,10 @@ import urujdas.dao.impl.jooq.mappers.CommentRecordMapper;
 import urujdas.dao.impl.jooq.mappers.NewsCategoryRecordMapper;
 import urujdas.dao.impl.jooq.mappers.NewsRecordMapper;
 import urujdas.dao.impl.jooq.mappers.UserRecordMapper;
-import urujdas.model.Comment;
-import urujdas.model.News;
-import urujdas.model.NewsCategory;
-import urujdas.model.User;
+import urujdas.model.comments.Comment;
+import urujdas.model.news.News;
+import urujdas.model.news.NewsCategory;
+import urujdas.model.users.User;
 
 public class JooqRecordMapperProvider implements RecordMapperProvider {
 

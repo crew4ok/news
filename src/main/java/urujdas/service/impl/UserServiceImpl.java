@@ -7,7 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import urujdas.dao.UserDao;
-import urujdas.model.User;
+import urujdas.model.users.User;
 import urujdas.service.UserService;
 import urujdas.service.exception.UserAlreadyExistsException;
 

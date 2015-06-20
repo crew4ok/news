@@ -2,8 +2,8 @@ package urujdas.dao.impl.jooq.mappers;
 
 import org.jooq.Record;
 import org.jooq.RecordMapper;
-import urujdas.model.Comment;
-import urujdas.model.User;
+import urujdas.model.comments.Comment;
+import urujdas.model.users.User;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

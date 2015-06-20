@@ -1,6 +1,6 @@
 package urujdas.service;
 
-import urujdas.model.User;
+import urujdas.model.users.User;
 
 public interface UserService {
 

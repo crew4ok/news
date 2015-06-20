@@ -1,8 +1,8 @@
 package urujdas.service;
 
-import urujdas.model.FavourResult;
-import urujdas.model.LikeResult;
-import urujdas.model.News;
+import urujdas.model.favourites.FavourResult;
+import urujdas.model.likes.LikeResult;
+import urujdas.model.news.News;
 
 import java.util.List;
 

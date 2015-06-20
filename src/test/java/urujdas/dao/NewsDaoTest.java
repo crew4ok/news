@@ -3,10 +3,10 @@ package urujdas.dao;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import urujdas.dao.exception.NotFoundException;
-import urujdas.model.News;
-import urujdas.model.NewsCategory;
-import urujdas.model.Subscription;
-import urujdas.model.User;
+import urujdas.model.news.News;
+import urujdas.model.news.NewsCategory;
+import urujdas.model.subscriptions.Subscription;
+import urujdas.model.users.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;

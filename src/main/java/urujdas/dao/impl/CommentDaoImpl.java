@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import urujdas.dao.CommentDao;
 import urujdas.dao.exception.NotFoundException;
-import urujdas.model.Comment;
-import urujdas.model.News;
+import urujdas.model.comments.Comment;
+import urujdas.model.news.News;
 
 import java.util.ArrayList;
 import java.util.Arrays;

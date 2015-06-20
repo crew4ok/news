@@ -1,4 +1,4 @@
-package urujdas.model;
+package urujdas.model.favourites;
 
 public enum FavourResult {
     FAVOUR, UNFAVOUR

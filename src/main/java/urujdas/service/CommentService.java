@@ -1,6 +1,6 @@
 package urujdas.service;
 
-import urujdas.model.Comment;
+import urujdas.model.comments.Comment;
 
 import java.util.List;
 

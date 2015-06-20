@@ -1,4 +1,6 @@
-package urujdas.model;
+package urujdas.model.subscriptions;
+
+import urujdas.model.users.User;
 
 import java.util.List;
 

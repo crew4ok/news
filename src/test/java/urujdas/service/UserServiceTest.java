@@ -10,8 +10,8 @@ import urujdas.config.DaoConfig;
 import urujdas.config.ServiceConfig;
 import urujdas.dao.UserDao;
 import urujdas.dao.impl.UserDaoImpl;
-import urujdas.model.Gender;
-import urujdas.model.User;
+import urujdas.model.users.Gender;
+import urujdas.model.users.User;
 import urujdas.service.exception.UserAlreadyExistsException;
 import urujdas.service.impl.UserServiceImpl;
 

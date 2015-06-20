@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import urujdas.dao.NewsCategoryDao;
 import urujdas.dao.exception.NotFoundException;
-import urujdas.model.NewsCategory;
+import urujdas.model.news.NewsCategory;
 import urujdas.tables.records.NewsCategoriesRecord;
 
 import java.util.List;

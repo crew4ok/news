@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import urujdas.config.WebConfig;
-import urujdas.model.User;
+import urujdas.model.users.User;
 import urujdas.service.UserService;
 import urujdas.service.exception.UserAlreadyExistsException;
 import urujdas.web.common.CommonExceptionHandler;

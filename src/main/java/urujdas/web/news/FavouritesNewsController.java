@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import urujdas.model.FavourResult;
-import urujdas.model.News;
+import urujdas.model.favourites.FavourResult;
+import urujdas.model.news.News;
 import urujdas.service.NewsService;
 import urujdas.web.common.WebCommons;
 
