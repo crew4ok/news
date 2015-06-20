@@ -1,34 +1,16 @@
 package urujdas.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.Test;
 import urujdas.config.ServiceConfig;
 import urujdas.dao.NewsCategoryDao;
 import urujdas.dao.NewsDao;
 import urujdas.dao.SubscriptionDao;
-import urujdas.model.likes.LikeResult;
-import urujdas.model.likes.LikeType;
-import urujdas.model.news.News;
-import urujdas.model.news.NewsCategory;
-import urujdas.model.users.User;
 import urujdas.service.impl.NewsServiceImpl;
-import urujdas.util.InvalidParamException;
 
-import java.util.Collections;
-import java.util.List;
-
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertEquals;
 
 @ContextConfiguration(classes = {
         ServiceConfig.class,
@@ -36,6 +18,7 @@ import static org.testng.Assert.assertEquals;
 })
 public class NewsServiceTest extends AbstractTestNGSpringContextTests {
 
+/*
     @Autowired
     private NewsService newsService;
 
@@ -182,6 +165,7 @@ public class NewsServiceTest extends AbstractTestNGSpringContextTests {
     public void like_newsIdIsInvalid() throws Exception {
         newsService.like(-1L);
     }
+    */
 
     @Configuration
     static class LocalContext {

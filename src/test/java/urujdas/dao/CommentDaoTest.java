@@ -5,6 +5,8 @@ import org.testng.annotations.Test;
 import urujdas.dao.exception.NotFoundException;
 import urujdas.model.Comment;
 import urujdas.model.news.News;
+import urujdas.model.news.NewsCategory;
+import urujdas.model.users.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import static org.testng.Assert.assertTrue;
 public class CommentDaoTest extends DaoBaseTest {
 
     private News defaultNews;
+    private User defaultUser;
+    private NewsCategory defaultNewsCategory;
 
     @BeforeMethod
     protected void createDefaults() {

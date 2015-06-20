@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import urujdas.model.news.News;
+import urujdas.model.news.FeedNews;
 import urujdas.service.NewsService;
 import urujdas.web.common.WebCommons;
 
@@ -22,12 +22,12 @@ public class SubscriptionNewsController {
     private NewsService newsService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<News> getLatestSubscriptionNews() {
+    public List<FeedNews> getLatestSubscriptionNews() {
         return newsService.getLatestBySubscription(WebCommons.PAGING_COUNT);
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "id")
-    public List<News> getBySubscriptionFromId(@RequestParam("id") Long id) {
+    public List<FeedNews> getBySubscriptionFromId(@RequestParam("id") Long id) {
         return newsService.getBySubscriptionFromId(id, WebCommons.PAGING_COUNT);
     }
 

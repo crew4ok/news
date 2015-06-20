@@ -13,8 +13,8 @@ import org.springframework.stereotype.Repository;
 import urujdas.dao.NewsDao;
 import urujdas.dao.exception.NotFoundException;
 import urujdas.model.Subscription;
+import urujdas.model.news.FeedNews;
 import urujdas.model.news.News;
-import urujdas.model.news.NewsLight;
 import urujdas.model.users.User;
 
 import java.sql.Timestamp;
@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
+import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static org.jooq.impl.DSL.coalesce;
@@ -61,11 +62,6 @@ public class NewsDaoImpl implements NewsDao {
         throw new NotFoundException(News.class, id);
     }
 
-    @Override
-    public List<NewsLight> getLatestAllLight(User currentUser, int latestCount) {
-        return selectLightNews(currentUser.getId(), Optional.of(latestCount));
-    }
-
     private List<News> select(Collection<Condition> conditions,
                               Map<Table<?>, Condition> joins,
                               Optional<Integer> limit) {
@@ -91,7 +87,10 @@ public class NewsDaoImpl implements NewsDao {
                 .into(News.class);
     }
 
-    private List<NewsLight> selectLightNews(Long currentUserId, Optional<Integer> limit) {
+    private List<FeedNews> selectFeedNews(User currentUser,
+                                          Collection<Condition> conditions,
+                                          Map<Table<?>, Condition> joins,
+                                          int limit) {
         Field<Object> commentsCount = ctx.select(count(COMMENTS.ID))
                 .from(COMMENTS)
                 .where(COMMENTS.NEWS_ID.equal(NEWS.ID))
@@ -106,12 +105,12 @@ public class NewsDaoImpl implements NewsDao {
 
         Select<?> favoured = ctx.selectOne()
                 .from(FAVOURITES)
-                .where(FAVOURITES.USER_ID.equal(currentUserId))
+                .where(FAVOURITES.USER_ID.equal(currentUser.getId()))
                 .and(FAVOURITES.NEWS_ID.equal(NEWS.ID));
 
         Select<?> liked = ctx.selectOne()
                 .from(LIKES)
-                .where(LIKES.LIKER.equal(currentUserId))
+                .where(LIKES.LIKER.equal(currentUser.getId()))
                 .and(LIKES.NEWS_ID.equal(NEWS.ID));
 
         List<Field<?>> fields = Arrays.asList(
@@ -123,13 +122,18 @@ public class NewsDaoImpl implements NewsDao {
                 when(exists(liked), "true").otherwise("false").as("user_liked")
         );
 
-        return ctx.select(fields)
+        SelectOnConditionStep<Record> step = ctx.select(fields)
                 .from(NEWS)
-                .join(USERS).on(NEWS.AUTHOR.equal(USERS.ID))
+                .join(USERS).on(NEWS.AUTHOR.equal(USERS.ID));
+
+        joins.forEach((t, c) -> step.join(t).on(c));
+
+        return step
+                .where(conditions)
                 .orderBy(NEWS.ID.desc())
-                .limit(limit.get())
+                .limit(limit)
                 .fetch()
-                .into(NewsLight.class);
+                .into(FeedNews.class);
     }
 
     private List<Field<?>> getNewsFields() {
@@ -143,82 +147,90 @@ public class NewsDaoImpl implements NewsDao {
     }
 
     @Override
-    public List<News> getLatestAll(int latestCount) {
-        return select(
+    public List<FeedNews> getLatestAll(User currentUser, int latestCount) {
+        return selectFeedNews(
+                currentUser,
                 emptyList(),
                 emptyMap(),
-                Optional.of(latestCount)
+                latestCount
         );
     }
 
     @Override
-    public List<News> getAllFromId(long id, int count) {
-        return select(
-                singletonList(pagingWhereClause(id)),
+    public List<FeedNews> getAllFromId(User currentUser, long id, int count) {
+        return selectFeedNews(
+                currentUser,
+                singleton(pagingWhereClause(id)),
                 emptyMap(),
-                Optional.of(count)
+                count
         );
     }
 
     @Override
-    public List<News> getLatestByUser(User user, int count) {
-        return select(
-                singletonList(authorWhereClause(user)),
+    public List<FeedNews> getLatestByUser(User user, int count) {
+        return selectFeedNews(
+                user,
+                singleton(authorWhereClause(user)),
                 emptyMap(),
-                Optional.of(count)
+                count
         );
     }
 
     @Override
-    public List<News> getByUserFromId(User user, Long id, int count) {
-        return select(
+    public List<FeedNews> getByUserFromId(User user, Long id, int count) {
+        return selectFeedNews(
+                user,
                 asList(pagingWhereClause(id), authorWhereClause(user)),
                 emptyMap(),
-                Optional.of(count)
+                count
         );
     }
 
     @Override
-    public List<News> getLatestBySubscription(Subscription subscription, int count) {
+    public List<FeedNews> getLatestBySubscription(User currentUser, Subscription subscription, int count) {
         List<Long> authorsIds = subscription.getAuthors().stream()
                 .map(User::getId)
                 .collect(Collectors.toList());
 
-        return select(
-                singletonList(NEWS.AUTHOR.in(authorsIds)),
+        return selectFeedNews(
+                currentUser,
+                singleton(NEWS.AUTHOR.in(authorsIds)),
                 emptyMap(),
-                Optional.of(count)
+                count
         );
     }
 
     @Override
-    public List<News> getBySubscriptionFromId(Subscription subscription, Long id, int count) {
+    public List<FeedNews> getBySubscriptionFromId(User currentUser, Subscription subscription, Long id, int count) {
         List<Long> authorsIds = subscription.getAuthors().stream()
                 .map(User::getId)
                 .collect(Collectors.toList());
 
-        return select(
+        return selectFeedNews(
+                currentUser,
                 asList(NEWS.AUTHOR.in(authorsIds), pagingWhereClause(id)),
                 emptyMap(),
-                Optional.of(count)
+                count
         );
     }
 
     @Override
-    public List<News> getLatestFavourites(User user, int count) {
-        return select(
+    public List<FeedNews> getLatestFavourites(User user, int count) {
+        return selectFeedNews(
+                user,
                 singletonList(FAVOURITES.USER_ID.equal(user.getId())),
                 singletonMap(FAVOURITES, FAVOURITES.NEWS_ID.equal(NEWS.ID)),
-                Optional.of(count)
+                count
         );
     }
 
     @Override
-    public List<News> getFavouritesFromId(User user, Long id, int count) {
-        return select(
+    public List<FeedNews> getFavouritesFromId(User user, Long id, int count) {
+        return selectFeedNews(
+                user,
                 asList(FAVOURITES.USER_ID.equal(user.getId()), pagingWhereClause(id)),
                 singletonMap(FAVOURITES, FAVOURITES.NEWS_ID.equal(NEWS.ID)),
-                Optional.of(count)
+                count
         );
     }
 

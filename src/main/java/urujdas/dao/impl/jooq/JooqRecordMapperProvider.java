@@ -10,9 +10,9 @@ import urujdas.dao.impl.jooq.mappers.NewsLightRecordMapper;
 import urujdas.dao.impl.jooq.mappers.NewsRecordMapper;
 import urujdas.dao.impl.jooq.mappers.UserRecordMapper;
 import urujdas.model.Comment;
+import urujdas.model.news.FeedNews;
 import urujdas.model.news.News;
 import urujdas.model.news.NewsCategory;
-import urujdas.model.news.NewsLight;
 import urujdas.model.users.User;
 
 public class JooqRecordMapperProvider implements RecordMapperProvider {
@@ -52,7 +52,7 @@ public class JooqRecordMapperProvider implements RecordMapperProvider {
             return (RecordMapper<R, E>) commentRecordMapper;
         }
 
-        if (NewsLight.class.equals(type)) {
+        if (FeedNews.class.equals(type)) {
             return (RecordMapper<R, E>) new NewsLightRecordMapper();
         }
 

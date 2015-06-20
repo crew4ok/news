@@ -11,7 +11,7 @@ import urujdas.model.likes.LikeResult;
 import urujdas.model.likes.LikeType;
 import urujdas.model.news.News;
 import urujdas.model.news.NewsCategory;
-import urujdas.model.news.NewsLight;
+import urujdas.model.news.FeedNews;
 import urujdas.model.users.User;
 import urujdas.service.NewsService;
 import urujdas.service.UserService;
@@ -38,31 +38,35 @@ public class NewsServiceImpl implements NewsService {
     private NewsCategoryDao newsCategoryDao;
 
     @Override
-    public List<NewsLight> getLatestAllLight(int latestCount) {
+    public List<FeedNews> getLatestAllLight(int latestCount) {
         Validation.isGreaterThanZero(latestCount);
 
         User currentUser = userService.getCurrentUser();
 
-        return newsDao.getLatestAllLight(currentUser, latestCount);
+        return newsDao.getLatestAll(currentUser, latestCount);
     }
 
     @Override
-    public List<News> getLatestAll(int latestCount) {
+    public List<FeedNews> getLatestAll(int latestCount) {
         Validation.isGreaterThanZero(latestCount);
 
-        return newsDao.getLatestAll(latestCount);
+        User currentUser = userService.getCurrentUser();
+
+        return newsDao.getLatestAll(currentUser, latestCount);
     }
 
     @Override
-    public List<News> getAllFromId(long id, int count) {
+    public List<FeedNews> getAllFromId(long id, int count) {
         Validation.isGreaterThanZero(id);
         Validation.isGreaterThanZero(count);
 
-        return newsDao.getAllFromId(id, count);
+        User currentUser = userService.getCurrentUser();
+
+        return newsDao.getAllFromId(currentUser, id, count);
     }
 
     @Override
-    public List<News> getLatestByUser(int count) {
+    public List<FeedNews> getLatestByUser(int count) {
         Validation.isGreaterThanZero(count);
 
         User currentUser = userService.getCurrentUser();
@@ -71,7 +75,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<News> getByUserFromId(Long id, int count) {
+    public List<FeedNews> getByUserFromId(Long id, int count) {
         Validation.isGreaterThanZero(count);
 
         User currentUser = userService.getCurrentUser();
@@ -80,28 +84,28 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<News> getLatestBySubscription(int count) {
+    public List<FeedNews> getLatestBySubscription(int count) {
         Validation.isGreaterThanZero(count);
 
         User currentUser = userService.getCurrentUser();
         Subscription subscription = subscriptionDao.getByUser(currentUser);
 
-        return newsDao.getLatestBySubscription(subscription, count);
+        return newsDao.getLatestBySubscription(currentUser, subscription, count);
     }
 
     @Override
-    public List<News> getBySubscriptionFromId(Long id, int count) {
+    public List<FeedNews> getBySubscriptionFromId(Long id, int count) {
         Validation.isGreaterThanZero(id);
         Validation.isGreaterThanZero(count);
 
         User currentUser = userService.getCurrentUser();
         Subscription subscription = subscriptionDao.getByUser(currentUser);
 
-        return newsDao.getBySubscriptionFromId(subscription, id, count);
+        return newsDao.getBySubscriptionFromId(currentUser, subscription, id, count);
     }
 
     @Override
-    public List<News> getLatestFavourites(int count) {
+    public List<FeedNews> getLatestFavourites(int count) {
         Validation.isGreaterThanZero(count);
 
         User currentUser = userService.getCurrentUser();
@@ -110,7 +114,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<News> getFavouritesFromId(Long id, int count) {
+    public List<FeedNews> getFavouritesFromId(Long id, int count) {
         Validation.isGreaterThanZero(id);
         Validation.isGreaterThanZero(count);
 

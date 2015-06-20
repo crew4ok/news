@@ -2,6 +2,7 @@ package urujdas.model;
 
 import net.karneim.pojobuilder.GeneratePojoBuilder;
 import urujdas.model.users.User;
+import urujdas.util.Validation;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +15,10 @@ public class Comment {
 
     @GeneratePojoBuilder
     public Comment(Long id, String body, LocalDateTime creationDate, Long newsId, User author) {
+        Validation.isNotNull(body);
+        Validation.isNotNull(newsId);
+        Validation.isNotNull(author);
+
         this.id = id;
         this.body = body;
         this.creationDate = creationDate;

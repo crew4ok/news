@@ -2,15 +2,15 @@ package urujdas.dao.impl.jooq.mappers;
 
 import org.jooq.Record;
 import org.jooq.RecordMapper;
-import urujdas.model.news.NewsLight;
+import urujdas.model.news.FeedNews;
 
 import static urujdas.tables.NewsTable.NEWS;
 import static urujdas.tables.UsersTable.USERS;
 
-public class NewsLightRecordMapper implements RecordMapper<Record, NewsLight> {
+public class NewsLightRecordMapper implements RecordMapper<Record, FeedNews> {
     @Override
-    public NewsLight map(Record record) {
-        return NewsLight.builder()
+    public FeedNews map(Record record) {
+        return FeedNews.builder()
                 .withId(record.getValue(NEWS.ID))
                 .withTitle(record.getValue(NEWS.TITLE))
                 .withBody(record.getValue(NEWS.BODY))

@@ -3,24 +3,25 @@ package urujdas.dao;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import urujdas.dao.exception.NotFoundException;
-import urujdas.model.Subscription;
+import urujdas.model.news.FeedNews;
 import urujdas.model.news.News;
 import urujdas.model.news.NewsCategory;
 import urujdas.model.users.User;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 public class NewsDaoTest extends DaoBaseTest {
+
+    private User defaultUser;
+    private NewsCategory defaultNewsCategory;
+
     @BeforeMethod
     public void setup() {
         this.defaultUser = createDefaultUser();
@@ -76,23 +77,28 @@ public class NewsDaoTest extends DaoBaseTest {
         int totalCount = 5;
         int latestCount = 2;
 
-        for (int i = 1; i <= totalCount; i++) {
-            createDefaultNews(i);
-        }
+        User author = createDefaultUser();
 
-        List<News> latestNews = newsDao.getLatestAll(latestCount);
+        List<FeedNews> expectedNews = IntStream.range(1, totalCount + 1)
+                .mapToObj(i -> createNews("title" + i, author))
+                .map(n -> FeedNews.builder()
+                                .withId(n.getId())
+                                .withTitle(n.getTitle())
+                                .withBody(n.getBody())
+                                .withUsername(author.getUsername())
+                                .withFirstname(author.getFirstname())
+                                .withLastname(author.getLastname())
+                                .build()
+                ).collect(Collectors.toList());
+        expectedNews = expectedNews.subList(totalCount - latestCount, totalCount);
+        Collections.reverse(expectedNews);
+
+        List<FeedNews> latestNews = newsDao.getLatestAll(defaultUser, latestCount);
 
         assertEquals(latestNews.size(), 2);
-
-        System.out.println(latestNews);
-
-        News first = latestNews.get(0);
-        News second = latestNews.get(1);
-
-        assertEquals(first.getTitle(), "title5");
-        assertEquals(second.getTitle(), "title4");
+        assertEquals(latestNews, expectedNews);
     }
-
+/*
     @Test
     public void getLatestAll_newsCountIsLesserThanRequested() throws Exception {
         createDefaultNews(0);
@@ -113,11 +119,11 @@ public class NewsDaoTest extends DaoBaseTest {
         assertEquals(latest.size(), 0);
     }
 
-    /*
+
     *
     * NewsDao.getAllFromId
     *
-    */
+
 
     @Test
     public void getAllFromId_hp() throws Exception {
@@ -152,11 +158,11 @@ public class NewsDaoTest extends DaoBaseTest {
         }
     }
 
-    /*
+
     *
     * NewsDao.getLatestByUser
     *
-    */
+
 
     @Test
     public void getLatestByUser_hp() throws Exception {
@@ -198,11 +204,11 @@ public class NewsDaoTest extends DaoBaseTest {
         assertTrue(latestNews.isEmpty());
     }
 
-    /*
+
     *
     * NewsDao.getByUserFromId
     *
-    */
+
 
     @Test
     public void getByUserFromId_hp() throws Exception {
@@ -253,11 +259,11 @@ public class NewsDaoTest extends DaoBaseTest {
         assertTrue(news.isEmpty());
     }
 
-    /*
+
     *
     * NewsDao.getLatestBySubscription
     *
-    */
+
 
     @Test
     public void getLatestBySubscription_hp() throws Exception {
@@ -311,11 +317,11 @@ public class NewsDaoTest extends DaoBaseTest {
         assertTrue(newsBySubscription.isEmpty());
     }
 
-    /*
+
     *
     * NewsDao.getBySubscriptionFromId
     *
-    */
+
 
     @Test
     public void getBySubscriptionFromId_hp() throws Exception {
@@ -385,11 +391,11 @@ public class NewsDaoTest extends DaoBaseTest {
         assertTrue(news.isEmpty());
     }
 
-    /*
+
     *
     * NewsDao.getLatestFavourites
     *
-    */
+
 
     @Test
     public void getLatestFavourites_hp() throws Exception {
@@ -420,11 +426,11 @@ public class NewsDaoTest extends DaoBaseTest {
         assertTrue(latestFavourites.isEmpty());
     }
 
-    /*
+
     *
     * NewsDao.getFavouritesFromId
     *
-    */
+
 
     @Test
     public void getFavouritesFromId_hp() throws Exception {
@@ -449,6 +455,7 @@ public class NewsDaoTest extends DaoBaseTest {
 
         assertEquals(actualFavourites, expectedFavourites);
     }
+*/
 
     /*
     *

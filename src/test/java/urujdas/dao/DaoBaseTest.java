@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import urujdas.config.DaoConfig;
+import urujdas.model.Comment;
 import urujdas.model.news.News;
 import urujdas.model.news.NewsCategory;
 import urujdas.model.users.User;
@@ -29,9 +30,6 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
     @Autowired
     protected UserDao userDao;
 
-    protected User defaultUser;
-    protected NewsCategory defaultNewsCategory;
-
     protected News createDefaultNews(User author, NewsCategory newsCategory) {
         News news = News.builder()
                 .withTitle("title")
@@ -43,15 +41,44 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
         return newsDao.create(news);
     }
 
-    protected News createDefaultNews(int i) {
+    protected News createNews(String title, User author) {
+        NewsCategory newsCategory = createDefaultNewsCategory();
+
+        return createNews(title, "body", author, newsCategory, 0, 0);
+    }
+
+    protected News createNews(String title, String body, User author, NewsCategory newsCategory,
+                              int commentsCount, int likesCount) {
         News news = News.builder()
-                .withTitle("title" + i)
-                .withBody("body")
+                .withTitle(title)
+                .withBody(body)
                 .withCreationDate(LocalDateTime.now())
-                .withAuthor(defaultUser)
-                .withCategory(defaultNewsCategory)
+                .withCategory(newsCategory)
+                .withAuthor(author)
                 .build();
-        return newsDao.create(news);
+
+        news = newsDao.create(news);
+
+        for (int i = 0; i < commentsCount; i++) {
+            User commenter = createDefaultUser();
+
+            Comment comment = Comment.builder()
+                    .withBody("body")
+                    .withCreationDate(LocalDateTime.now())
+                    .withAuthor(commenter)
+                    .withNewsId(news.getId())
+                    .build();
+
+            commentDao.create(comment);
+        }
+
+        for (int i = 0; i < likesCount; i++) {
+            User liker = createDefaultUser();
+
+            newsDao.like(liker, news);
+        }
+
+        return newsDao.getById(news.getId());
     }
 
     protected NewsCategory createDefaultNewsCategory() {
