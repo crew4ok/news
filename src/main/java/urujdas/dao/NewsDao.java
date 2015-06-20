@@ -26,9 +26,13 @@ public interface NewsDao {
 
     List<News> getFavouritesFromId(User user, Long id, int count);
 
+    List<News> getAllFavourites(User user);
+
     News create(News news);
 
-    void addToFavourites(User user, News news);
+    void favour(User user, News news);
+
+    void unfavour(User user, News news);
 
     void like(User currentUser, News news);
 

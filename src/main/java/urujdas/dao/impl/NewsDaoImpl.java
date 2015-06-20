@@ -169,6 +169,15 @@ public class NewsDaoImpl implements NewsDao {
         );
     }
 
+    @Override
+    public List<News> getAllFavourites(User user) {
+        return select(
+                singletonList(FAVOURITES.USER_ID.equal(user.getId())),
+                singletonMap(FAVOURITES, FAVOURITES.NEWS_ID.equal(NEWS.ID)),
+                Optional.empty()
+        );
+    }
+
     private Collection<Field<?>> groupByClause() {
         return asList(NEWS.ID, USERS.ID, NEWS_CATEGORIES.ID);
     }
@@ -201,10 +210,18 @@ public class NewsDaoImpl implements NewsDao {
     }
 
     @Override
-    public void addToFavourites(User user, News news) {
+    public void favour(User user, News news) {
         ctx.insertInto(FAVOURITES)
                 .set(FAVOURITES.NEWS_ID, news.getId())
                 .set(FAVOURITES.USER_ID, user.getId())
+                .execute();
+    }
+
+    @Override
+    public void unfavour(User user, News news) {
+        ctx.deleteFrom(FAVOURITES)
+                .where(FAVOURITES.NEWS_ID.equal(news.getId()))
+                .and(FAVOURITES.USER_ID.equal(user.getId()))
                 .execute();
     }
 

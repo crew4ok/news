@@ -1,5 +1,6 @@
 package urujdas.service;
 
+import urujdas.model.FavourResult;
 import urujdas.model.LikeResult;
 import urujdas.model.News;
 
@@ -25,7 +26,7 @@ public interface NewsService {
 
     void create(News news);
 
-    void addNewsToFavourites(Long newsId);
+    FavourResult favour(Long newsId);
 
     void subscribe(Long userId);
 

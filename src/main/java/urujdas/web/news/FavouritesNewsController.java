@@ -1,13 +1,12 @@
 package urujdas.web.news;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import urujdas.model.FavourResult;
 import urujdas.model.News;
 import urujdas.service.NewsService;
 import urujdas.web.common.WebCommons;
@@ -32,9 +31,7 @@ public class FavouritesNewsController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-    public ResponseEntity<String> addNewsToFavourites(@PathVariable("id") Long id) {
-        newsService.addNewsToFavourites(id);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    public FavourResult favourNews(@PathVariable("id") Long id) {
+        return newsService.favour(id);
     }
 }

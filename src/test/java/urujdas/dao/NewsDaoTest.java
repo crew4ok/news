@@ -398,7 +398,7 @@ public class NewsDaoTest extends DaoBaseTest {
         for (int i = 0; i < totalCount; i++) {
             News news = createDefaultNews(defaultUser, defaultNewsCategory);
             if (i % 2 == 0) {
-                newsDao.addToFavourites(defaultUser, news);
+                newsDao.favour(defaultUser, news);
                 favourites.add(news);
             }
         }
@@ -434,7 +434,7 @@ public class NewsDaoTest extends DaoBaseTest {
         for (int i = 0; i < totalCount; i++) {
             News news = createDefaultNews(defaultUser, defaultNewsCategory);
             if (i % 2 == 0) {
-                newsDao.addToFavourites(defaultUser, news);
+                newsDao.favour(defaultUser, news);
                 favourites.add(news);
             }
         }
@@ -446,6 +446,54 @@ public class NewsDaoTest extends DaoBaseTest {
         List<News> actualFavourites = newsDao.getFavouritesFromId(defaultUser, fromId, count);
 
         assertEquals(actualFavourites, expectedFavourites);
+    }
+
+    /*
+    *
+    * NewsDao.favour
+    *
+    */
+
+    @Test
+    public void favour_hp() throws Exception {
+        User user = createDefaultUser();
+
+        News firstNews = createDefaultNews(defaultUser, defaultNewsCategory);
+        News secondNews = createDefaultNews(defaultUser, defaultNewsCategory);
+
+        newsDao.favour(user, firstNews);
+        newsDao.favour(user, secondNews);
+
+        List<News> favourites = newsDao.getAllFavourites(user);
+
+        assertEquals(favourites, Arrays.asList(secondNews, firstNews));
+    }
+
+    /*
+    *
+    * NewsDao.unfavour
+    *
+    */
+
+    @Test
+    public void unfavour_hp() throws Exception {
+        User user = createDefaultUser();
+
+        News firstNews = createDefaultNews(defaultUser, defaultNewsCategory);
+        News secondNews = createDefaultNews(defaultUser, defaultNewsCategory);
+
+        newsDao.favour(user, firstNews);
+        newsDao.favour(user, secondNews);
+
+        newsDao.unfavour(user, firstNews);
+
+        List<News> favourites = newsDao.getAllFavourites(user);
+
+        assertEquals(favourites, Collections.singletonList(secondNews));
+
+        newsDao.unfavour(user, secondNews);
+
+        assertTrue(newsDao.getAllFavourites(user).isEmpty());
     }
 
     /*

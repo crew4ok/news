@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import urujdas.dao.NewsCategoryDao;
 import urujdas.dao.NewsDao;
 import urujdas.dao.SubscriptionDao;
+import urujdas.model.FavourResult;
 import urujdas.model.LikeResult;
 import urujdas.model.LikeType;
 import urujdas.model.News;
@@ -123,12 +124,22 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional(readOnly = false)
-    public void addNewsToFavourites(Long newsId) {
-        User currentUser = userService.getCurrentUser();
+    public FavourResult favour(Long newsId) {
+        Validation.isGreaterThanZero(newsId);
 
+        User currentUser = userService.getCurrentUser();
         News news = newsDao.getById(newsId);
 
-        newsDao.addToFavourites(currentUser, news);
+        List<News> favourites = newsDao.getAllFavourites(currentUser);
+        if (favourites.contains(news)) {
+            newsDao.unfavour(currentUser, news);
+
+            return FavourResult.UNFAVOUR;
+        } else {
+            newsDao.favour(currentUser, news);
+
+            return FavourResult.FAVOUR;
+        }
     }
 
     @Override

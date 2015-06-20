@@ -2,3 +2,4 @@
 2. Write tests for controllers
 3. Remember me.
 4. Comments count in the news.
+5. Add length validation for username and password in registration.

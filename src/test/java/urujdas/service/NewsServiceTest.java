@@ -11,6 +11,7 @@ import urujdas.config.ServiceConfig;
 import urujdas.dao.NewsCategoryDao;
 import urujdas.dao.NewsDao;
 import urujdas.dao.SubscriptionDao;
+import urujdas.model.FavourResult;
 import urujdas.model.LikeResult;
 import urujdas.model.LikeType;
 import urujdas.model.News;
@@ -128,6 +129,48 @@ public class NewsServiceTest extends AbstractTestNGSpringContextTests {
         verify(newsDao).create(any(News.class));
         verify(newsCategoryDao).getById(newsCategoryId);
         verify(userService).getCurrentUser();
+    }
+
+    @Test
+    public void favour_favour() throws Exception {
+        User currentUser = mock(User.class);
+        when(userService.getCurrentUser()).thenReturn(currentUser);
+
+        long newsId = 1L;
+        News news = mock(News.class);
+        when(newsDao.getById(newsId)).thenReturn(news);
+
+        when(newsDao.getAllFavourites(currentUser)).thenReturn(Collections.singletonList(mock(News.class)));
+
+        FavourResult favourResult = newsService.favour(newsId);
+
+        assertEquals(favourResult, FavourResult.FAVOUR);
+
+        verify(userService).getCurrentUser();
+        verify(newsDao).getById(newsId);
+        verify(newsDao).getAllFavourites(currentUser);
+        verify(newsDao).favour(currentUser, news);
+    }
+
+    @Test
+    public void favour_unfavour() throws Exception {
+        User currentUser = mock(User.class);
+        when(userService.getCurrentUser()).thenReturn(currentUser);
+
+        long newsId = 1L;
+        News news = mock(News.class);
+        when(newsDao.getById(newsId)).thenReturn(news);
+
+        when(newsDao.getAllFavourites(currentUser)).thenReturn(Collections.singletonList(news));
+
+        FavourResult favourResult = newsService.favour(newsId);
+
+        assertEquals(favourResult, FavourResult.UNFAVOUR);
+
+        verify(userService).getCurrentUser();
+        verify(newsDao).getById(newsId);
+        verify(newsDao).getAllFavourites(currentUser);
+        verify(newsDao).unfavour(currentUser, news);
     }
 
     @Test
