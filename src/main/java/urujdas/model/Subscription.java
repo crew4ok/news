@@ -1,5 +1,7 @@
 package urujdas.model;
 
+import urujdas.model.users.User;
+
 import java.util.List;
 
 public class Subscription {

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import urujdas.dao.CommentDao;
 import urujdas.dao.exception.NotFoundException;
 import urujdas.model.Comment;
-import urujdas.model.News;
+import urujdas.model.news.News;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

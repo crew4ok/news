@@ -1,9 +1,9 @@
 package urujdas.dao;
 
-import urujdas.model.News;
-import urujdas.model.NewsLight;
 import urujdas.model.Subscription;
-import urujdas.model.User;
+import urujdas.model.news.News;
+import urujdas.model.news.NewsLight;
+import urujdas.model.users.User;
 
 import java.util.List;
 

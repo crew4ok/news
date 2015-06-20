@@ -1,7 +1,7 @@
 package urujdas.dao;
 
 import urujdas.model.Subscription;
-import urujdas.model.User;
+import urujdas.model.users.User;
 
 public interface SubscriptionDao {
 

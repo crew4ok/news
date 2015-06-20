@@ -1,4 +1,4 @@
-package urujdas.model;
+package urujdas.model.news;
 
 import net.karneim.pojobuilder.GeneratePojoBuilder;
 

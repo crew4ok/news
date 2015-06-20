@@ -12,10 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import urujdas.dao.NewsDao;
 import urujdas.dao.exception.NotFoundException;
-import urujdas.model.News;
-import urujdas.model.NewsLight;
 import urujdas.model.Subscription;
-import urujdas.model.User;
+import urujdas.model.news.News;
+import urujdas.model.news.NewsLight;
+import urujdas.model.users.User;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package urujdas.model;
+package urujdas.model.users;
 
 public enum Gender {
     MALE,

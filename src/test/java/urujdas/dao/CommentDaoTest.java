@@ -4,7 +4,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import urujdas.dao.exception.NotFoundException;
 import urujdas.model.Comment;
-import urujdas.model.News;
+import urujdas.model.news.News;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

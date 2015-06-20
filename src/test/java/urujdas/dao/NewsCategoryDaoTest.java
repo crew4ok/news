@@ -3,7 +3,7 @@ package urujdas.dao;
 import org.jooq.exception.DataAccessException;
 import org.testng.annotations.Test;
 import urujdas.dao.exception.NotFoundException;
-import urujdas.model.NewsCategory;
+import urujdas.model.news.NewsCategory;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import urujdas.dao.SubscriptionDao;
 import urujdas.model.Subscription;
-import urujdas.model.User;
+import urujdas.model.users.User;
 import urujdas.tables.records.SubscriptionsRecord;
 
 import java.util.ArrayList;

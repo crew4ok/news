@@ -1,6 +1,7 @@
-package urujdas.model;
+package urujdas.model.news;
 
 import net.karneim.pojobuilder.GeneratePojoBuilder;
+import urujdas.model.users.User;
 
 import java.time.LocalDateTime;
 

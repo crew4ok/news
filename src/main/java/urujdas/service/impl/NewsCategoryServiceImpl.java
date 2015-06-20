@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import urujdas.dao.NewsCategoryDao;
-import urujdas.model.NewsCategory;
+import urujdas.model.news.NewsCategory;
 import urujdas.service.NewsCategoryService;
 import urujdas.util.Validation;
 

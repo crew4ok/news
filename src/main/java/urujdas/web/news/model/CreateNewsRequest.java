@@ -3,8 +3,8 @@ package urujdas.web.news.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import net.karneim.pojobuilder.GeneratePojoBuilder;
-import urujdas.model.News;
-import urujdas.model.NewsCategory;
+import urujdas.model.news.News;
+import urujdas.model.news.NewsCategory;
 
 import javax.validation.constraints.NotNull;
 

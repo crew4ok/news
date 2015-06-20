@@ -1,4 +1,4 @@
-package urujdas.model;
+package urujdas.model.news;
 
 public class NewsCategory {
     private final Long id;

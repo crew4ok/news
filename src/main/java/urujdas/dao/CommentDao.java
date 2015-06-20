@@ -1,7 +1,7 @@
 package urujdas.dao;
 
 import urujdas.model.Comment;
-import urujdas.model.News;
+import urujdas.model.news.News;
 
 import java.util.List;
 

@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import urujdas.config.DaoConfig;
-import urujdas.model.News;
-import urujdas.model.NewsCategory;
-import urujdas.model.User;
+import urujdas.model.news.News;
+import urujdas.model.news.NewsCategory;
+import urujdas.model.users.User;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

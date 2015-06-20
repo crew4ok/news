@@ -2,7 +2,7 @@ package urujdas.dao.impl.jooq.mappers;
 
 import org.jooq.Record;
 import org.jooq.RecordMapper;
-import urujdas.model.NewsCategory;
+import urujdas.model.news.NewsCategory;
 
 import static urujdas.tables.NewsCategoriesTable.NEWS_CATEGORIES;
 

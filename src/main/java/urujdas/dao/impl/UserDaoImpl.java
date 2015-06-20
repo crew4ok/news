@@ -4,7 +4,7 @@ import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import urujdas.dao.UserDao;
-import urujdas.model.User;
+import urujdas.model.users.User;
 import urujdas.tables.records.UsersRecord;
 
 import java.sql.Timestamp;

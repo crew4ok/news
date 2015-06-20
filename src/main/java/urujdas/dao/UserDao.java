@@ -1,6 +1,6 @@
 package urujdas.dao;
 
-import urujdas.model.User;
+import urujdas.model.users.User;
 
 public interface UserDao {
 

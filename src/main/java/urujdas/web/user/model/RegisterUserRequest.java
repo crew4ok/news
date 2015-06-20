@@ -3,8 +3,8 @@ package urujdas.web.user.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import net.karneim.pojobuilder.GeneratePojoBuilder;
-import urujdas.model.Gender;
-import urujdas.model.User;
+import urujdas.model.users.Gender;
+import urujdas.model.users.User;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;

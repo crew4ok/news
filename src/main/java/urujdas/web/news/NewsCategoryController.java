@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import urujdas.model.NewsCategory;
+import urujdas.model.news.NewsCategory;
 import urujdas.service.NewsCategoryService;
 import urujdas.web.common.WebCommons;
 

@@ -1,6 +1,6 @@
 package urujdas.dao;
 
-import urujdas.model.NewsCategory;
+import urujdas.model.news.NewsCategory;
 
 import java.util.List;
 

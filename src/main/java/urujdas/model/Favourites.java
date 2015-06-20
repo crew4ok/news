@@ -1,6 +1,8 @@
 package urujdas.model;
 
 import net.karneim.pojobuilder.GeneratePojoBuilder;
+import urujdas.model.news.News;
+import urujdas.model.users.User;
 
 import java.util.List;
 
