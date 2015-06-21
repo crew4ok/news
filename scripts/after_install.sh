@@ -27,7 +27,7 @@ echo "Migrating"
     -schema=urujdas \
     -locations=filesystem:deltas \
     -jarDirs=drivers \
-    migrate
+    clean migrate
 
 if [ $? -ne 0 ]; then
     cleanup 1
