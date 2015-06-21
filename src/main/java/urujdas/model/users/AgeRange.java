@@ -1,12 +1,16 @@
 package urujdas.model.users;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import urujdas.util.Validation;
 
 public class AgeRange {
     private final Integer lower;
     private final Integer higher;
 
-    public AgeRange(Integer lower, Integer higher) {
+    @JsonCreator
+    public AgeRange(@JsonProperty("lower") Integer lower,
+                    @JsonProperty("higher") Integer higher) {
         if (lower != null && higher != null) {
             Validation.checkRangeNonStrict(lower, higher);
         }

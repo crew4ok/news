@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import urujdas.model.users.User;
-import urujdas.model.users.UserFilter;
 import urujdas.service.DatingService;
 import urujdas.web.common.WebCommons;
 import urujdas.web.exception.ValidationException;
+import urujdas.web.user.model.UserFilterRequest;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -28,20 +28,20 @@ public class DatingController {
     private DatingService datingService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<User> getLatestUsersByFilter(@RequestBody(required = false) @Valid UserFilter userFilter,
+    public List<User> getLatestUsersByFilter(@RequestBody(required = false) @Valid UserFilterRequest userFilter,
                                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult);
         }
 
         return datingService.getLatestUsersByFilter(
-                Optional.ofNullable(userFilter),
+                Optional.ofNullable(userFilter.toUserFilter()),
                 WebCommons.PAGING_COUNT
         );
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "pullUpDate")
-    public List<User> getUsersByFilterFromDate(@RequestBody(required = false) @Valid UserFilter userFilter,
+    public List<User> getUsersByFilterFromDate(@RequestBody(required = false) @Valid UserFilterRequest userFilter,
                                                BindingResult bindingResult,
                                                @RequestParam("pullUpDate") LocalDateTime pullUpDate) {
         if (bindingResult.hasErrors()) {
@@ -49,7 +49,7 @@ public class DatingController {
         }
 
         return datingService.getUsersByFilterFromDate(
-                Optional.ofNullable(userFilter),
+                Optional.ofNullable(userFilter.toUserFilter()),
                 pullUpDate,
                 WebCommons.PAGING_COUNT
         );
