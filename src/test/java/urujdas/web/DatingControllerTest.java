@@ -21,6 +21,7 @@ import urujdas.model.users.GenderPreferences;
 import urujdas.model.users.RelationsPreferences;
 import urujdas.model.users.UserFilter;
 import urujdas.service.DatingService;
+import urujdas.service.exception.PullUpTooFrequentException;
 import urujdas.web.common.CommonExceptionHandler;
 import urujdas.web.common.WebCommons;
 import urujdas.web.user.DatingController;
@@ -30,6 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -110,6 +112,16 @@ public class DatingControllerTest {
     public void pullUp_hp() throws Exception {
         mockMvc.perform(post(WebCommons.VERSION_PREFIX + "/users/dating/pull_up/"))
                 .andExpect(status().isOk());
+
+        verify(datingService).pullCurrentUserUp();
+    }
+
+    @Test
+    public void pullUp_tooFrequent() throws Exception {
+        doThrow(new PullUpTooFrequentException(LocalDateTime.now())).when(datingService).pullCurrentUserUp();
+
+        mockMvc.perform(post(WebCommons.VERSION_PREFIX + "/users/dating/pull_up/"))
+                .andExpect(status().isBadRequest());
 
         verify(datingService).pullCurrentUserUp();
     }

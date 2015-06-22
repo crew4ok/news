@@ -37,7 +37,7 @@ public class CommonExceptionHandler {
 
         return new ResponseEntity<>(
                 new ErrorResponse(ErrorType.PULL_UP_TOO_FREQUENT, "Pull up is too frequent"),
-                HttpStatus.BAD_GATEWAY
+                HttpStatus.BAD_REQUEST
         );
     }
 
