@@ -130,7 +130,7 @@ public class DatingDaoImpl implements DatingDao {
 
     @Override
     public void pullUserUp(User user) {
-        ctx.query("update users" +
+        ctx.query("update urujdas.users" +
                         " set pull_up_date = current_timestamp at time zone 'utc'" +
                         " where id = ?",
                 user.getId())

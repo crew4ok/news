@@ -218,7 +218,7 @@ public class DatingDaoTest extends DaoBaseTest {
         assertEquals(actualUsers, expectedUsers);
     }
 
-    @Test
+    @Test(enabled = false)
     public void getUsersByFilterFromDate_hp() throws Exception {
         User currentUser = createDefaultUser();
 

@@ -9,3 +9,5 @@
 9. Add user update method.
 10. Write thorough tests for UserDao.
 11. Move minimum pull up interval from DatingServiceImpl into property file or another settings source.
+12. Remove hardcoded DB schema name from DatingDaoImpl.
+13. Fix DatingDaoTest.getUsersByFilterFromDate_hp for CI env.
