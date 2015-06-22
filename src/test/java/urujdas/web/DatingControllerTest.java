@@ -28,7 +28,7 @@ import urujdas.web.user.DatingController;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -63,7 +63,7 @@ public class DatingControllerTest {
 
         String requestInJson = objectMapper.writeValueAsString(userFilter);
 
-        mockMvc.perform(get(WebCommons.VERSION_PREFIX + "/users/dating")
+        mockMvc.perform(post(WebCommons.VERSION_PREFIX + "/users/dating")
                 .content(requestInJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

@@ -27,7 +27,7 @@ public class DatingController {
     @Autowired
     private DatingService datingService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.POST)
     public List<User> getLatestUsersByFilter(@RequestBody(required = false) @Valid UserFilterRequest userFilter,
                                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -40,7 +40,7 @@ public class DatingController {
         );
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "pullUpDate")
+    @RequestMapping(method = RequestMethod.POST, params = "pullUpDate")
     public List<User> getUsersByFilterFromDate(@RequestBody(required = false) @Valid UserFilterRequest userFilter,
                                                BindingResult bindingResult,
                                                @RequestParam("pullUpDate") LocalDateTime pullUpDate) {
