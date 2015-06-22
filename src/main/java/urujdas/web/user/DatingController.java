@@ -43,10 +43,12 @@ public class DatingController {
     @RequestMapping(method = RequestMethod.POST, params = "pullUpDate")
     public List<User> getUsersByFilterFromDate(@RequestBody(required = false) @Valid UserFilterRequest userFilter,
                                                BindingResult bindingResult,
-                                               @RequestParam("pullUpDate") LocalDateTime pullUpDate) {
+                                               @RequestParam("pullUpDate") String pullUpDateStr) {
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult);
         }
+
+        LocalDateTime pullUpDate = LocalDateTime.parse(pullUpDateStr, WebCommons.DATE_TIME_FORMATTER);
 
         return datingService.getUsersByFilterFromDate(
                 Optional.ofNullable(userFilter.toUserFilter()),
