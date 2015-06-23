@@ -37,6 +37,7 @@ echo "After migrate"
 
 popd
 service tomcat8 stop
+rm -rf /usr/share/tomcat8/webapps/ROOT
 cp urujdas-*.war /usr/share/tomcat8/webapps/ROOT.war
 service tomcat8 start
 
