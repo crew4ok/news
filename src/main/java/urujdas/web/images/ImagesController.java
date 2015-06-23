@@ -37,8 +37,7 @@ public class ImagesController {
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public SaveImageResponse saveImage(@RequestParam("image") MultipartFile imageFile,
-                                       @RequestParam("contentType") String contentType) {
+    public SaveImageResponse saveImage(@RequestParam("image") MultipartFile imageFile) {
         if (imageFile.isEmpty()) {
             throw new InvalidImageException("Image is empty");
         }
@@ -46,7 +45,7 @@ public class ImagesController {
         try {
             byte[] bytes = imageFile.getBytes();
 
-            Image image = imageService.save(bytes, contentType);
+            Image image = imageService.save(bytes, imageFile.getContentType());
 
             return new SaveImageResponse(image.getId());
         } catch (IOException e) {
