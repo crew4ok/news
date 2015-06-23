@@ -14,3 +14,4 @@
 14. Fix test annotations in controller tests (now junit annotations are used).
 15. Replace manual string conversion in DatingController.getUsersByFilterFromDate.
 16. Cleanup exception handlers in controllers.
+17. Move all the settings into JNDI.

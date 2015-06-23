@@ -24,10 +24,9 @@ import urujdas.service.exception.PullUpTooFrequentException;
 import urujdas.web.common.CommonExceptionHandler;
 import urujdas.web.common.WebCommons;
 import urujdas.web.user.DatingController;
+import urujdas.web.user.model.UserFilterRequest;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
@@ -66,14 +65,14 @@ public class DatingControllerTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void getLatestUsersByFilter_hp() throws Exception {
-        UserFilter userFilter = UserFilter.builder()
+        UserFilterRequest request = UserFilterRequest.builder()
                 .withGender(Gender.FEMALE)
                 .withGenderPreferences(GenderPreferences.FEMALES)
                 .withRelationsPreferences(RelationsPreferences.INTERESTS_RELATIONS)
                 .withAgeRange(new AgeRange(1, 2))
                 .build();
 
-        String requestInJson = objectMapper.writeValueAsString(userFilter);
+        String requestInJson = objectMapper.writeValueAsString(request);
 
         mockMvc.perform(post(WebCommons.VERSION_PREFIX + "/users/dating")
                 .content(requestInJson)
@@ -81,32 +80,34 @@ public class DatingControllerTest extends AbstractTestNGSpringContextTests {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        verify(datingService).getLatestUsersByFilter(eq(Optional.ofNullable(userFilter)), eq(WebCommons.PAGING_COUNT));
+        verify(datingService).getLatestUsersByFilter(
+                eq(request.toUserFilter()),
+                eq(WebCommons.PAGING_COUNT)
+        );
     }
 
     @Test
     public void getUsersByFilterFromDate_hp() throws Exception {
         LocalDateTime pullUpDate = LocalDateTime.now();
-        String pullUpDateStr = pullUpDate.format(DateTimeFormatter.ISO_DATE_TIME);
 
-        UserFilter userFilter = UserFilter.builder()
+        UserFilterRequest request = UserFilterRequest.builder()
                 .withGender(Gender.FEMALE)
                 .withGenderPreferences(GenderPreferences.FEMALES)
                 .withRelationsPreferences(RelationsPreferences.INTERESTS_RELATIONS)
                 .withAgeRange(new AgeRange(1, 2))
+                .withPullUpDate(pullUpDate)
                 .build();
 
-        String requestInJson = objectMapper.writeValueAsString(userFilter);
+        String requestInJson = objectMapper.writeValueAsString(request);
 
         mockMvc.perform(post(WebCommons.VERSION_PREFIX + "/users/dating")
                 .content(requestInJson)
-                .contentType(MediaType.APPLICATION_JSON)
-                .param("pullUpDate", pullUpDateStr))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         verify(datingService).getUsersByFilterFromDate(
-                eq(Optional.ofNullable(userFilter)),
+                eq(request.toUserFilter()),
                 eq(pullUpDate),
                 eq(WebCommons.PAGING_COUNT)
         );

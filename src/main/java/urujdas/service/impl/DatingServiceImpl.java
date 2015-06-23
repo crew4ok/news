@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import urujdas.dao.DatingDao;
-import urujdas.dao.exception.NotFoundException;
 import urujdas.model.users.User;
 import urujdas.model.users.UserFilter;
 import urujdas.service.DatingService;
@@ -15,7 +14,6 @@ import urujdas.util.Validation;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -31,7 +29,7 @@ public class DatingServiceImpl implements DatingService {
     private UserService userService;
 
     @Override
-    public List<User> getLatestUsersByFilter(Optional<UserFilter> filter, int count) {
+    public List<User> getLatestUsersByFilter(UserFilter filter, int count) {
         Validation.isNotNull(filter);
         Validation.isGreaterThanZero(count);
 
@@ -41,7 +39,7 @@ public class DatingServiceImpl implements DatingService {
     }
 
     @Override
-    public List<User> getUsersByFilterFromDate(Optional<UserFilter> filter, LocalDateTime pullUpDate, int count) {
+    public List<User> getUsersByFilterFromDate(UserFilter filter, LocalDateTime pullUpDate, int count) {
         Validation.isNotNull(filter);
         Validation.isNotNull(pullUpDate);
         Validation.isGreaterThanZero(count);
@@ -51,25 +49,14 @@ public class DatingServiceImpl implements DatingService {
         return datingDao.getUsersByFilterFromDate(actualFilter, pullUpDate, count);
     }
 
-    private UserFilter getUserFilter(Optional<UserFilter> filter) {
+    private UserFilter getUserFilter(UserFilter filter) {
         User currentUser = userService.getCurrentUser();
 
-        if (filter.isPresent()) {
-            UserFilter newFilter = filter.get();
+        datingDao.updateUserFilter(currentUser, filter);
 
-            datingDao.updateUserFilter(currentUser, newFilter);
-
-            return UserFilter.fromUserFilter(newFilter)
-                    .withUserId(currentUser.getId())
-                    .build();
-        }
-
-        UserFilter savedFilter = datingDao.findUserFilter(currentUser);
-
-        if (savedFilter == null) {
-            throw new NotFoundException(UserFilter.class, currentUser.getId());
-        }
-        return savedFilter;
+        return UserFilter.fromUserFilter(filter)
+                .withUserId(currentUser.getId())
+                .build();
     }
 
     @Override

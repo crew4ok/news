@@ -19,7 +19,6 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -57,12 +56,12 @@ public class DatingServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test(expectedExceptions = InvalidParamException.class)
     public void getLatestUsersByFilter_countIsNegative() throws Exception {
-        datingService.getLatestUsersByFilter(Optional.empty(), -1);
+        datingService.getLatestUsersByFilter(mock(UserFilter.class), -1);
     }
 
     @Test(expectedExceptions = InvalidParamException.class)
     public void getLatestUsersByFilter_countIsZero() throws Exception {
-        datingService.getLatestUsersByFilter(Optional.empty(), 0);
+        datingService.getLatestUsersByFilter(mock(UserFilter.class), 0);
     }
 
     @Test
@@ -78,35 +77,13 @@ public class DatingServiceTest extends AbstractTestNGSpringContextTests {
         List<User> expectedUsers = Collections.singletonList(mock(User.class));
         when(datingDao.getLatestUsersByFilter(any(UserFilter.class), eq(count))).thenReturn(expectedUsers);
 
-        List<User> actualUsers = datingService.getLatestUsersByFilter(Optional.ofNullable(filter), count);
+        List<User> actualUsers = datingService.getLatestUsersByFilter(filter, count);
 
         assertEquals(actualUsers, expectedUsers);
 
         verify(userService).getCurrentUser();
         verify(datingDao).updateUserFilter(currentUser, filter);
         verify(datingDao).getLatestUsersByFilter(any(UserFilter.class), eq(count));
-    }
-
-    @Test
-    public void getLatestUserByFilter_noFilterProvided() throws Exception {
-        User currentUser = mock(User.class);
-        when(userService.getCurrentUser()).thenReturn(currentUser);
-
-        UserFilter savedFilter = UserFilter.builder().build();
-        when(datingDao.findUserFilter(currentUser)).thenReturn(savedFilter);
-
-        int count = 1;
-
-        List<User> expectedUsers = Collections.singletonList(mock(User.class));
-        when(datingDao.getLatestUsersByFilter(savedFilter, count)).thenReturn(expectedUsers);
-
-        List<User> actualUsers = datingService.getLatestUsersByFilter(Optional.empty(), count);
-
-        assertEquals(actualUsers, expectedUsers);
-
-        verify(userService).getCurrentUser();
-        verify(datingDao).findUserFilter(currentUser);
-        verify(datingDao).getLatestUsersByFilter(savedFilter, count);
     }
 
     @Test(expectedExceptions = InvalidParamException.class)
@@ -116,17 +93,17 @@ public class DatingServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test(expectedExceptions = InvalidParamException.class)
     public void getUsersByFilterFromDate_nullDate() throws Exception {
-        datingService.getUsersByFilterFromDate(Optional.empty(), null, 1);
+        datingService.getUsersByFilterFromDate(mock(UserFilter.class), null, 1);
     }
 
     @Test(expectedExceptions = InvalidParamException.class)
     public void getUsersByFilterFromDate_countIsNegative() throws Exception {
-        datingService.getUsersByFilterFromDate(Optional.empty(), LocalDateTime.now(), -1);
+        datingService.getUsersByFilterFromDate(mock(UserFilter.class), LocalDateTime.now(), -1);
     }
 
     @Test(expectedExceptions = InvalidParamException.class)
     public void getUsersByFilterFromDate_countIsZero() throws Exception {
-        datingService.getUsersByFilterFromDate(Optional.empty(), LocalDateTime.now(), 0);
+        datingService.getUsersByFilterFromDate(mock(UserFilter.class), LocalDateTime.now(), 0);
     }
 
     @Test
@@ -142,40 +119,13 @@ public class DatingServiceTest extends AbstractTestNGSpringContextTests {
         when(datingDao.getUsersByFilterFromDate(any(UserFilter.class), eq(pullUpDate), eq(count)))
                 .thenReturn(expectedUsers);
 
-        List<User> actualUsers = datingService.getUsersByFilterFromDate(
-                Optional.ofNullable(filter),
-                pullUpDate,
-                count
-        );
+        List<User> actualUsers = datingService.getUsersByFilterFromDate(filter, pullUpDate, count);
 
         assertEquals(actualUsers, expectedUsers);
 
         verify(userService).getCurrentUser();
         verify(datingDao).updateUserFilter(currentUser, filter);
         verify(datingDao).getUsersByFilterFromDate(any(UserFilter.class), eq(pullUpDate), eq(count));
-    }
-
-    @Test
-    public void getUserByFilterFromDate_noFilterProvided() throws Exception {
-        User currentUser = mock(User.class);
-        when(userService.getCurrentUser()).thenReturn(currentUser);
-
-        UserFilter savedFilter = UserFilter.builder().build();
-        when(datingDao.findUserFilter(currentUser)).thenReturn(savedFilter);
-
-        int count = 1;
-
-        LocalDateTime pullUpDate = LocalDateTime.now();
-        List<User> expectedUsers = Collections.singletonList(mock(User.class));
-        when(datingDao.getUsersByFilterFromDate(savedFilter, pullUpDate, count)).thenReturn(expectedUsers);
-
-        List<User> actualUsers = datingService.getUsersByFilterFromDate(Optional.empty(), pullUpDate, count);
-
-        assertEquals(actualUsers, expectedUsers);
-
-        verify(userService).getCurrentUser();
-        verify(datingDao).findUserFilter(currentUser);
-        verify(datingDao).getUsersByFilterFromDate(savedFilter, pullUpDate, count);
     }
 
     @Test
