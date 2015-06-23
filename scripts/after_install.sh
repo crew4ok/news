@@ -36,7 +36,9 @@ fi
 echo "After migrate"
 
 popd
+service tomcat8 stop
 cp urujdas-*.war /usr/share/tomcat8/webapps/ROOT.war
+service tomcat8 start
 
 if [ $? -ne 0 ]; then
     cleanup 1
