@@ -3,10 +3,12 @@ package urujdas.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import urujdas.dao.ImageDao;
 import urujdas.dao.NewsCategoryDao;
 import urujdas.dao.NewsDao;
 import urujdas.dao.SubscriptionDao;
 import urujdas.model.favourites.FavourResult;
+import urujdas.model.images.Image;
 import urujdas.model.likes.LikeResult;
 import urujdas.model.likes.LikeType;
 import urujdas.model.news.News;
@@ -18,6 +20,7 @@ import urujdas.service.UserService;
 import urujdas.util.Validation;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,11 +38,14 @@ public class NewsServiceImpl implements NewsService {
     @Autowired
     private NewsCategoryDao newsCategoryDao;
 
+    @Autowired
+    private ImageDao imageDao;
+
     @Override
     public List<News> getLatestAll(int latestCount) {
         Validation.isGreaterThanZero(latestCount);
 
-        return newsDao.getLatestAll(latestCount);
+        return constructNews(newsDao.getLatestAll(latestCount));
     }
 
     @Override
@@ -47,7 +53,7 @@ public class NewsServiceImpl implements NewsService {
         Validation.isGreaterThanZero(id);
         Validation.isGreaterThanZero(count);
 
-        return newsDao.getAllFromId(id, count);
+        return constructNews(newsDao.getAllFromId(id, count));
     }
 
     @Override
@@ -56,7 +62,7 @@ public class NewsServiceImpl implements NewsService {
 
         User currentUser = userService.getCurrentUser();
 
-        return newsDao.getLatestByUser(currentUser, count);
+        return constructNews(newsDao.getLatestByUser(currentUser, count));
     }
 
     @Override
@@ -65,7 +71,7 @@ public class NewsServiceImpl implements NewsService {
 
         User currentUser = userService.getCurrentUser();
 
-        return newsDao.getByUserFromId(currentUser, id, count);
+        return constructNews(newsDao.getByUserFromId(currentUser, id, count));
     }
 
     @Override
@@ -75,7 +81,7 @@ public class NewsServiceImpl implements NewsService {
         User currentUser = userService.getCurrentUser();
         Subscription subscription = subscriptionDao.getByUser(currentUser);
 
-        return newsDao.getLatestBySubscription(subscription, count);
+        return constructNews(newsDao.getLatestBySubscription(subscription, count));
     }
 
     @Override
@@ -86,7 +92,7 @@ public class NewsServiceImpl implements NewsService {
         User currentUser = userService.getCurrentUser();
         Subscription subscription = subscriptionDao.getByUser(currentUser);
 
-        return newsDao.getBySubscriptionFromId(subscription, id, count);
+        return constructNews(newsDao.getBySubscriptionFromId(subscription, id, count));
     }
 
     @Override
@@ -95,7 +101,7 @@ public class NewsServiceImpl implements NewsService {
 
         User currentUser = userService.getCurrentUser();
 
-        return newsDao.getLatestFavourites(currentUser, count);
+        return constructNews(newsDao.getLatestFavourites(currentUser, count));
     }
 
     @Override
@@ -105,7 +111,21 @@ public class NewsServiceImpl implements NewsService {
 
         User currentUser = userService.getCurrentUser();
 
-        return newsDao.getFavouritesFromId(currentUser, id, count);
+        return constructNews(newsDao.getFavouritesFromId(currentUser, id, count));
+    }
+
+    private List<News> constructNews(List<News> originalNews) {
+        return originalNews.stream()
+                .map(n -> {
+                    List<Image> images = imageDao.getByNews(n);
+                    List<Long> imageIds = images.stream()
+                            .map(Image::getId)
+                            .collect(Collectors.toList());
+
+                    return News.fromNews(n)
+                            .withImageIds(imageIds)
+                            .build();
+                }).collect(Collectors.toList());
     }
 
     @Override
@@ -120,6 +140,16 @@ public class NewsServiceImpl implements NewsService {
                 .build();
 
         newsDao.create(news);
+
+        if (news.getImageIds() != null) {
+            for (int i = 0; i < news.getImageIds().size(); i++) {
+                Long imageId = news.getImageIds().get(i);
+
+                Image image = imageDao.getById(imageId);
+                imageDao.linkToNews(image, news, i);
+            }
+        }
+
     }
 
     @Override

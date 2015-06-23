@@ -5,11 +5,13 @@ import org.jooq.RecordMapper;
 import org.jooq.RecordMapperProvider;
 import org.jooq.RecordType;
 import urujdas.dao.impl.jooq.mappers.CommentRecordMapper;
+import urujdas.dao.impl.jooq.mappers.ImageRecordMapper;
 import urujdas.dao.impl.jooq.mappers.NewsCategoryRecordMapper;
 import urujdas.dao.impl.jooq.mappers.NewsRecordMapper;
 import urujdas.dao.impl.jooq.mappers.UserFilterRecordMapper;
 import urujdas.dao.impl.jooq.mappers.UserRecordMapper;
 import urujdas.model.comments.Comment;
+import urujdas.model.images.Image;
 import urujdas.model.news.News;
 import urujdas.model.news.NewsCategory;
 import urujdas.model.users.User;
@@ -22,18 +24,21 @@ public class JooqRecordMapperProvider implements RecordMapperProvider {
     private final NewsRecordMapper newsRecordMapper;
     private final NewsCategoryRecordMapper newsCategoryRecordMapper;
     private final CommentRecordMapper commentRecordMapper;
+    private final ImageRecordMapper imageRecordMapper;
 
     public JooqRecordMapperProvider(UserRecordMapper userRecordMapper,
                                     UserFilterRecordMapper userFilterRecordMapper,
                                     NewsRecordMapper newsRecordMapper,
                                     NewsCategoryRecordMapper newsCategoryRecordMapper,
-                                    CommentRecordMapper commentRecordMapper) {
+                                    CommentRecordMapper commentRecordMapper,
+                                    ImageRecordMapper imageRecordMapper) {
 
         this.userRecordMapper = userRecordMapper;
         this.userFilterRecordMapper = userFilterRecordMapper;
         this.newsRecordMapper = newsRecordMapper;
         this.newsCategoryRecordMapper = newsCategoryRecordMapper;
         this.commentRecordMapper = commentRecordMapper;
+        this.imageRecordMapper = imageRecordMapper;
     }
 
     @SuppressWarnings("unchecked")
@@ -57,6 +62,10 @@ public class JooqRecordMapperProvider implements RecordMapperProvider {
 
         if (Comment.class.equals(type)) {
             return (RecordMapper<R, E>) commentRecordMapper;
+        }
+
+        if (Image.class.equals(type)) {
+            return (RecordMapper<R, E>) imageRecordMapper;
         }
 
         throw new RuntimeException("Mapper for type " + type.getName() + " is not found");

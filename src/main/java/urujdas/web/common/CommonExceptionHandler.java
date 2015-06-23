@@ -5,16 +5,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import urujdas.dao.exception.NotFoundException;
 import urujdas.service.exception.PullUpTooFrequentException;
+import urujdas.web.common.exception.ValidationException;
 import urujdas.web.common.model.error.ErrorResponse;
 import urujdas.web.common.model.error.ErrorType;
 import urujdas.web.common.model.error.NotFoundErrorResponse;
 import urujdas.web.common.model.error.ValidationErrorResponse;
-import urujdas.web.exception.ValidationException;
 
 @ControllerAdvice(annotations = RestController.class)
 public class CommonExceptionHandler {
@@ -50,6 +51,16 @@ public class CommonExceptionHandler {
 
         return new ResponseEntity<>(
                 new NotFoundErrorResponse(entityName, id),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(HttpMediaTypeException.class)
+    public ResponseEntity<ErrorResponse> httpMediaTypeException(HttpMediaTypeException e) {
+        LOG.debug("Media type is not supported", e);
+
+        return new ResponseEntity<>(
+                new ErrorResponse(ErrorType.WRONG_FORMAT, "Content-Type or Accept is incorrect"),
                 HttpStatus.BAD_REQUEST
         );
     }

@@ -24,10 +24,12 @@ public class User {
     private final GenderPreferences genderPreferences;
     private final RelationsPreferences relationsPreferences;
 
+    private final Long imageId;
+
     @GeneratePojoBuilder
-    User(Long id, String username, String password, String firstname, String lastname, LocalDateTime birthDate,
-         String email, Gender gender, String phone, LocalDateTime pullUpDate, GenderPreferences genderPreferences,
-         RelationsPreferences relationsPreferences) {
+    public User(Long id, String username, String password, String firstname, String lastname, LocalDateTime birthDate,
+                String email, Gender gender, String phone, LocalDateTime pullUpDate, GenderPreferences genderPreferences,
+                RelationsPreferences relationsPreferences, Long imageId) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -40,6 +42,7 @@ public class User {
         this.pullUpDate = pullUpDate;
         this.genderPreferences = genderPreferences;
         this.relationsPreferences = relationsPreferences;
+        this.imageId = imageId;
     }
 
     public Long getId() {
@@ -90,6 +93,10 @@ public class User {
         return pullUpDate;
     }
 
+    public Long getImageId() {
+        return imageId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -108,7 +115,9 @@ public class User {
         if (phone != null ? !phone.equals(user.phone) : user.phone != null) return false;
         if (pullUpDate != null ? !pullUpDate.equals(user.pullUpDate) : user.pullUpDate != null) return false;
         if (genderPreferences != user.genderPreferences) return false;
-        return relationsPreferences == user.relationsPreferences;
+        if (relationsPreferences != user.relationsPreferences) return false;
+        return !(imageId != null ? !imageId.equals(user.imageId) : user.imageId != null);
+
     }
 
     @Override
@@ -125,6 +134,7 @@ public class User {
         result = 31 * result + (pullUpDate != null ? pullUpDate.hashCode() : 0);
         result = 31 * result + (genderPreferences != null ? genderPreferences.hashCode() : 0);
         result = 31 * result + (relationsPreferences != null ? relationsPreferences.hashCode() : 0);
+        result = 31 * result + (imageId != null ? imageId.hashCode() : 0);
         return result;
     }
 
@@ -143,6 +153,7 @@ public class User {
                 ", pullUpDate=" + pullUpDate +
                 ", genderPreferences=" + genderPreferences +
                 ", relationsPreferences=" + relationsPreferences +
+                ", imageId=" + imageId +
                 '}';
     }
 

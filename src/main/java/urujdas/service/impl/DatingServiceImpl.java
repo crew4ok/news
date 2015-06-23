@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import urujdas.dao.DatingDao;
+import urujdas.dao.ImageDao;
 import urujdas.dao.exception.NotFoundException;
+import urujdas.model.images.Image;
 import urujdas.model.users.User;
 import urujdas.model.users.UserFilter;
 import urujdas.service.DatingService;
@@ -16,6 +18,7 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -30,6 +33,9 @@ public class DatingServiceImpl implements DatingService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ImageDao imageDao;
+
     @Override
     public List<User> getLatestUsersByFilter(Optional<UserFilter> filter, int count) {
         Validation.isNotNull(filter);
@@ -37,7 +43,7 @@ public class DatingServiceImpl implements DatingService {
 
         UserFilter actualFilter = getUserFilter(filter);
 
-        return datingDao.getLatestUsersByFilter(actualFilter, count);
+        return constructUsers(datingDao.getLatestUsersByFilter(actualFilter, count));
     }
 
     @Override
@@ -48,7 +54,7 @@ public class DatingServiceImpl implements DatingService {
 
         UserFilter actualFilter = getUserFilter(filter);
 
-        return datingDao.getUsersByFilterFromDate(actualFilter, pullUpDate, count);
+        return constructUsers(datingDao.getUsersByFilterFromDate(actualFilter, pullUpDate, count));
     }
 
     private UserFilter getUserFilter(Optional<UserFilter> filter) {
@@ -92,4 +98,23 @@ public class DatingServiceImpl implements DatingService {
 
         datingDao.pullUserUp(currentUser);
     }
+
+    private List<User> constructUsers(List<User> users) {
+        return users.stream()
+                .map(this::constructUser)
+                .collect(Collectors.toList());
+    }
+
+    private User constructUser(User user) {
+        Optional<Image> image = imageDao.getByUser(user);
+
+        if (image.isPresent()) {
+            return User.fromUser(user)
+                    .withImageId(image.get().getId())
+                    .build();
+        }
+
+        return user;
+    }
+
 }

@@ -35,6 +35,9 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
     @Autowired
     protected DatingDao datingDao;
 
+    @Autowired
+    protected ImageDao imageDao;
+
     protected User defaultUser;
     protected NewsCategory defaultNewsCategory;
 

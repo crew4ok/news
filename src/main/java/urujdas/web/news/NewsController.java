@@ -16,7 +16,7 @@ import urujdas.model.news.News;
 import urujdas.service.CommentService;
 import urujdas.service.NewsService;
 import urujdas.web.common.WebCommons;
-import urujdas.web.exception.ValidationException;
+import urujdas.web.common.exception.ValidationException;
 import urujdas.web.news.model.CreateCommentRequest;
 import urujdas.web.news.model.CreateNewsRequest;
 

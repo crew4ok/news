@@ -13,3 +13,7 @@
 13. Fix DatingDaoTest.getUsersByFilterFromDate_hp for CI env.
 14. Fix test annotations in controller tests (now junit annotations are used).
 15. Replace manual string conversion in DatingController.getUsersByFilterFromDate.
+16. Remove hardcoded AWS Region from ServiceConfig and hardcoded bucket name from S3ImageService
+17. Move pullUpDate parameter in DatingController.getUsersByFilterFromDate into the request POJO.
+18. Deal with duplication of image injection in DatingServiceImpl and UserServiceImpl.
+19. Consider more thorough testing of S3ImageService.

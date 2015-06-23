@@ -9,6 +9,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import urujdas.config.ServiceConfig;
 import urujdas.dao.DatingDao;
+import urujdas.dao.ImageDao;
 import urujdas.model.users.User;
 import urujdas.model.users.UserFilter;
 import urujdas.service.exception.PullUpTooFrequentException;
@@ -44,10 +45,13 @@ public class DatingServiceTest extends AbstractTestNGSpringContextTests {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ImageDao imageDao;
+
     @AfterMethod
     public void resetMocks() {
-        verifyNoMoreInteractions(datingDao, userService);
-        reset(datingDao, userService);
+        verifyNoMoreInteractions(datingDao, userService, imageDao);
+        reset(datingDao, userService, imageDao);
     }
 
     @Test(expectedExceptions = InvalidParamException.class)
@@ -75,8 +79,11 @@ public class DatingServiceTest extends AbstractTestNGSpringContextTests {
         when(currentUser.getId()).thenReturn(userId);
         when(userService.getCurrentUser()).thenReturn(currentUser);
 
-        List<User> expectedUsers = Collections.singletonList(mock(User.class));
+        User expectedUser = mock(User.class);
+        List<User> expectedUsers = Collections.singletonList(expectedUser);
         when(datingDao.getLatestUsersByFilter(any(UserFilter.class), eq(count))).thenReturn(expectedUsers);
+
+        when(imageDao.getByUser(expectedUser)).thenReturn(Optional.empty());
 
         List<User> actualUsers = datingService.getLatestUsersByFilter(Optional.ofNullable(filter), count);
 
@@ -85,6 +92,7 @@ public class DatingServiceTest extends AbstractTestNGSpringContextTests {
         verify(userService).getCurrentUser();
         verify(datingDao).updateUserFilter(currentUser, filter);
         verify(datingDao).getLatestUsersByFilter(any(UserFilter.class), eq(count));
+        verify(imageDao).getByUser(expectedUser);
     }
 
     @Test
@@ -97,8 +105,11 @@ public class DatingServiceTest extends AbstractTestNGSpringContextTests {
 
         int count = 1;
 
-        List<User> expectedUsers = Collections.singletonList(mock(User.class));
+        User expectedUser = mock(User.class);
+        List<User> expectedUsers = Collections.singletonList(expectedUser);
         when(datingDao.getLatestUsersByFilter(savedFilter, count)).thenReturn(expectedUsers);
+
+        when(imageDao.getByUser(expectedUser)).thenReturn(Optional.empty());
 
         List<User> actualUsers = datingService.getLatestUsersByFilter(Optional.empty(), count);
 
@@ -107,6 +118,7 @@ public class DatingServiceTest extends AbstractTestNGSpringContextTests {
         verify(userService).getCurrentUser();
         verify(datingDao).findUserFilter(currentUser);
         verify(datingDao).getLatestUsersByFilter(savedFilter, count);
+        verify(imageDao).getByUser(expectedUser);
     }
 
     @Test(expectedExceptions = InvalidParamException.class)
@@ -138,9 +150,12 @@ public class DatingServiceTest extends AbstractTestNGSpringContextTests {
         when(userService.getCurrentUser()).thenReturn(currentUser);
 
         LocalDateTime pullUpDate = LocalDateTime.now();
-        List<User> expectedUsers = Collections.singletonList(mock(User.class));
+        User expectedUser = mock(User.class);
+        List<User> expectedUsers = Collections.singletonList(expectedUser);
         when(datingDao.getUsersByFilterFromDate(any(UserFilter.class), eq(pullUpDate), eq(count)))
                 .thenReturn(expectedUsers);
+
+        when(imageDao.getByUser(expectedUser)).thenReturn(Optional.empty());
 
         List<User> actualUsers = datingService.getUsersByFilterFromDate(
                 Optional.ofNullable(filter),
@@ -153,6 +168,7 @@ public class DatingServiceTest extends AbstractTestNGSpringContextTests {
         verify(userService).getCurrentUser();
         verify(datingDao).updateUserFilter(currentUser, filter);
         verify(datingDao).getUsersByFilterFromDate(any(UserFilter.class), eq(pullUpDate), eq(count));
+        verify(imageDao).getByUser(expectedUser);
     }
 
     @Test
@@ -166,8 +182,11 @@ public class DatingServiceTest extends AbstractTestNGSpringContextTests {
         int count = 1;
 
         LocalDateTime pullUpDate = LocalDateTime.now();
-        List<User> expectedUsers = Collections.singletonList(mock(User.class));
+        User expectedUser = mock(User.class);
+        List<User> expectedUsers = Collections.singletonList(expectedUser);
         when(datingDao.getUsersByFilterFromDate(savedFilter, pullUpDate, count)).thenReturn(expectedUsers);
+
+        when(imageDao.getByUser(expectedUser)).thenReturn(Optional.empty());
 
         List<User> actualUsers = datingService.getUsersByFilterFromDate(Optional.empty(), pullUpDate, count);
 
@@ -176,6 +195,7 @@ public class DatingServiceTest extends AbstractTestNGSpringContextTests {
         verify(userService).getCurrentUser();
         verify(datingDao).findUserFilter(currentUser);
         verify(datingDao).getUsersByFilterFromDate(savedFilter, pullUpDate, count);
+        verify(imageDao).getByUser(expectedUser);
     }
 
     @Test
@@ -235,6 +255,11 @@ public class DatingServiceTest extends AbstractTestNGSpringContextTests {
         @Bean
         public UserService userService() {
             return mock(UserService.class);
+        }
+
+        @Bean
+        public ImageDao imageDao() {
+            return mock(ImageDao.class);
         }
     }
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import urujdas.model.users.User;
 import urujdas.service.DatingService;
 import urujdas.web.common.WebCommons;
-import urujdas.web.exception.ValidationException;
+import urujdas.web.common.exception.ValidationException;
 import urujdas.web.user.model.UserFilterRequest;
 
 import javax.validation.Valid;

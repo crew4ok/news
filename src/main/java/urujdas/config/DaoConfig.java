@@ -18,6 +18,7 @@ import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import urujdas.dao.impl.jooq.JooqRecordMapperProvider;
 import urujdas.dao.impl.jooq.JooqTransactionProvider;
 import urujdas.dao.impl.jooq.mappers.CommentRecordMapper;
+import urujdas.dao.impl.jooq.mappers.ImageRecordMapper;
 import urujdas.dao.impl.jooq.mappers.NewsCategoryRecordMapper;
 import urujdas.dao.impl.jooq.mappers.NewsRecordMapper;
 import urujdas.dao.impl.jooq.mappers.UserFilterRecordMapper;
@@ -95,7 +96,8 @@ public class  DaoConfig {
                 userFilterRecordMapper(),
                 newsRecordMapper(),
                 newsCategoryRecordMapper(),
-                commentRecordMapper()
+                commentRecordMapper(),
+                imageRecordMapper()
         );
     }
 
@@ -122,6 +124,11 @@ public class  DaoConfig {
     @Bean
     public CommentRecordMapper commentRecordMapper() {
         return new CommentRecordMapper();
+    }
+
+    @Bean
+    public ImageRecordMapper imageRecordMapper() {
+        return new ImageRecordMapper();
     }
 
     @Bean
