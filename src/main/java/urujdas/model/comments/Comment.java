@@ -4,6 +4,7 @@ import net.karneim.pojobuilder.GeneratePojoBuilder;
 import urujdas.model.users.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Comment {
     private final Long id;
@@ -11,14 +12,16 @@ public class Comment {
     private final LocalDateTime creationDate;
     private final Long newsId;
     private final User author;
+    private final List<Long> imageIds;
 
     @GeneratePojoBuilder
-    public Comment(Long id, String body, LocalDateTime creationDate, Long newsId, User author) {
+    public Comment(Long id, String body, LocalDateTime creationDate, Long newsId, User author, List<Long> imageIds) {
         this.id = id;
         this.body = body;
         this.creationDate = creationDate;
         this.newsId = newsId;
         this.author = author;
+        this.imageIds = imageIds;
     }
 
     public Long getId() {
@@ -41,6 +44,10 @@ public class Comment {
         return author;
     }
 
+    public List<Long> getImageIds() {
+        return imageIds;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -53,7 +60,8 @@ public class Comment {
         if (creationDate != null ? !creationDate.equals(comment.creationDate) : comment.creationDate != null)
             return false;
         if (newsId != null ? !newsId.equals(comment.newsId) : comment.newsId != null) return false;
-        return !(author != null ? !author.equals(comment.author) : comment.author != null);
+        if (author != null ? !author.equals(comment.author) : comment.author != null) return false;
+        return !(imageIds != null ? !imageIds.equals(comment.imageIds) : comment.imageIds != null);
 
     }
 
@@ -64,6 +72,7 @@ public class Comment {
         result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
         result = 31 * result + (newsId != null ? newsId.hashCode() : 0);
         result = 31 * result + (author != null ? author.hashCode() : 0);
+        result = 31 * result + (imageIds != null ? imageIds.hashCode() : 0);
         return result;
     }
 
@@ -75,6 +84,7 @@ public class Comment {
                 ", creationDate=" + creationDate +
                 ", newsId=" + newsId +
                 ", author=" + author +
+                ", imageIds=" + imageIds +
                 '}';
     }
 

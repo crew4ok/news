@@ -1,4 +1,4 @@
-package urujdas.web.exception;
+package urujdas.web.common.exception;
 
 import org.springframework.validation.Errors;
 

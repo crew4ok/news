@@ -12,7 +12,7 @@ import urujdas.model.users.User;
 import urujdas.model.users.UserFilter;
 import urujdas.service.DatingService;
 import urujdas.web.common.WebCommons;
-import urujdas.web.exception.ValidationException;
+import urujdas.web.common.exception.ValidationException;
 import urujdas.web.user.model.UserFilterRequest;
 
 import javax.validation.Valid;

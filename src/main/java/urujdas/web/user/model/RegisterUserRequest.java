@@ -28,6 +28,8 @@ public class RegisterUserRequest {
 
     private final String phone;
 
+    private final Long imageId;
+
     @GeneratePojoBuilder
     @JsonCreator
     public RegisterUserRequest(@JsonProperty("username") String username,
@@ -37,7 +39,8 @@ public class RegisterUserRequest {
                                @JsonProperty("birthDate") LocalDateTime birthDate,
                                @JsonProperty("email") String email,
                                @JsonProperty("gender") Gender gender,
-                               @JsonProperty("phone") String phone) {
+                               @JsonProperty("phone") String phone,
+                               @JsonProperty("imageId") Long imageId) {
         this.username = username;
         this.password = password;
         this.firstname = firstname;
@@ -46,6 +49,7 @@ public class RegisterUserRequest {
         this.email = email;
         this.gender = gender;
         this.phone = phone;
+        this.imageId = imageId;
     }
 
     public String getUsername() {
@@ -80,6 +84,10 @@ public class RegisterUserRequest {
         return phone;
     }
 
+    public Long getImageId() {
+        return imageId;
+    }
+
     public User toUser() {
         return User.builder()
                 .withUsername(username)
@@ -90,6 +98,7 @@ public class RegisterUserRequest {
                 .withEmail(email)
                 .withGender(gender)
                 .withPhone(phone)
+                .withImageId(imageId)
                 .build();
     }
 

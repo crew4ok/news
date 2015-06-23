@@ -63,3 +63,12 @@ CREATE TABLE comments (
   news_id       BIGSERIAL NOT NULL REFERENCES news (id),
   author        BIGSERIAL NOT NULL REFERENCES users (id)
 );
+
+CREATE TABLE images (
+  id           BIGSERIAL PRIMARY KEY,
+  content_type VARCHAR NOT NULL,
+  ordering     INT,
+  news_id      BIGINT REFERENCES news (id),
+  comment_id   BIGINT REFERENCES comments (id),
+  user_id      BIGINT REFERENCES users (id)
+);

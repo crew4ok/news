@@ -4,6 +4,7 @@ import net.karneim.pojobuilder.GeneratePojoBuilder;
 import urujdas.model.users.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class News {
     private final Long id;
@@ -14,10 +15,11 @@ public class News {
     private final Integer likesCount;
     private final User author;
     private final NewsCategory category;
+    private final List<Long> imageIds;
 
     @GeneratePojoBuilder
     public News(Long id, String title, String body, LocalDateTime creationDate, String location,
-                Integer likesCount, User author, NewsCategory category) {
+                Integer likesCount, User author, NewsCategory category, List<Long> imageIds) {
         this.id = id;
         this.title = title;
         this.body = body;
@@ -26,6 +28,7 @@ public class News {
         this.likesCount = likesCount;
         this.author = author;
         this.category = category;
+        this.imageIds = imageIds;
     }
 
     public Long getId() {
@@ -60,6 +63,10 @@ public class News {
         return category;
     }
 
+    public List<Long> getImageIds() {
+        return imageIds;
+    }
+
     public static NewsBuilder fromNews(News news) {
         return new NewsBuilder()
                 .withId(news.id)
@@ -69,7 +76,8 @@ public class News {
                 .withLocation(news.location)
                 .withLikesCount(news.likesCount)
                 .withAuthor(news.author)
-                .withCategory(news.category);
+                .withCategory(news.category)
+                .withImageIds(news.imageIds);
     }
 
     @Override
@@ -86,7 +94,8 @@ public class News {
         if (location != null ? !location.equals(news.location) : news.location != null) return false;
         if (likesCount != null ? !likesCount.equals(news.likesCount) : news.likesCount != null) return false;
         if (author != null ? !author.equals(news.author) : news.author != null) return false;
-        return !(category != null ? !category.equals(news.category) : news.category != null);
+        if (category != null ? !category.equals(news.category) : news.category != null) return false;
+        return !(imageIds != null ? !imageIds.equals(news.imageIds) : news.imageIds != null);
 
     }
 
@@ -100,6 +109,7 @@ public class News {
         result = 31 * result + (likesCount != null ? likesCount.hashCode() : 0);
         result = 31 * result + (author != null ? author.hashCode() : 0);
         result = 31 * result + (category != null ? category.hashCode() : 0);
+        result = 31 * result + (imageIds != null ? imageIds.hashCode() : 0);
         return result;
     }
 
@@ -114,6 +124,7 @@ public class News {
                 ", likesCount=" + likesCount +
                 ", author=" + author +
                 ", category=" + category +
+                ", imageIds=" + imageIds +
                 '}';
     }
 

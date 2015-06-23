@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import urujdas.service.UserService;
 import urujdas.service.exception.UserAlreadyExistsException;
 import urujdas.web.common.WebCommons;
+import urujdas.web.common.exception.ValidationException;
 import urujdas.web.common.model.error.ErrorResponse;
 import urujdas.web.common.model.error.ErrorType;
-import urujdas.web.exception.ValidationException;
 import urujdas.web.user.model.RegisterUserRequest;
 
 import javax.validation.Valid;

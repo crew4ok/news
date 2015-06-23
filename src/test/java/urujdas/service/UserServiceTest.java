@@ -1,34 +1,50 @@
 package urujdas.service;
 
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
-import urujdas.config.DaoConfig;
 import urujdas.config.ServiceConfig;
+import urujdas.dao.ImageDao;
 import urujdas.dao.UserDao;
-import urujdas.dao.impl.UserDaoImpl;
 import urujdas.model.users.Gender;
+import urujdas.model.users.GenderPreferences;
+import urujdas.model.users.RelationsPreferences;
 import urujdas.model.users.User;
 import urujdas.service.exception.UserAlreadyExistsException;
 import urujdas.service.impl.UserServiceImpl;
 
 import java.time.LocalDateTime;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 @ContextConfiguration(classes = {
-        DaoConfig.class,
         ServiceConfig.class,
         UserServiceTest.LocalContext.class
 })
-public class UserServiceTest extends AbstractTransactionalTestNGSpringContextTests {
+public class UserServiceTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserDao userDao;
+
+    @AfterMethod
+    public void resetMocks() throws Exception {
+        verifyNoMoreInteractions(userDao);
+        reset(userDao);
+    }
 
     @Test(expectedExceptions = UserAlreadyExistsException.class)
     public void register_userAlreadyExists() throws Exception {
@@ -37,8 +53,14 @@ public class UserServiceTest extends AbstractTransactionalTestNGSpringContextTes
                 .withPassword("pass")
                 .build();
 
-        userService.register(user);
-        userService.register(user);
+        when(userDao.getByUsername(user.getUsername())).thenReturn(user);
+
+        try {
+            userService.register(user);
+            userService.register(user);
+        } finally {
+            verify(userDao).getByUsername(user.getUsername());
+        }
     }
 
     @Test
@@ -52,13 +74,22 @@ public class UserServiceTest extends AbstractTransactionalTestNGSpringContextTes
                 .withEmail("email")
                 .withGender(Gender.MALE)
                 .withPhone("phone")
+                .withPullUpDate(LocalDateTime.now())
+                .withGenderPreferences(GenderPreferences.MALES)
+                .withRelationsPreferences(RelationsPreferences.INTERESTS_RELATIONS)
+                .withImageId(1L)
                 .build();
 
         userService.register(expectedUser);
 
-        User actualUser = userService.getByUsername(expectedUser.getUsername());
+        verify(userDao).getByUsername(expectedUser.getUsername());
+        ArgumentCaptor<User> argumentCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userDao).create(argumentCaptor.capture());
+
+        User actualUser = argumentCaptor.getValue();
 
         assertNotNull(actualUser);
+        assertNotNull(actualUser.getPassword());
         assertEquals(actualUser.getUsername(), expectedUser.getUsername());
         assertEquals(actualUser.getFirstname(), expectedUser.getFirstname());
         assertEquals(actualUser.getLastname(), expectedUser.getLastname());
@@ -66,6 +97,9 @@ public class UserServiceTest extends AbstractTransactionalTestNGSpringContextTes
         assertEquals(actualUser.getEmail(), expectedUser.getEmail());
         assertEquals(actualUser.getGender(), expectedUser.getGender());
         assertEquals(actualUser.getPhone(), expectedUser.getPhone());
+        assertEquals(actualUser.getPullUpDate(), expectedUser.getPullUpDate());
+        assertEquals(actualUser.getGenderPreferences(), expectedUser.getGenderPreferences());
+        assertEquals(actualUser.getRelationsPreferences(), expectedUser.getRelationsPreferences());
     }
 
     @Configuration
@@ -77,7 +111,12 @@ public class UserServiceTest extends AbstractTransactionalTestNGSpringContextTes
 
         @Bean
         public UserDao userDao() {
-            return new UserDaoImpl();
+            return mock(UserDao.class);
+        }
+
+        @Bean
+        public ImageDao imageDao() {
+            return mock(ImageDao.class);
         }
     }
 }
