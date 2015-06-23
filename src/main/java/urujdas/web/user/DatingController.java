@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import urujdas.model.users.User;
+import urujdas.model.users.UserFilter;
 import urujdas.service.DatingService;
 import urujdas.web.common.WebCommons;
 import urujdas.web.exception.ValidationException;
@@ -55,6 +56,17 @@ public class DatingController {
                 pullUpDate,
                 WebCommons.PAGING_COUNT
         );
+    }
+
+    @RequestMapping(value = "/last_filter", method = RequestMethod.GET)
+    public ResponseEntity<UserFilter> getLastFilter() {
+        UserFilter currentUserFilter = datingService.findCurrentUserFilter();
+
+        if (currentUserFilter != null) {
+            return new ResponseEntity<>(currentUserFilter, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
     @RequestMapping(value = "/pull_up/", method = RequestMethod.POST)
