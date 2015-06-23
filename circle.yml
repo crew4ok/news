@@ -20,5 +20,4 @@ deployment:
             bucket: urujdas-deployment
             key_pattern: urujdas-{BUILD_NUM}
         region: eu-west-1
-        deployment_group: urujdas-staging
-        deployment_config: CodeDeployDefault.AllAtOnce
+        deployment_group: urujdas
