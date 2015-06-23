@@ -4,11 +4,23 @@ files:
   - source: /
     destination: /tmp/urujdas-deployment/
 hooks:
+  ApplicationStop:
+    - location: scripts/stop_app.sh
+      timeout: 60
+      runas: root
+  BeforeInstal:
+    - location: scripts/before_install.sh
+      timeout: 60
+      runas: root
   AfterInstall:
     - location: scripts/after_install.sh
       timeout: 180
       runas: root
+  ApplicationStart:
+    - location: scripts/start_app.sh
+      timeout: 60
+      runas: root
   ValidateService:
     - location: scripts/validate.sh
-      timeout: 120
+      timeout: 50
       runas: root
