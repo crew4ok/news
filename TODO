@@ -19,3 +19,4 @@
 19. Consider more thorough testing of S3ImageService.
 20. Cleanup exception handlers in controllers.
 21. Move all the settings into JNDI.
+22. Image thumbnails.
