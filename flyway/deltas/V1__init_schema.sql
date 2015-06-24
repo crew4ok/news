@@ -70,5 +70,5 @@ CREATE TABLE images (
   ordering     INT,
   news_id      BIGINT REFERENCES news (id),
   comment_id   BIGINT REFERENCES comments (id),
-  user_id      BIGINT REFERENCES users (id)
+  user_id      BIGINT UNIQUE REFERENCES users (id)
 );

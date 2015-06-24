@@ -48,6 +48,7 @@ public class ImageDaoImpl implements ImageDao {
     public void linkToNews(Image image, News news, int ordering) {
         ctx.update(IMAGES)
                 .set(IMAGES.NEWS_ID, news.getId())
+                .where(IMAGES.ID.equal(image.getId()))
                 .execute();
     }
 
@@ -64,6 +65,7 @@ public class ImageDaoImpl implements ImageDao {
     public void linkToComment(Image image, Comment comment, int ordering) {
         ctx.update(IMAGES)
                 .set(IMAGES.COMMENT_ID, comment.getId())
+                .where(IMAGES.ID.equal(image.getId()))
                 .execute();
     }
 
@@ -80,6 +82,7 @@ public class ImageDaoImpl implements ImageDao {
     public void linkToUser(Image image, User user) {
         ctx.update(IMAGES)
                 .set(IMAGES.USER_ID, user.getId())
+                .where(IMAGES.ID.equal(image.getId()))
                 .execute();
     }
 

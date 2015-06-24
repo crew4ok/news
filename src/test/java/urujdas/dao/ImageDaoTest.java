@@ -77,6 +77,26 @@ public class ImageDaoTest extends DaoBaseTest {
         assertTrue(images.contains(savedImage));
     }
 
+    @Test
+    public void linkToNews_otherImagesInDB() throws Exception {
+        User user = createDefaultUser();
+        NewsCategory category = createDefaultNewsCategory();
+        News news = createDefaultNews(user, category);
+
+        Image image = Image.builder()
+                .withContentType("contentType")
+                .build();
+        Image savedImage = imageDao.save(image);
+        imageDao.save(image);
+
+        imageDao.linkToNews(savedImage, news, 1);
+
+        List<Image> images = imageDao.getByNews(news);
+
+        assertEquals(images.size(), 1);
+        assertTrue(images.contains(savedImage));
+    }
+
     @Test(expectedExceptions = DataAccessException.class)
     public void linkToNews_noNews() throws Exception {
         Image savedImage = imageDao.save(
@@ -158,6 +178,32 @@ public class ImageDaoTest extends DaoBaseTest {
     }
 
     @Test
+    public void linkToComment_otherImagesInDB() throws Exception {
+        User user = createDefaultUser();
+        NewsCategory category = createDefaultNewsCategory();
+        News news = createDefaultNews(user, category);
+        Comment comment = Comment.builder()
+                .withBody("body")
+                .withAuthor(user)
+                .withNewsId(news.getId())
+                .build();
+        comment = commentDao.create(comment);
+
+        Image image = Image.builder()
+                .withContentType("contentType")
+                .build();
+        Image savedImage = imageDao.save(image);
+        imageDao.save(image);
+
+        imageDao.linkToComment(savedImage, comment, 1);
+
+        List<Image> images = imageDao.getByComment(comment);
+
+        assertEquals(images.size(), 1);
+        assertTrue(images.contains(savedImage));
+    }
+
+    @Test
     public void getByComment_hp() throws Exception {
         User user = createDefaultUser();
         NewsCategory category = createDefaultNewsCategory();
@@ -216,6 +262,23 @@ public class ImageDaoTest extends DaoBaseTest {
         Optional<Image> userImage = imageDao.getByUser(user);
 
         assertEquals(userImage.get(), savedImage);
+    }
+
+    @Test
+    public void linkToUser_otherImagesInDB() throws Exception {
+        User user = createDefaultUser();
+
+        Image image = Image.builder()
+                .withContentType("contentType")
+                .build();
+        Image userImage = imageDao.save(image);
+        imageDao.save(image);
+
+        imageDao.linkToUser(userImage, user);
+
+        Optional<Image> actualUserImage = imageDao.getByUser(user);
+
+        assertEquals(actualUserImage.get(), userImage);
     }
 
     @Test(expectedExceptions = DataAccessException.class)
