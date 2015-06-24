@@ -149,14 +149,14 @@ public class NewsServiceImpl implements NewsService {
                 .withCategory(newsCategory)
                 .build();
 
-        newsDao.create(news);
+        News createdNews = newsDao.create(news);
 
         if (news.getImageIds() != null) {
             for (int i = 0; i < news.getImageIds().size(); i++) {
                 Long imageId = news.getImageIds().get(i);
 
                 Image image = imageDao.getById(imageId);
-                imageDao.linkToNews(image, news, i);
+                imageDao.linkToNews(image, createdNews, i);
             }
         }
 
