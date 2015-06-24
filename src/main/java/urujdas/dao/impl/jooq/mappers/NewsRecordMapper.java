@@ -18,8 +18,6 @@ public class NewsRecordMapper implements RecordMapper<Record, News> {
 
     @Override
     public News map(Record record) {
-        Timestamp creationDateTimestamp = record.getValue(NEWS.CREATION_DATE);
-
         LocalDateTime creationDate = fromNullable(record.getValue(NEWS.CREATION_DATE), Timestamp::toLocalDateTime);
         Integer likesCount = record.getValue(count(LikesTable.LIKES.ID));
 

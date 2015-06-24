@@ -15,6 +15,7 @@ import urujdas.service.UserService;
 import urujdas.util.Validation;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,8 +72,17 @@ public class CommentServiceImpl implements CommentService {
                             .map(Image::getId)
                             .collect(Collectors.toList());
 
+                    User author = c.getAuthor();
+                    Optional<Image> userImage = imageDao.getByUser(author);
+                    if (userImage.isPresent()) {
+                        author = User.fromUser(author)
+                                .withImageId(userImage.get().getId())
+                                .build();
+                    }
+
                     return Comment.fromComment(c)
                             .withImageIds(imageIds)
+                            .withAuthor(author)
                             .build();
                 }).collect(Collectors.toList());
     }

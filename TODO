@@ -20,3 +20,4 @@
 20. Cleanup exception handlers in controllers.
 21. Move all the settings into JNDI.
 22. Image thumbnails.
+23. Deal with duplication of user construction in NewsServiceImpl and CommentServiceImpl.

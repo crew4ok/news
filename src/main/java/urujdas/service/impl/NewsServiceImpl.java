@@ -20,6 +20,7 @@ import urujdas.service.UserService;
 import urujdas.util.Validation;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -122,8 +123,17 @@ public class NewsServiceImpl implements NewsService {
                             .map(Image::getId)
                             .collect(Collectors.toList());
 
+                    User author = n.getAuthor();
+                    Optional<Image> userImage = imageDao.getByUser(author);
+                    if (userImage.isPresent()) {
+                        author = User.fromUser(author)
+                                .withImageId(userImage.get().getId())
+                                .build();
+                    }
+
                     return News.fromNews(n)
                             .withImageIds(imageIds)
+                            .withAuthor(author)
                             .build();
                 }).collect(Collectors.toList());
     }

@@ -23,6 +23,7 @@ import urujdas.util.exception.InvalidParamException;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -49,6 +50,9 @@ public class NewsServiceTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     private NewsCategoryDao newsCategoryDao;
+
+    @Autowired
+    private ImageDao imageDao;
 
     @AfterMethod
     public void tearDown() throws Exception {
@@ -85,6 +89,7 @@ public class NewsServiceTest extends AbstractTestNGSpringContextTests {
         List<News> result = Collections.singletonList(mock(News.class));
 
         when(newsDao.getAllFromId(id, count)).thenReturn(result);
+        when(imageDao.getByUser(any(User.class))).thenReturn(Optional.empty());
 
         newsService.getAllFromId(id, count);
 
