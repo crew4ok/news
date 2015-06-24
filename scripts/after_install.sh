@@ -1,25 +1,28 @@
 #!/usr/bin/env bash
 
+echo "After install; start" >> /tmp/deployment.log
+
 function cleanup {
     local exit_code=$1
-    echo "Exit code: "${exit_code}
+    echo "Exit code: "${exit_code} >> /tmp/deployment.log
 
-#    if [ -d /tmp/urujdas-deployment ]; then
-#        rm -rf /tmp/urujdas-deployment
-#    fi
+    if [ -d /tmp/urujdas-deployment ]; then
+        rm -rf /tmp/urujdas-deployment >> /tmp/deployment.log
+    fi
 
+    echo "After install; stop" >> /tmp/deployment.log
     exit ${exit_code}
 }
 
 
-pushd /tmp/urujdas-deployment/target
+pushd /tmp/urujdas-deployment/target >> /tmp/deployment.log
 
-tar -xf deployment.tar.gz
-pushd deployment/flyway
+tar -xf deployment.tar.gz >> /tmp/deployment.log
+pushd deployment/flyway >> /tmp/deployment.log
 
-source /root/export_variables.sh
+source /root/export_variables.sh >> /tmp/deployment.log
 
-echo "Migrating"
+echo "Migrating" >> /tmp/deployment.log
 ./flyway -driver=org.postgresql.Driver \
     -url=jdbc:postgresql://${DB_HOSTNAME}/${DB_DATABASE} \
     -user=${DB_USER} \
@@ -27,17 +30,17 @@ echo "Migrating"
     -schemas=urujdas \
     -locations=filesystem:deltas \
     -jarDirs=drivers \
-    migrate
+    migrate >> /tmp/deployment.log
 
 if [ $? -ne 0 ]; then
     cleanup 1
 fi
 
-echo "After migrate"
+echo "After migrate" >> /tmp/deployment.log
 
-popd
+popd >> /tmp/deployment.log
 
-cp urujdas-*.war /usr/share/tomcat8/webapps/ROOT.war
+cp urujdas-*.war /usr/share/tomcat8/webapps/ROOT.war >> /tmp/deployment.log
 
 if [ $? -ne 0 ]; then
     cleanup 1
