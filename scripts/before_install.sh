@@ -11,4 +11,4 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "Before install; end" >> /tmp/deployment.log
+echo "Before install; stop" >> /tmp/deployment.log
