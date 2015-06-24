@@ -53,6 +53,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .failureHandler(new SimpleUrlAuthenticationFailureHandler())
                     .successHandler((request, response, auth) -> response.setStatus(HttpServletResponse.SC_OK))
                 .and()
+                    .logout()
+                    .logoutUrl(VERSION_PREFIX + "/logout")
+                    .logoutSuccessHandler((req, resp, auth) -> resp.setStatus(HttpServletResponse.SC_OK))
+                .and()
                     .headers()
                     .cacheControl().disable();
     }
