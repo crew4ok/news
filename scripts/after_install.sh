@@ -4,9 +4,9 @@ function cleanup {
     local exit_code=$1
     echo "Exit code: "${exit_code}
 
-    if [ -d /tmp/urujdas-deployment ]; then
-        rm -rf /tmp/urujdas-deployment
-    fi
+#    if [ -d /tmp/urujdas-deployment ]; then
+#        rm -rf /tmp/urujdas-deployment
+#    fi
 
     exit ${exit_code}
 }
