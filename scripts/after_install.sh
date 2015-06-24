@@ -20,7 +20,7 @@ pushd /tmp/urujdas-deployment/target >> /tmp/deployment.log
 tar -xf deployment.tar.gz >> /tmp/deployment.log
 pushd deployment/flyway >> /tmp/deployment.log
 
-source /root/export_variables.sh >> /tmp/deployment.log
+source /etc/profile.d/export_variables.sh >> /tmp/deployment.log
 
 echo "Migrating" >> /tmp/deployment.log
 ./flyway -driver=org.postgresql.Driver \
