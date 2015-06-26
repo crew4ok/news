@@ -1,6 +1,7 @@
 package urujdas.dao.impl;
 
 import org.jooq.DSLContext;
+import org.jooq.Record1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import urujdas.dao.UserDao;
@@ -19,6 +20,16 @@ public class UserDaoImpl implements UserDao {
 
     @Autowired
     private DSLContext ctx;
+
+    @Override
+    public boolean checkExists(String username) {
+        Record1<Integer> record = ctx.selectOne()
+                .from(USERS)
+                .where(USERS.USERNAME.equal(username))
+                .fetchOne();
+
+        return record != null;
+    }
 
     @Override
     public User getById(Long id) {

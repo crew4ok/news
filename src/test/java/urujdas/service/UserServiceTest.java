@@ -48,13 +48,13 @@ public class UserServiceTest extends BaseServiceTest {
                 .withPassword("pass")
                 .build();
 
-        when(userDao.getByUsername(user.getUsername())).thenReturn(user);
+        when(userDao.checkExists(user.getUsername())).thenReturn(true);
 
         try {
             userService.register(user);
             userService.register(user);
         } finally {
-            verify(userDao).getByUsername(user.getUsername());
+            verify(userDao).checkExists(user.getUsername());
         }
     }
 
@@ -75,9 +75,11 @@ public class UserServiceTest extends BaseServiceTest {
                 .withImageId(1L)
                 .build();
 
+        when(userDao.checkExists(expectedUser.getUsername())).thenReturn(false);
+
         userService.register(expectedUser);
 
-        verify(userDao).getByUsername(expectedUser.getUsername());
+        verify(userDao).checkExists(expectedUser.getUsername());
         ArgumentCaptor<User> argumentCaptor = ArgumentCaptor.forClass(User.class);
         verify(userDao).create(argumentCaptor.capture());
 

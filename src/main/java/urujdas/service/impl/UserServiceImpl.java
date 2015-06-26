@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = false)
     public void register(User newUser) {
-        if (userDao.getByUsername(newUser.getUsername()) != null){
+        if (userDao.checkExists(newUser.getUsername())){
             throw new UserAlreadyExistsException();
         }
 
