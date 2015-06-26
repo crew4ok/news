@@ -200,7 +200,10 @@ public class NewsServiceImpl implements NewsService {
         News news = newsDao.getById(newsId);
 
         List<User> likers = newsDao.getLikers(news);
-        if (likers.contains(currentUser)) {
+        boolean liked = likers.stream()
+                .anyMatch(u -> u.getId().equals(currentUser.getId()));
+
+        if (liked) {
             newsDao.dislike(currentUser, news);
 
             return new LikeResult(LikeType.DISLIKE, likers.size() - 1);
