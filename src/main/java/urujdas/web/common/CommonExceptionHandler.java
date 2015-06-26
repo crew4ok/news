@@ -45,12 +45,12 @@ public class CommonExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<NotFoundErrorResponse> notFoundException(NotFoundException e) {
         String entityName = e.getEntityClass().getSimpleName();
-        Long id = e.getId();
+        Object identifier = e.getIdentifier();
 
-        LOG.debug("Entity of class = {} with id = {} was not found", entityName, id);
+        LOG.debug("Entity of class = {} was not found by identifier = {}", entityName, identifier);
 
         return new ResponseEntity<>(
-                new NotFoundErrorResponse(entityName, id),
+                new NotFoundErrorResponse(entityName, identifier),
                 HttpStatus.BAD_REQUEST
         );
     }

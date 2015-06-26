@@ -2,9 +2,11 @@ package urujdas.dao;
 
 import org.jooq.exception.DataAccessException;
 import org.testng.annotations.Test;
+import urujdas.dao.exception.NotFoundException;
 import urujdas.model.users.Gender;
 import urujdas.model.users.User;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class UserDaoTest extends DaoBaseTest {
@@ -24,6 +26,11 @@ public class UserDaoTest extends DaoBaseTest {
         assertNotNull(user);
     }
 
+    @Test(expectedExceptions = NotFoundException.class)
+    public void getByUser_notFound() throws Exception {
+        userDao.getByUsername("username");
+    }
+
     @Test(expectedExceptions = DataAccessException.class)
     public void create_usernameUniqueness() throws Exception {
         User user = User.builder()
@@ -32,5 +39,18 @@ public class UserDaoTest extends DaoBaseTest {
                 .build();
         userDao.create(user);
         userDao.create(user);
+    }
+
+    @Test
+    public void getById_hp() throws Exception {
+        User user = createDefaultUser();
+        User actualUser = userDao.getById(user.getId());
+
+        assertEquals(actualUser, user);
+    }
+
+    @Test(expectedExceptions = NotFoundException.class)
+    public void getById_notFound() throws Exception {
+        userDao.getById(1L);
     }
 }

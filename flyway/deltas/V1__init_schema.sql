@@ -53,7 +53,8 @@ CREATE TABLE favourites (
 CREATE TABLE likes (
   id      BIGSERIAL PRIMARY KEY,
   news_id BIGSERIAL REFERENCES news (id),
-  liker   BIGSERIAL REFERENCES users (id)
+  liker   BIGSERIAL REFERENCES users (id),
+  UNIQUE (news_id, liker)
 );
 
 CREATE TABLE comments (

@@ -5,10 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
-import urujdas.config.ServiceConfig;
 import urujdas.dao.ImageDao;
 import urujdas.dao.UserDao;
 import urujdas.model.users.Gender;
@@ -28,11 +26,8 @@ import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-@ContextConfiguration(classes = {
-        ServiceConfig.class,
-        UserServiceTest.LocalContext.class
-})
-public class UserServiceTest extends AbstractTestNGSpringContextTests {
+@ContextConfiguration(classes = UserServiceTest.LocalContext.class)
+public class UserServiceTest extends BaseServiceTest {
 
     @Autowired
     private UserService userService;

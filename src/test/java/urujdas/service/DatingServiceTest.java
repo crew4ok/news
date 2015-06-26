@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
-import urujdas.config.ServiceConfig;
 import urujdas.dao.DatingDao;
 import urujdas.model.users.User;
 import urujdas.model.users.UserFilter;
@@ -29,11 +27,8 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 
-@ContextConfiguration(classes = {
-        ServiceConfig.class,
-        DatingServiceTest.LocalContext.class
-})
-public class DatingServiceTest extends AbstractTestNGSpringContextTests {
+@ContextConfiguration(classes = DatingServiceTest.LocalContext.class)
+public class DatingServiceTest extends BaseServiceTest {
     @Autowired
     private DatingService datingService;
 

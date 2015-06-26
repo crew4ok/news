@@ -168,9 +168,9 @@ public class User {
                 .withEmail(user.email)
                 .withGender(user.gender)
                 .withPhone(user.phone)
-                .withGenderPreferences(user.getGenderPreferences())
-                .withRelationsPreferences(user.getRelationsPreferences())
-                .withPullUpDate(user.getPullUpDate());
+                .withGenderPreferences(user.genderPreferences)
+                .withRelationsPreferences(user.relationsPreferences)
+                .withPullUpDate(user.pullUpDate);
     }
 
     public static UserBuilder builder() {

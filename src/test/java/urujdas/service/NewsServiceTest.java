@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
-import urujdas.config.ServiceConfig;
 import urujdas.dao.ImageDao;
 import urujdas.dao.NewsCategoryDao;
 import urujdas.dao.NewsDao;
@@ -33,11 +31,8 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 
-@ContextConfiguration(classes = {
-        ServiceConfig.class,
-        NewsServiceTest.LocalContext.class
-})
-public class NewsServiceTest extends AbstractTestNGSpringContextTests {
+@ContextConfiguration(classes = NewsServiceTest.LocalContext.class)
+public class NewsServiceTest extends BaseServiceTest {
 
     @Autowired
     private NewsService newsService;

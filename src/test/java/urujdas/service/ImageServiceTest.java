@@ -191,18 +191,13 @@ public class ImageServiceTest extends BaseServiceTest {
     @Configuration
     static class LocalContext {
         @Bean
-        public ImageService imageService() {
-            return new S3ImageService(s3Client());
+        public ImageService imageService(AmazonS3 s3Client) {
+            return new S3ImageService(s3Client);
         }
 
         @Bean
         public ImageDao imageDao() {
             return mock(ImageDao.class);
-        }
-
-        @Bean
-        public AmazonS3 s3Client() {
-            return mock(AmazonS3.class);
         }
     }
 }

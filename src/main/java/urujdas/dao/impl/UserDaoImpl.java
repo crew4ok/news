@@ -4,6 +4,7 @@ import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import urujdas.dao.UserDao;
+import urujdas.dao.exception.NotFoundException;
 import urujdas.model.users.User;
 import urujdas.tables.records.UsersRecord;
 
@@ -25,11 +26,11 @@ public class UserDaoImpl implements UserDao {
                 .where(USERS.ID.equal(id))
                 .fetchOne();
 
-        if (usersRecord == null) {
-            return null;
-        } else {
+        if (usersRecord != null) {
             return usersRecord.into(User.class);
         }
+
+        throw new NotFoundException(User.class, id);
     }
 
     @Override
@@ -38,11 +39,11 @@ public class UserDaoImpl implements UserDao {
                 .where(USERS.USERNAME.equal(username))
                 .fetchOne();
 
-        if (usersRecord == null) {
-            return null;
-        } else {
+        if (usersRecord != null) {
             return usersRecord.into(User.class);
         }
+
+        throw new NotFoundException(User.class, username);
     }
 
     @Override

@@ -16,7 +16,6 @@ import urujdas.model.subscriptions.Subscription;
 import urujdas.model.users.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -243,10 +242,7 @@ public class NewsDaoImpl implements NewsDao {
 
     @Override
     public List<User> getLikers(News news) {
-        ArrayList<Field<?>> fields = new ArrayList<>(Arrays.asList(USERS.fields()));
-        fields.remove(USERS.PASSWORD);
-
-        return ctx.select(fields)
+        return ctx.select(USERS.fields())
                 .from(LIKES)
                 .join(USERS).on(LIKES.LIKER.equal(USERS.ID))
                 .where(LIKES.NEWS_ID.equal(news.getId()))
