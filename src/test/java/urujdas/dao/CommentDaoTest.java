@@ -26,7 +26,7 @@ public class CommentDaoTest extends DaoBaseTest {
     }
 
     @Test
-    public void getById_hp() {
+    public void create_hp() {
         Comment comment = Comment.builder()
                 .withId(-1L)
                 .withBody("body")
@@ -36,8 +36,8 @@ public class CommentDaoTest extends DaoBaseTest {
 
         Comment createdComment = commentDao.create(comment);
 
+        assertNotNull(createdComment.getId());
         assertNotEquals(createdComment.getId(), comment.getId());
-
         assertEquals(createdComment.getBody(), createdComment.getBody());
         assertNotNull(createdComment.getCreationDate());
         assertEquals(createdComment.getNewsId(), createdComment.getNewsId());

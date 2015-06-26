@@ -94,10 +94,11 @@ public class Comment {
 
     public static CommentBuilder fromComment(Comment comment) {
         return new CommentBuilder()
-                .withId(comment.getId())
-                .withBody(comment.getBody())
-                .withCreationDate(comment.getCreationDate())
-                .withNewsId(comment.getNewsId())
-                .withAuthor(comment.getAuthor());
+                .withId(comment.id)
+                .withBody(comment.body)
+                .withCreationDate(comment.creationDate)
+                .withNewsId(comment.newsId)
+                .withAuthor(comment.author)
+                .withImageIds(comment.imageIds);
     }
 }
