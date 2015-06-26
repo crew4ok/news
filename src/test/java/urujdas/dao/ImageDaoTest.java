@@ -120,13 +120,13 @@ public class ImageDaoTest extends DaoBaseTest {
         Image firstImage = imageDao.save(image);
         Image secondImage = imageDao.save(image);
 
-        imageDao.linkToNews(firstImage, news, 1);
-        imageDao.linkToNews(secondImage, news, 2);
+        imageDao.linkToNews(firstImage, news, 2);
+        imageDao.linkToNews(secondImage, news, 1);
 
         List<Image> images = imageDao.getByNews(news);
 
         assertEquals(images.size(), 2);
-        assertEquals(images, Arrays.asList(firstImage, secondImage));
+        assertEquals(images, Arrays.asList(secondImage, firstImage));
     }
 
     @Test
@@ -221,13 +221,13 @@ public class ImageDaoTest extends DaoBaseTest {
         Image firstImage = imageDao.save(image);
         Image secondImage = imageDao.save(image);
 
-        imageDao.linkToComment(firstImage, comment, 1);
+        imageDao.linkToComment(firstImage, comment, 2);
         imageDao.linkToComment(secondImage, comment, 1);
 
         List<Image> images = imageDao.getByComment(comment);
 
         assertEquals(images.size(), 2);
-        assertEquals(images, Arrays.asList(firstImage, secondImage));
+        assertEquals(images, Arrays.asList(secondImage, firstImage));
     }
 
     @Test
