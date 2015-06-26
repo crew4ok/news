@@ -17,12 +17,13 @@ import urujdas.web.common.exception.ValidationException;
 import urujdas.web.common.model.error.ErrorResponse;
 import urujdas.web.common.model.error.ErrorType;
 import urujdas.web.user.model.RegisterUserRequest;
+import urujdas.web.user.model.UpdateUserRequest;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping(WebCommons.VERSION_PREFIX + "/register")
-public class RegistrationController {
+public class UsersController {
 
     @Autowired
     private UserService userService;
@@ -35,6 +36,18 @@ public class RegistrationController {
         }
 
         userService.register(registerUserRequest.toUser());
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT)
+    public ResponseEntity<String> update(@Valid @RequestBody UpdateUserRequest updateUserRequest,
+                                         BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new ValidationException(bindingResult);
+        }
+
+        userService.update(updateUserRequest.toUser());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

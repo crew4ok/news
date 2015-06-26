@@ -19,7 +19,7 @@ import urujdas.service.UserService;
 import urujdas.service.exception.UserAlreadyExistsException;
 import urujdas.web.common.CommonExceptionHandler;
 import urujdas.web.common.WebCommons;
-import urujdas.web.user.RegistrationController;
+import urujdas.web.user.UsersController;
 import urujdas.web.user.model.RegisterUserRequest;
 
 import static org.mockito.Matchers.any;
@@ -37,9 +37,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ContextConfiguration(classes = {
         WebConfig.class,
-        RegistrationControllerTest.LocalContext.class
+        UsersControllerTest.LocalContext.class
 })
-public class RegistrationControllerTest extends AbstractTestNGSpringContextTests {
+public class UsersControllerTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -121,8 +121,8 @@ public class RegistrationControllerTest extends AbstractTestNGSpringContextTests
     @Configuration
     static class LocalContext {
         @Bean
-        public RegistrationController registrationController() {
-            return new RegistrationController();
+        public UsersController registrationController() {
+            return new UsersController();
         }
 
         @Bean
