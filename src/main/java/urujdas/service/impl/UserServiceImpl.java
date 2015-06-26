@@ -16,6 +16,8 @@ import urujdas.util.Validation;
 
 import java.util.Optional;
 
+import static urujdas.util.MapperUtils.fromNullable;
+
 @Service
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
@@ -67,6 +69,24 @@ public class UserServiceImpl implements UserService {
         if (newUser.getImageId() != null) {
             Image image = imageDao.getById(newUser.getImageId());
             imageDao.linkToUser(image, createdUser);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void update(User user) {
+        User currentUser = getCurrentUser();
+
+        user = User.fromUser(user)
+                .withId(currentUser.getId())
+                .withPassword(fromNullable(user.getPassword(), passwordEncoder::encode))
+                .build();
+
+        userDao.update(user);
+
+        if (user.getImageId() != null) {
+            Image image = imageDao.getById(user.getImageId());
+            imageDao.linkToUser(image, user);
         }
     }
 

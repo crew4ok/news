@@ -80,6 +80,13 @@ public class ImageDaoImpl implements ImageDao {
 
     @Override
     public void linkToUser(Image image, User user) {
+        Optional<Image> currentImage = getByUser(user);
+        if (currentImage.isPresent()) {
+            ctx.update(IMAGES)
+                    .set(IMAGES.USER_ID, (Long)null)
+                    .where(IMAGES.ID.equal(image.getId()));
+        }
+
         ctx.update(IMAGES)
                 .set(IMAGES.USER_ID, user.getId())
                 .where(IMAGES.ID.equal(image.getId()))

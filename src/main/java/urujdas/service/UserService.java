@@ -11,4 +11,6 @@ public interface UserService {
     User getByUsername(String username);
 
     void register(User user);
+
+    void update(User user);
 }
