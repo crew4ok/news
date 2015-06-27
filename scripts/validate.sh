@@ -5,7 +5,7 @@ echo "Validate; start" >> /tmp/deployment.log
 retries=5
 
 result=0
-for i in {1..${retries}}; do
+for i in $(seq 1 ${retries}); do
     response=$(curl --write-out %{http_code} --silent --output /dev/null localhost:8080/v1/healthcheck)
     if [ ${response} -ne '200' ]; then
         result=1
