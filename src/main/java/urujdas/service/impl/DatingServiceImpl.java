@@ -35,7 +35,8 @@ public class DatingServiceImpl implements DatingService {
 
         UserFilter actualFilter = getUserFilter(filter);
 
-        return datingDao.getLatestUsersByFilter(actualFilter, count);
+        List<User> users = datingDao.getLatestUsersByFilter(actualFilter, count);
+        return userService.attachImage(users);
     }
 
     @Override
@@ -46,7 +47,8 @@ public class DatingServiceImpl implements DatingService {
 
         UserFilter actualFilter = getUserFilter(filter);
 
-        return datingDao.getUsersByFilterFromDate(actualFilter, pullUpDate, count);
+        List<User> users = datingDao.getUsersByFilterFromDate(actualFilter, pullUpDate, count);
+        return userService.attachImage(users);
     }
 
     private UserFilter getUserFilter(UserFilter filter) {

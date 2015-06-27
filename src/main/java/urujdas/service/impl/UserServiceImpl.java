@@ -14,7 +14,9 @@ import urujdas.service.UserService;
 import urujdas.service.exception.UserAlreadyExistsException;
 import urujdas.util.Validation;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static urujdas.util.MapperUtils.fromNullable;
 
@@ -88,6 +90,18 @@ public class UserServiceImpl implements UserService {
             Image image = imageDao.getById(user.getImageId());
             imageDao.linkToUser(image, user);
         }
+    }
+
+    @Override
+    public User attachImage(User user) {
+        return constructUser(user);
+    }
+
+    @Override
+    public List<User> attachImage(List<User> users) {
+        return users.stream()
+                .map(this::constructUser)
+                .collect(Collectors.toList());
     }
 
     private User constructUser(User user) {
