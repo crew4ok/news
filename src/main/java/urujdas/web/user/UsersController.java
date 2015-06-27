@@ -5,11 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import urujdas.model.users.User;
 import urujdas.service.UserService;
 import urujdas.service.exception.UserAlreadyExistsException;
 import urujdas.web.common.WebCommons;
@@ -22,13 +24,23 @@ import urujdas.web.user.model.UpdateUserRequest;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(WebCommons.VERSION_PREFIX + "/register")
+@RequestMapping(WebCommons.VERSION_PREFIX + "/users")
 public class UsersController {
 
     @Autowired
     private UserService userService;
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+    public User getUserById(@PathVariable("userId") Long userId) {
+        return userService.getById(userId);
+    }
+
+    @RequestMapping(value = "/current", method = RequestMethod.GET)
+    public User getCurrentUser() {
+        return userService.getCurrentUser();
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<String> register(@Valid @RequestBody RegisterUserRequest registerUserRequest,
                                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

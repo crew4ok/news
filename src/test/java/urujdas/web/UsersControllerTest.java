@@ -65,7 +65,7 @@ public class UsersControllerTest extends AbstractTestNGSpringContextTests {
 
         String requestInJson = toJson(registerUserRequest);
 
-        mockMvc.perform(post(WebCommons.VERSION_PREFIX + "/register")
+        mockMvc.perform(post(WebCommons.VERSION_PREFIX + "/users/register")
                 .content(requestInJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -87,7 +87,7 @@ public class UsersControllerTest extends AbstractTestNGSpringContextTests {
 
         String requestInJson = toJson(registerUserRequest);
 
-        mockMvc.perform(post(WebCommons.VERSION_PREFIX + "/register")
+        mockMvc.perform(post(WebCommons.VERSION_PREFIX + "/users/register")
                 .content(requestInJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -105,7 +105,7 @@ public class UsersControllerTest extends AbstractTestNGSpringContextTests {
 
         doThrow(new UserAlreadyExistsException()).when(userService).register(any(User.class));
 
-        mockMvc.perform(post(WebCommons.VERSION_PREFIX + "/register")
+        mockMvc.perform(post(WebCommons.VERSION_PREFIX + "/users/register")
                 .content(requestInJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
