@@ -91,6 +91,7 @@ public class UserDaoTest extends DaoBaseTest {
                 .withGenderPreferences(GenderPreferences.MALES)
                 .withRelationsPreferences(RelationsPreferences.SERIOUS_RELATIONS)
                 .withPullUpDate(createdUser.getPullUpDate().minusYears(1))
+                .withQuickBloxId(1L)
                 .build();
 
         userDao.update(update);
@@ -108,6 +109,7 @@ public class UserDaoTest extends DaoBaseTest {
         assertEquals(updatedUser.getPhone(), update.getPhone());
         assertEquals(updatedUser.getGenderPreferences(), update.getGenderPreferences());
         assertEquals(updatedUser.getRelationsPreferences(), update.getRelationsPreferences());
+        assertEquals(updatedUser.getQuickBloxId(), update.getQuickBloxId());
     }
 
     @Test

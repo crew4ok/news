@@ -29,6 +29,8 @@ public class UpdateUserRequest {
 
     private final Long imageId;
 
+    private final Long quickBloxId;
+
     @GeneratePojoBuilder
     @JsonCreator
     public UpdateUserRequest(@JsonProperty("password") String password,
@@ -40,7 +42,8 @@ public class UpdateUserRequest {
                              @JsonProperty("phone") String phone,
                              @JsonProperty("genderPreferences") GenderPreferences genderPreferences,
                              @JsonProperty("relationsPreferences") RelationsPreferences relationsPreferences,
-                             @JsonProperty("imageId") Long imageId) {
+                             @JsonProperty("imageId") Long imageId,
+                             @JsonProperty("quickBloxId") Long quickBloxId) {
         this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -51,6 +54,7 @@ public class UpdateUserRequest {
         this.genderPreferences = genderPreferences;
         this.relationsPreferences = relationsPreferences;
         this.imageId = imageId;
+        this.quickBloxId = quickBloxId;
     }
 
     public String getPassword() {
@@ -93,6 +97,10 @@ public class UpdateUserRequest {
         return imageId;
     }
 
+    public Long getQuickBloxId() {
+        return quickBloxId;
+    }
+
     public User toUser() {
         return User.builder()
                 .withPassword(password)
@@ -105,6 +113,7 @@ public class UpdateUserRequest {
                 .withGenderPreferences(genderPreferences)
                 .withRelationsPreferences(relationsPreferences)
                 .withImageId(imageId)
+                .withQuickBloxId(quickBloxId)
                 .build();
     }
 

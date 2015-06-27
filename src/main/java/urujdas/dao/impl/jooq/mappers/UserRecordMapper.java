@@ -43,6 +43,7 @@ public class UserRecordMapper implements RecordMapper<Record, User> {
                 .withPullUpDate(pullUpDate)
                 .withGenderPreferences(genderPreferences)
                 .withRelationsPreferences(relationsPreferences)
+                .withQuickBloxId(record.getValue(USERS.QUICK_BLOX_ID))
                 .build();
     }
 }

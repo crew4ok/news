@@ -1,13 +1,13 @@
 package urujdas.dao.impl;
 
 import org.jooq.DSLContext;
-import org.jooq.Record1;
 import org.jooq.Field;
+import org.jooq.Record1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import urujdas.dao.UserDao;
-import urujdas.dao.exception.UpdateFailedException;
 import urujdas.dao.exception.NotFoundException;
+import urujdas.dao.exception.UpdateFailedException;
 import urujdas.model.users.User;
 import urujdas.tables.records.UsersRecord;
 
@@ -109,6 +109,7 @@ public class UserDaoImpl implements UserDao {
         mapping.put(USERS.PHONE, user.getPhone());
         mapping.put(USERS.GENDER_PREFERENCES, fromNullable(user.getGenderPreferences(), Enum::name));
         mapping.put(USERS.RELATIONS_PREFERENCES, fromNullable(user.getRelationsPreferences(), Enum::name));
+        mapping.put(USERS.QUICK_BLOX_ID, user.getQuickBloxId());
 
         return mapping;
     }
