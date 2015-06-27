@@ -7,6 +7,7 @@ import urujdas.model.users.Gender;
 import urujdas.model.users.User;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class RegisterUserRequest {
@@ -30,6 +31,8 @@ public class RegisterUserRequest {
 
     private final Long imageId;
 
+    private final GeoLocation geoLocation;
+
     @GeneratePojoBuilder
     @JsonCreator
     public RegisterUserRequest(@JsonProperty("username") String username,
@@ -40,7 +43,10 @@ public class RegisterUserRequest {
                                @JsonProperty("email") String email,
                                @JsonProperty("gender") Gender gender,
                                @JsonProperty("phone") String phone,
-                               @JsonProperty("imageId") Long imageId) {
+                               @JsonProperty("imageId") Long imageId,
+                               @JsonProperty("latitude") BigDecimal latitude,
+                               @JsonProperty("longitude") BigDecimal longitude,
+                               @JsonProperty("geoLocation") GeoLocation geoLocation) {
         this.username = username;
         this.password = password;
         this.firstname = firstname;
@@ -50,6 +56,7 @@ public class RegisterUserRequest {
         this.gender = gender;
         this.phone = phone;
         this.imageId = imageId;
+        this.geoLocation = geoLocation;
     }
 
     public String getUsername() {
@@ -88,7 +95,13 @@ public class RegisterUserRequest {
         return imageId;
     }
 
+    public GeoLocation getGeoLocation() {
+        return geoLocation;
+    }
+
     public User toUser() {
+
+
         return User.builder()
                 .withUsername(username)
                 .withPassword(password)
@@ -99,6 +112,7 @@ public class RegisterUserRequest {
                 .withGender(gender)
                 .withPhone(phone)
                 .withImageId(imageId)
+                .withGeoLocation(geoLocation.toGeoLocation())
                 .build();
     }
 

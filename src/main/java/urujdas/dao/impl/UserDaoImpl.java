@@ -1,13 +1,14 @@
 package urujdas.dao.impl;
 
 import org.jooq.DSLContext;
-import org.jooq.Record1;
 import org.jooq.Field;
+import org.jooq.Record1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import urujdas.dao.UserDao;
-import urujdas.dao.exception.UpdateFailedException;
 import urujdas.dao.exception.NotFoundException;
+import urujdas.dao.exception.UpdateFailedException;
+import urujdas.model.users.GeoLocation;
 import urujdas.model.users.User;
 import urujdas.tables.records.UsersRecord;
 
@@ -78,6 +79,8 @@ public class UserDaoImpl implements UserDao {
                 .set(USERS.PHONE, user.getPhone())
                 .set(USERS.GENDER_PREFERENCES, genderPreferencesName)
                 .set(USERS.RELATIONS_PREFERENCES, relationsPreferences)
+                .set(USERS.LATITUDE, fromNullable(user.getGeoLocation(), GeoLocation::getLatitude))
+                .set(USERS.LONGITUDE, fromNullable(user.getGeoLocation(), GeoLocation::getLongitude))
                 .returning(USERS.fields())
                 .fetchOne()
                 .into(User.class);

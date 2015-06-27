@@ -1,0 +1,5 @@
+ALTER TABLE users
+ADD COLUMN latitude NUMERIC(10, 7);
+
+ALTER TABLE users
+ADD COLUMN longitude NUMERIC(10, 7);

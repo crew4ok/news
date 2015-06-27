@@ -4,9 +4,11 @@ import org.jooq.Record;
 import org.jooq.RecordMapper;
 import urujdas.model.users.Gender;
 import urujdas.model.users.GenderPreferences;
+import urujdas.model.users.GeoLocation;
 import urujdas.model.users.RelationsPreferences;
 import urujdas.model.users.User;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -31,6 +33,13 @@ public class UserRecordMapper implements RecordMapper<Record, User> {
                 RelationsPreferences::valueOf
         );
 
+        BigDecimal latitude = record.getValue(USERS.LATITUDE);
+        BigDecimal longitude = record.getValue(USERS.LONGITUDE);
+        GeoLocation geoLocation = GeoLocation.builder()
+                .withLatitude(latitude)
+                .withLongitude(longitude)
+                .build();
+
         return User.builder()
                 .withId(record.getValue(USERS.ID))
                 .withUsername(record.getValue(USERS.USERNAME))
@@ -43,6 +52,7 @@ public class UserRecordMapper implements RecordMapper<Record, User> {
                 .withPullUpDate(pullUpDate)
                 .withGenderPreferences(genderPreferences)
                 .withRelationsPreferences(relationsPreferences)
+                .withGeoLocation(geoLocation)
                 .build();
     }
 }

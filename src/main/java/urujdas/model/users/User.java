@@ -26,10 +26,12 @@ public class User {
 
     private final Long imageId;
 
+    private final GeoLocation geoLocation;
+
     @GeneratePojoBuilder
     public User(Long id, String username, String password, String firstname, String lastname, LocalDateTime birthDate,
                 String email, Gender gender, String phone, LocalDateTime pullUpDate, GenderPreferences genderPreferences,
-                RelationsPreferences relationsPreferences, Long imageId) {
+                RelationsPreferences relationsPreferences, Long imageId, GeoLocation geoLocation) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -43,6 +45,7 @@ public class User {
         this.genderPreferences = genderPreferences;
         this.relationsPreferences = relationsPreferences;
         this.imageId = imageId;
+        this.geoLocation = geoLocation;
     }
 
     public Long getId() {
@@ -97,6 +100,10 @@ public class User {
         return imageId;
     }
 
+    public GeoLocation getGeoLocation() {
+        return geoLocation;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -116,7 +123,8 @@ public class User {
         if (pullUpDate != null ? !pullUpDate.equals(user.pullUpDate) : user.pullUpDate != null) return false;
         if (genderPreferences != user.genderPreferences) return false;
         if (relationsPreferences != user.relationsPreferences) return false;
-        return !(imageId != null ? !imageId.equals(user.imageId) : user.imageId != null);
+        if (imageId != null ? !imageId.equals(user.imageId) : user.imageId != null) return false;
+        return !(geoLocation != null ? !geoLocation.equals(user.geoLocation) : user.geoLocation != null);
 
     }
 
@@ -135,6 +143,7 @@ public class User {
         result = 31 * result + (genderPreferences != null ? genderPreferences.hashCode() : 0);
         result = 31 * result + (relationsPreferences != null ? relationsPreferences.hashCode() : 0);
         result = 31 * result + (imageId != null ? imageId.hashCode() : 0);
+        result = 31 * result + (geoLocation != null ? geoLocation.hashCode() : 0);
         return result;
     }
 
@@ -154,6 +163,7 @@ public class User {
                 ", genderPreferences=" + genderPreferences +
                 ", relationsPreferences=" + relationsPreferences +
                 ", imageId=" + imageId +
+                ", geoLocation=" + geoLocation +
                 '}';
     }
 
@@ -170,7 +180,9 @@ public class User {
                 .withPhone(user.phone)
                 .withGenderPreferences(user.genderPreferences)
                 .withRelationsPreferences(user.relationsPreferences)
-                .withPullUpDate(user.pullUpDate);
+                .withPullUpDate(user.pullUpDate)
+                .withImageId(user.imageId)
+                .withGeoLocation(user.geoLocation);
     }
 
     public static UserBuilder builder() {
