@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import urujdas.dao.ImageDao;
 import urujdas.dao.NewsCategoryDao;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -49,6 +51,13 @@ public class NewsServiceTest extends BaseServiceTest {
     @Autowired
     private ImageDao imageDao;
 
+    private User currentUser;
+
+    @BeforeMethod
+    public void setUp() throws Exception {
+        this.currentUser = mock(User.class);
+    }
+
     @AfterMethod
     public void tearDown() throws Exception {
         verifyNoMoreInteractions(newsDao, userService, newsCategoryDao);
@@ -60,11 +69,14 @@ public class NewsServiceTest extends BaseServiceTest {
         int latestCount = 1;
         List<News> result = Collections.singletonList(mock(News.class));
 
-        when(newsDao.getLatestAll(latestCount)).thenReturn(result);
+        when(newsDao.getLatestAll(currentUser, latestCount)).thenReturn(result);
+
+        when(userService.getCurrentUser()).thenReturn(currentUser);
 
         newsService.getLatestAll(latestCount);
 
-        verify(newsDao).getLatestAll(latestCount);
+        verify(newsDao).getLatestAll(currentUser, latestCount);
+        verify(userService).getCurrentUser();
     }
 
     @Test(expectedExceptions = InvalidParamException.class)
@@ -83,12 +95,15 @@ public class NewsServiceTest extends BaseServiceTest {
         int count = 2;
         List<News> result = Collections.singletonList(mock(News.class));
 
-        when(newsDao.getAllFromId(id, count)).thenReturn(result);
+        when(newsDao.getAllFromId(currentUser, id, count)).thenReturn(result);
         when(imageDao.getByUser(any(User.class))).thenReturn(Optional.empty());
+
+        when(userService.getCurrentUser()).thenReturn(currentUser);
 
         newsService.getAllFromId(id, count);
 
-        verify(newsDao).getAllFromId(id, count);
+        verify(newsDao).getAllFromId(currentUser, id, count);
+        verify(userService).getCurrentUser();
     }
 
     @Test(expectedExceptions = InvalidParamException.class)
@@ -114,18 +129,17 @@ public class NewsServiceTest extends BaseServiceTest {
     @Test
     public void create_hp() throws Exception {
         long newsCategoryId = 1L;
-        User user = mock(User.class);
         NewsCategory newsCategory = mock(NewsCategory.class);
         when(newsCategory.getId()).thenReturn(newsCategoryId);
 
-        when(userService.getCurrentUser()).thenReturn(user);
+        when(userService.getCurrentUser()).thenReturn(currentUser);
         when(newsCategoryDao.getById(newsCategoryId)).thenReturn(newsCategory);
 
         News news = mock(News.class);
         when(news.getCategory()).thenReturn(newsCategory);
         newsService.create(news);
 
-        verify(newsDao).create(any(News.class));
+        verify(newsDao).create(eq(currentUser), any(News.class));
         verify(newsCategoryDao).getById(newsCategoryId);
         verify(userService).getCurrentUser();
     }
@@ -137,7 +151,7 @@ public class NewsServiceTest extends BaseServiceTest {
 
         long newsId = 1L;
         News news = mock(News.class);
-        when(newsDao.getById(newsId)).thenReturn(news);
+        when(newsDao.getById(currentUser, newsId)).thenReturn(news);
 
         when(newsDao.getAllFavourites(currentUser)).thenReturn(Collections.singletonList(mock(News.class)));
 
@@ -146,7 +160,7 @@ public class NewsServiceTest extends BaseServiceTest {
         assertEquals(favourResult, FavourResult.FAVOUR);
 
         verify(userService).getCurrentUser();
-        verify(newsDao).getById(newsId);
+        verify(newsDao).getById(currentUser, newsId);
         verify(newsDao).getAllFavourites(currentUser);
         verify(newsDao).favour(currentUser, news);
     }
@@ -158,7 +172,7 @@ public class NewsServiceTest extends BaseServiceTest {
 
         long newsId = 1L;
         News news = mock(News.class);
-        when(newsDao.getById(newsId)).thenReturn(news);
+        when(newsDao.getById(currentUser, newsId)).thenReturn(news);
 
         when(newsDao.getAllFavourites(currentUser)).thenReturn(Collections.singletonList(news));
 
@@ -167,7 +181,7 @@ public class NewsServiceTest extends BaseServiceTest {
         assertEquals(favourResult, FavourResult.UNFAVOUR);
 
         verify(userService).getCurrentUser();
-        verify(newsDao).getById(newsId);
+        verify(newsDao).getById(currentUser, newsId);
         verify(newsDao).getAllFavourites(currentUser);
         verify(newsDao).unfavour(currentUser, news);
     }
@@ -175,12 +189,11 @@ public class NewsServiceTest extends BaseServiceTest {
     @Test
     public void like_like() throws Exception {
         long newsId = 1l;
-        User user = mock(User.class);
-        when(user.getId()).thenReturn(1L);
+        when(currentUser.getId()).thenReturn(1L);
         News news = mock(News.class);
 
-        when(userService.getCurrentUser()).thenReturn(user);
-        when(newsDao.getById(newsId)).thenReturn(news);
+        when(userService.getCurrentUser()).thenReturn(currentUser);
+        when(newsDao.getById(currentUser, newsId)).thenReturn(news);
 
         User liker = mock(User.class);
         when(liker.getId()).thenReturn(2L);
@@ -192,22 +205,21 @@ public class NewsServiceTest extends BaseServiceTest {
         assertEquals(likeResult.getLikesCount(), Integer.valueOf(2));
 
         verify(userService).getCurrentUser();
-        verify(newsDao).getById(newsId);
+        verify(newsDao).getById(currentUser, newsId);
         verify(newsDao).getLikers(news);
-        verify(newsDao).like(user, news);
+        verify(newsDao).like(currentUser, news);
     }
 
     @Test
     public void like_dislike() throws Exception {
         long newsId = 1l;
-        User user = mock(User.class);
-        when(user.getId()).thenReturn(1L);
+        when(currentUser.getId()).thenReturn(1L);
         News news = mock(News.class);
 
-        when(userService.getCurrentUser()).thenReturn(user);
-        when(newsDao.getById(newsId)).thenReturn(news);
+        when(userService.getCurrentUser()).thenReturn(currentUser);
+        when(newsDao.getById(currentUser, newsId)).thenReturn(news);
 
-        when(newsDao.getLikers(news)).thenReturn(Collections.singletonList(user));
+        when(newsDao.getLikers(news)).thenReturn(Collections.singletonList(currentUser));
 
         LikeResult likeResult = newsService.like(newsId);
 
@@ -215,9 +227,9 @@ public class NewsServiceTest extends BaseServiceTest {
         assertEquals(likeResult.getLikesCount(), Integer.valueOf(0));
 
         verify(userService).getCurrentUser();
-        verify(newsDao).getById(newsId);
+        verify(newsDao).getById(currentUser, newsId);
         verify(newsDao).getLikers(news);
-        verify(newsDao).dislike(user, news);
+        verify(newsDao).dislike(currentUser, news);
     }
 
     @Test(expectedExceptions = InvalidParamException.class)

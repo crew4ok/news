@@ -20,9 +20,12 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 public class NewsDaoTest extends DaoBaseTest {
+    private User currentUser;
+
     @BeforeMethod
     public void setup() {
         this.defaultUser = createDefaultUser();
+        this.currentUser = createDefaultUser();
         this.defaultNewsCategory = createDefaultNewsCategory();
     }
 
@@ -43,12 +46,12 @@ public class NewsDaoTest extends DaoBaseTest {
                 .withCategory(defaultNewsCategory)
                 .build();
 
-        Long id = newsDao.create(news).getId();
+        Long id = newsDao.create(currentUser, news).getId();
 
-        News actualNews = newsDao.getById(id);
+        News actualNews = newsDao.getById(currentUser, id);
 
         // likes should not be set
-        assertEquals(actualNews.getLikesCount(), Integer.valueOf(0));
+        assertEquals(actualNews.getLikesCount(), 0);
 
         assertEquals(actualNews.getTitle(), news.getTitle());
         assertEquals(actualNews.getBody(), news.getBody());
@@ -60,7 +63,7 @@ public class NewsDaoTest extends DaoBaseTest {
 
     @Test(expectedExceptions = NotFoundException.class)
     public void getById_notFound() throws Exception {
-        newsDao.getById(-1L);
+        newsDao.getById(currentUser, -1L);
     }
 
     /*
@@ -78,7 +81,7 @@ public class NewsDaoTest extends DaoBaseTest {
             createDefaultNews(i);
         }
 
-        List<News> latestNews = newsDao.getLatestAll(latestCount);
+        List<News> latestNews = newsDao.getLatestAll(currentUser, latestCount);
 
         assertEquals(latestNews.size(), 2);
 
@@ -95,7 +98,7 @@ public class NewsDaoTest extends DaoBaseTest {
     public void getLatestAll_newsCountIsLesserThanRequested() throws Exception {
         createDefaultNews(0);
 
-        List<News> latest = newsDao.getLatestAll(2);
+        List<News> latest = newsDao.getLatestAll(currentUser, 2);
 
         assertEquals(latest.size(), 1);
 
@@ -106,7 +109,7 @@ public class NewsDaoTest extends DaoBaseTest {
 
     @Test
     public void getLatestAll_empty() throws Exception {
-        List<News> latest = newsDao.getLatestAll(100);
+        List<News> latest = newsDao.getLatestAll(currentUser, 100);
 
         assertEquals(latest.size(), 0);
     }
@@ -127,14 +130,14 @@ public class NewsDaoTest extends DaoBaseTest {
             createDefaultNews(i);
         }
 
-        List<Long> allIds = newsDao.getLatestAll(100).stream()
+        List<Long> allIds = newsDao.getLatestAll(currentUser, 100).stream()
                 .map(News::getId)
                 .sorted()
                 .collect(Collectors.toList());
 
         List<Long> expectedIds = allIds.subList(to - count, to);
 
-        List<News> news = newsDao.getAllFromId(expectedIds.get(expectedIds.size() - 1), count);
+        List<News> news = newsDao.getAllFromId(currentUser, expectedIds.get(expectedIds.size() - 1), count);
 
         assertEquals(news.size(), count);
 
@@ -272,7 +275,7 @@ public class NewsDaoTest extends DaoBaseTest {
 
         Subscription subscription = subscriptionDao.getByUser(subscriber);
 
-        List<News> newsBySubscription = newsDao.getLatestBySubscription(subscription, 100);
+        List<News> newsBySubscription = newsDao.getLatestBySubscription(currentUser, subscription, 100);
 
         assertEquals(newsBySubscription.size(), 2);
         assertEquals(newsBySubscription, Arrays.asList(secondNews, firstNews));
@@ -287,7 +290,7 @@ public class NewsDaoTest extends DaoBaseTest {
 
         Subscription subscription = subscriptionDao.getByUser(subscriber);
 
-        List<News> newsBySubscription = newsDao.getLatestBySubscription(subscription, 100);
+        List<News> newsBySubscription = newsDao.getLatestBySubscription(currentUser, subscription, 100);
 
         assertTrue(newsBySubscription.isEmpty());
     }
@@ -304,7 +307,7 @@ public class NewsDaoTest extends DaoBaseTest {
 
         Subscription subscription = subscriptionDao.getByUser(subscriber);
 
-        List<News> newsBySubscription = newsDao.getLatestBySubscription(subscription, 100);
+        List<News> newsBySubscription = newsDao.getLatestBySubscription(currentUser, subscription, 100);
 
         assertTrue(newsBySubscription.isEmpty());
     }
@@ -340,7 +343,7 @@ public class NewsDaoTest extends DaoBaseTest {
         List<News> expectedNews = news.subList(from, from + count);
 
         Subscription subscription = subscriptionDao.getByUser(defaultUser);
-        List<News> actualNews = newsDao.getBySubscriptionFromId(subscription, fromId, count);
+        List<News> actualNews = newsDao.getBySubscriptionFromId(currentUser, subscription, fromId, count);
 
         assertEquals(actualNews, expectedNews);
     }
@@ -370,7 +373,7 @@ public class NewsDaoTest extends DaoBaseTest {
         List<News> expectedNews = news.subList(from, news.size());
 
         Subscription subscription = subscriptionDao.getByUser(defaultUser);
-        List<News> actualNews = newsDao.getBySubscriptionFromId(subscription, fromId, count);
+        List<News> actualNews = newsDao.getBySubscriptionFromId(currentUser, subscription, fromId, count);
 
         assertEquals(actualNews, expectedNews);
     }
@@ -378,7 +381,7 @@ public class NewsDaoTest extends DaoBaseTest {
     @Test
     public void getBySubscriptionFromId_noSubscription() throws Exception {
         Subscription subscription = subscriptionDao.getByUser(defaultUser);
-        List<News> news = newsDao.getBySubscriptionFromId(subscription, 1L, 10);
+        List<News> news = newsDao.getBySubscriptionFromId(currentUser, subscription, 1L, 10);
 
         assertTrue(news.isEmpty());
     }
@@ -404,7 +407,11 @@ public class NewsDaoTest extends DaoBaseTest {
         }
         Collections.reverse(favourites);
 
-        List<News> expectedFavourites = favourites.subList(0, count);
+        List<News> expectedFavourites = favourites.subList(0, count).stream()
+                .map(n -> News.fromNews(n)
+                        .withCurrentUserFavoured(true)
+                        .build())
+                .collect(Collectors.toList());
 
         List<News> actualFavourites = newsDao.getLatestFavourites(defaultUser, count);
 
@@ -440,7 +447,11 @@ public class NewsDaoTest extends DaoBaseTest {
         }
         Collections.reverse(favourites);
 
-        List<News> expectedFavourites = favourites.subList(from, from + count);
+        List<News> expectedFavourites = favourites.subList(from, from + count).stream()
+                .map(n -> News.fromNews(n)
+                        .withCurrentUserFavoured(true)
+                        .build())
+                .collect(Collectors.toList());
         Long fromId = expectedFavourites.get(0).getId();
 
         List<News> actualFavourites = newsDao.getFavouritesFromId(defaultUser, fromId, count);
@@ -463,6 +474,13 @@ public class NewsDaoTest extends DaoBaseTest {
 
         newsDao.favour(user, firstNews);
         newsDao.favour(user, secondNews);
+
+        firstNews = News.fromNews(firstNews)
+                .withCurrentUserFavoured(true)
+                .build();
+        secondNews = News.fromNews(secondNews)
+                .withCurrentUserFavoured(true)
+                .build();
 
         List<News> favourites = newsDao.getAllFavourites(user);
 
@@ -488,6 +506,10 @@ public class NewsDaoTest extends DaoBaseTest {
         newsDao.unfavour(user, firstNews);
 
         List<News> favourites = newsDao.getAllFavourites(user);
+
+        secondNews = News.fromNews(secondNews)
+                .withCurrentUserFavoured(true)
+                .build();
 
         assertEquals(favourites, Collections.singletonList(secondNews));
 
@@ -525,11 +547,11 @@ public class NewsDaoTest extends DaoBaseTest {
         assertEquals(secondNewsLikers.size(), 1);
         assertTrue(secondNewsLikers.contains(secondUser));
 
-        News actualFirstNews = newsDao.getById(firstNews.getId());
-        assertEquals(actualFirstNews.getLikesCount(), Integer.valueOf(2));
+        News actualFirstNews = newsDao.getById(currentUser, firstNews.getId());
+        assertEquals(actualFirstNews.getLikesCount(), 2);
 
-        News actualSecondNews = newsDao.getById(secondNews.getId());
-        assertEquals(actualSecondNews.getLikesCount(), Integer.valueOf(1));
+        News actualSecondNews = newsDao.getById(currentUser, secondNews.getId());
+        assertEquals(actualSecondNews.getLikesCount(), 1);
     }
 
     /*
@@ -537,7 +559,6 @@ public class NewsDaoTest extends DaoBaseTest {
     * NewsDao.dislike
     *
     */
-
 
     @Test
     public void dislike_hp() throws Exception {
@@ -558,7 +579,7 @@ public class NewsDaoTest extends DaoBaseTest {
         List<User> likers = newsDao.getLikers(news);
         assertTrue(likers.isEmpty());
 
-        News actualNews = newsDao.getById(news.getId());
-        assertEquals(actualNews.getLikesCount(), Integer.valueOf(0));
+        News actualNews = newsDao.getById(currentUser, news.getId());
+        assertEquals(actualNews.getLikesCount(), 0);
     }
 }

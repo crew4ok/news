@@ -34,26 +34,26 @@ CREATE TABLE news (
   body          TEXT,
   creation_date TIMESTAMP NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
   location      VARCHAR,
-  author        BIGSERIAL NOT NULL REFERENCES users (id),
-  category_id   BIGSERIAL NOT NULL REFERENCES news_categories (id)
+  author        BIGINT NOT NULL REFERENCES users (id),
+  category_id   BIGINT NOT NULL REFERENCES news_categories (id)
 );
 
 CREATE TABLE subscriptions (
-  subscriber_id BIGSERIAL REFERENCES users (id),
-  author_id     BIGSERIAL REFERENCES users (id),
+  subscriber_id BIGINT REFERENCES users (id),
+  author_id     BIGINT REFERENCES users (id),
   PRIMARY KEY (subscriber_id, author_id)
 );
 
 CREATE TABLE favourites (
-  user_id BIGSERIAL REFERENCES users (id),
-  news_id BIGSERIAL REFERENCES news (id),
+  user_id BIGINT REFERENCES users (id),
+  news_id BIGINT REFERENCES news (id),
   PRIMARY KEY (user_id, news_id)
 );
 
 CREATE TABLE likes (
   id      BIGSERIAL PRIMARY KEY,
-  news_id BIGSERIAL REFERENCES news (id),
-  liker   BIGSERIAL REFERENCES users (id),
+  news_id BIGINT REFERENCES news (id),
+  liker   BIGINT REFERENCES users (id),
   UNIQUE (news_id, liker)
 );
 
@@ -61,8 +61,8 @@ CREATE TABLE comments (
   id            BIGSERIAL PRIMARY KEY,
   body          TEXT      NOT NULL,
   creation_date TIMESTAMP NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
-  news_id       BIGSERIAL NOT NULL REFERENCES news (id),
-  author        BIGSERIAL NOT NULL REFERENCES users (id)
+  news_id       BIGINT NOT NULL REFERENCES news (id),
+  author        BIGINT NOT NULL REFERENCES users (id)
 );
 
 CREATE TABLE images (

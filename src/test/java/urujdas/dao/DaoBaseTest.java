@@ -48,7 +48,7 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
                 .withCategory(newsCategory)
                 .withAuthor(author)
                 .build();
-        return newsDao.create(news);
+        return newsDao.create(author, news);
     }
 
     protected News createDefaultNews(int i) {
@@ -58,7 +58,7 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
                 .withAuthor(defaultUser)
                 .withCategory(defaultNewsCategory)
                 .build();
-        return newsDao.create(news);
+        return newsDao.create(defaultUser, news);
     }
 
     protected NewsCategory createDefaultNewsCategory() {

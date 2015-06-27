@@ -38,7 +38,7 @@ public class CommentServiceImpl implements CommentService {
     public List<Comment> getAll(Long newsId) {
         Validation.isGreaterThanZero(newsId);
 
-        News news = newsDao.getById(newsId);
+        News news = newsDao.getById(userService.getCurrentUser(), newsId);
 
         return constructComments(commentDao.getAll(news));
     }
@@ -46,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void create(Comment comment) {
         User currentUser = userService.getCurrentUser();
-        News news = newsDao.getById(comment.getNewsId());
+        News news = newsDao.getById(currentUser, comment.getNewsId());
 
         Comment commentToCreate = Comment.fromComment(comment)
                 .withAuthor(currentUser)

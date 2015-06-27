@@ -46,7 +46,7 @@ public class NewsServiceImpl implements NewsService {
     public List<News> getLatestAll(int latestCount) {
         Validation.isGreaterThanZero(latestCount);
 
-        return constructNews(newsDao.getLatestAll(latestCount));
+        return constructNews(newsDao.getLatestAll(userService.getCurrentUser(), latestCount));
     }
 
     @Override
@@ -54,7 +54,7 @@ public class NewsServiceImpl implements NewsService {
         Validation.isGreaterThanZero(id);
         Validation.isGreaterThanZero(count);
 
-        return constructNews(newsDao.getAllFromId(id, count));
+        return constructNews(newsDao.getAllFromId(userService.getCurrentUser(), id, count));
     }
 
     @Override
@@ -82,7 +82,7 @@ public class NewsServiceImpl implements NewsService {
         User currentUser = userService.getCurrentUser();
         Subscription subscription = subscriptionDao.getByUser(currentUser);
 
-        return constructNews(newsDao.getLatestBySubscription(subscription, count));
+        return constructNews(newsDao.getLatestBySubscription(currentUser, subscription, count));
     }
 
     @Override
@@ -93,7 +93,7 @@ public class NewsServiceImpl implements NewsService {
         User currentUser = userService.getCurrentUser();
         Subscription subscription = subscriptionDao.getByUser(currentUser);
 
-        return constructNews(newsDao.getBySubscriptionFromId(subscription, id, count));
+        return constructNews(newsDao.getBySubscriptionFromId(currentUser, subscription, id, count));
     }
 
     @Override
@@ -149,7 +149,7 @@ public class NewsServiceImpl implements NewsService {
                 .withCategory(newsCategory)
                 .build();
 
-        News createdNews = newsDao.create(news);
+        News createdNews = newsDao.create(currentUser, news);
 
         if (news.getImageIds() != null) {
             for (int i = 0; i < news.getImageIds().size(); i++) {
@@ -168,7 +168,7 @@ public class NewsServiceImpl implements NewsService {
         Validation.isGreaterThanZero(newsId);
 
         User currentUser = userService.getCurrentUser();
-        News news = newsDao.getById(newsId);
+        News news = newsDao.getById(currentUser, newsId);
 
         List<News> favourites = newsDao.getAllFavourites(currentUser);
         if (favourites.contains(news)) {
@@ -197,7 +197,7 @@ public class NewsServiceImpl implements NewsService {
         Validation.isGreaterThanZero(newsId);
 
         User currentUser = userService.getCurrentUser();
-        News news = newsDao.getById(newsId);
+        News news = newsDao.getById(currentUser, newsId);
 
         List<User> likers = newsDao.getLikers(news);
         boolean liked = likers.stream()
