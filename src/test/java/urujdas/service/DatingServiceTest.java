@@ -71,12 +71,14 @@ public class DatingServiceTest extends BaseServiceTest {
 
         List<User> expectedUsers = Collections.singletonList(mock(User.class));
         when(datingDao.getLatestUsersByFilter(any(UserFilter.class), eq(count))).thenReturn(expectedUsers);
+        when(userService.attachImage(expectedUsers)).thenReturn(expectedUsers);
 
         List<User> actualUsers = datingService.getLatestUsersByFilter(filter, count);
 
         assertEquals(actualUsers, expectedUsers);
 
         verify(userService).getCurrentUser();
+        verify(userService).attachImage(expectedUsers);
         verify(datingDao).updateUserFilter(currentUser, filter);
         verify(datingDao).getLatestUsersByFilter(any(UserFilter.class), eq(count));
     }
@@ -113,12 +115,14 @@ public class DatingServiceTest extends BaseServiceTest {
         List<User> expectedUsers = Collections.singletonList(mock(User.class));
         when(datingDao.getUsersByFilterFromDate(any(UserFilter.class), eq(pullUpDate), eq(count)))
                 .thenReturn(expectedUsers);
+        when(userService.attachImage(expectedUsers)).thenReturn(expectedUsers);
 
         List<User> actualUsers = datingService.getUsersByFilterFromDate(filter, pullUpDate, count);
 
         assertEquals(actualUsers, expectedUsers);
 
         verify(userService).getCurrentUser();
+        verify(userService).attachImage(expectedUsers);
         verify(datingDao).updateUserFilter(currentUser, filter);
         verify(datingDao).getUsersByFilterFromDate(any(UserFilter.class), eq(pullUpDate), eq(count));
     }
