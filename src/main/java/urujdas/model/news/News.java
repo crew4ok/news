@@ -98,7 +98,11 @@ public class News {
                 .withLikesCount(news.likesCount)
                 .withAuthor(news.author)
                 .withCategory(news.category)
-                .withImageIds(news.imageIds);
+                .withImageIds(news.imageIds)
+                .withLikesCount(news.likesCount)
+                .withCommentsCount(news.commentsCount)
+                .withCurrentUserLiked(news.currentUserLiked)
+                .withCurrentUserFavoured(news.currentUserFavoured);
     }
 
     @Override

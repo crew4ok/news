@@ -554,6 +554,19 @@ public class NewsDaoTest extends DaoBaseTest {
         assertEquals(actualSecondNews.getLikesCount(), 1);
     }
 
+    @Test
+    public void like_currentUser() throws Exception {
+        NewsCategory category = createDefaultNewsCategory();
+
+        News news = createDefaultNews(currentUser, category);
+
+        newsDao.like(currentUser, news);
+
+        News actualNews = newsDao.getById(currentUser, news.getId());
+        assertEquals(actualNews.getLikesCount(), 1);
+        assertTrue(actualNews.isCurrentUserLiked());
+    }
+
     /*
     *
     * NewsDao.dislike
