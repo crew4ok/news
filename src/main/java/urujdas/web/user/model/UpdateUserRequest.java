@@ -27,6 +27,8 @@ public class UpdateUserRequest {
     private final GenderPreferences genderPreferences;
     private final RelationsPreferences relationsPreferences;
 
+    private final Long imageId;
+
     @GeneratePojoBuilder
     @JsonCreator
     public UpdateUserRequest(@JsonProperty("password") String password,
@@ -37,7 +39,8 @@ public class UpdateUserRequest {
                              @JsonProperty("gender") Gender gender,
                              @JsonProperty("phone") String phone,
                              @JsonProperty("genderPreferences") GenderPreferences genderPreferences,
-                             @JsonProperty("relationsPreferences") RelationsPreferences relationsPreferences) {
+                             @JsonProperty("relationsPreferences") RelationsPreferences relationsPreferences,
+                             @JsonProperty("imageId") Long imageId) {
         this.password = password;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -47,6 +50,7 @@ public class UpdateUserRequest {
         this.phone = phone;
         this.genderPreferences = genderPreferences;
         this.relationsPreferences = relationsPreferences;
+        this.imageId = imageId;
     }
 
     public String getPassword() {
@@ -85,6 +89,10 @@ public class UpdateUserRequest {
         return relationsPreferences;
     }
 
+    public Long getImageId() {
+        return imageId;
+    }
+
     public User toUser() {
         return User.builder()
                 .withPassword(password)
@@ -96,6 +104,7 @@ public class UpdateUserRequest {
                 .withPhone(phone)
                 .withGenderPreferences(genderPreferences)
                 .withRelationsPreferences(relationsPreferences)
+                .withImageId(imageId)
                 .build();
     }
 
