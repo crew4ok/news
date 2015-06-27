@@ -2,7 +2,7 @@
 
 echo "Validate; start" >> /tmp/deployment.log
 #Timeout needed for service to startup
-retries=5
+retries=10
 
 result=0
 for i in $(seq 1 ${retries}); do
@@ -10,9 +10,12 @@ for i in $(seq 1 ${retries}); do
     if [ ${response} -ne '200' ]; then
         result=1
         echo 'Response: '${response} >> /tmp/deployment.log
+    else
+        result=0
+        break
     fi
 
-    sleep 10
+    sleep 5
 done
 
 echo "Validate; stop" >> /tmp/deployment.log
