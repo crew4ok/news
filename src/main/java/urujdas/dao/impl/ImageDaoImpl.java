@@ -86,7 +86,8 @@ public class ImageDaoImpl implements ImageDao {
         if (currentImage.isPresent()) {
             ctx.update(IMAGES)
                     .set(IMAGES.USER_ID, (Long)null)
-                    .where(IMAGES.ID.equal(image.getId()));
+                    .where(IMAGES.ID.equal(currentImage.get().getId()))
+                    .execute();
         }
 
         ctx.update(IMAGES)

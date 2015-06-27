@@ -293,6 +293,24 @@ public class ImageDaoTest extends DaoBaseTest {
     }
 
     @Test
+    public void linkToUser_imageAlreadyLinked() throws Exception {
+        User user = createDefaultUser();
+
+        Image image = Image.builder()
+                .withContentType("contentType")
+                .build();
+        Image savedImage = imageDao.save(image);
+        imageDao.linkToUser(savedImage, user);
+
+        Image anotherSavedImage = imageDao.save(image);
+        imageDao.linkToUser(anotherSavedImage, user);
+
+        Optional<Image> actualUserImage = imageDao.getByUser(user);
+
+        assertEquals(actualUserImage.get(), anotherSavedImage);
+    }
+
+    @Test
     public void getByUser_noImage() throws Exception {
         User user = createDefaultUser();
 
