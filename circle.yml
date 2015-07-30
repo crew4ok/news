@@ -9,7 +9,7 @@ machine:
     DB_PASSWORD:
 
 deployment:
-  staging:
+  production:
     branch: master
     codedeploy:
       urujdas:
@@ -21,3 +21,15 @@ deployment:
             key_pattern: urujdas-{BUILD_NUM}
         region: eu-west-1
         deployment_group: urujdas
+  staging:
+    branch: /features.*/
+    codedeploy:
+      urujdas:
+        application_root: /
+        revision_location:
+          revision_type: S3
+          s3_location:
+            bucket: urujdas-deployment
+            key_pattern: urujdas-{BUILD_NUM}
+        region: eu-west-1
+        deployment_group: urujdas-dev

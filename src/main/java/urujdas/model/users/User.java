@@ -28,10 +28,12 @@ public class User {
 
     private final Long quickBloxId;
 
+    private final Long vkId;
+
     @GeneratePojoBuilder
     public User(Long id, String username, String password, String firstname, String lastname, LocalDateTime birthDate,
                 String email, Gender gender, String phone, LocalDateTime pullUpDate, GenderPreferences genderPreferences,
-                RelationsPreferences relationsPreferences, Long imageId, Long quickBloxId) {
+                RelationsPreferences relationsPreferences, Long imageId, Long quickBloxId, Long vkId) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -46,6 +48,7 @@ public class User {
         this.relationsPreferences = relationsPreferences;
         this.imageId = imageId;
         this.quickBloxId = quickBloxId;
+        this.vkId = vkId;
     }
 
     public Long getId() {
@@ -102,6 +105,10 @@ public class User {
 
     public Long getQuickBloxId() {
         return quickBloxId;
+    }
+
+    public Long getVkId() {
+        return vkId;
     }
 
     @Override
@@ -164,6 +171,7 @@ public class User {
                 ", relationsPreferences=" + relationsPreferences +
                 ", imageId=" + imageId +
                 ", quickBloxId=" + quickBloxId +
+                ", vkId=" + vkId +
                 '}';
     }
 
@@ -182,7 +190,9 @@ public class User {
                 .withRelationsPreferences(user.relationsPreferences)
                 .withPullUpDate(user.pullUpDate)
                 .withImageId(user.imageId)
-                .withQuickBloxId(user.quickBloxId);
+                .withQuickBloxId(user.quickBloxId)
+                .withVkId(user.vkId)
+                ;
     }
 
     public static UserBuilder builder() {

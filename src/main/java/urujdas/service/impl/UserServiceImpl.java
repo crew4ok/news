@@ -1,6 +1,7 @@
 package urujdas.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,6 +13,7 @@ import urujdas.model.images.Image;
 import urujdas.model.users.User;
 import urujdas.service.UserService;
 import urujdas.service.exception.UserAlreadyExistsException;
+import urujdas.social.security.SocialNetworkUserAuthentication;
 import urujdas.util.Validation;
 
 import java.util.List;
@@ -36,9 +38,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
 
-        return this.getByUsername(username);
+        if (authentication instanceof UsernamePasswordAuthenticationToken) {
+            String username = (String) authentication.getPrincipal();
+
+            return userDao.getByUsername(username);
+         } else if (authentication instanceof SocialNetworkUserAuthentication) {
+            Long userId = (Long) authentication.getPrincipal();
+
+            return userDao.getById(userId);
+        }
+
+        throw new RuntimeException("Unknown authentication class: " + authentication.getClass());
     }
 
     @Override

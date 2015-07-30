@@ -78,6 +78,7 @@ public class UserDaoImpl implements UserDao {
                 .set(USERS.PHONE, user.getPhone())
                 .set(USERS.GENDER_PREFERENCES, genderPreferencesName)
                 .set(USERS.RELATIONS_PREFERENCES, relationsPreferences)
+                .set(USERS.VK_ID, user.getVkId())
                 .returning(USERS.fields())
                 .fetchOne()
                 .into(User.class);
