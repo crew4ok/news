@@ -23,6 +23,8 @@ import ru.uruydas.dao.impl.jooq.mappers.NewsCategoryRecordMapper;
 import ru.uruydas.dao.impl.jooq.mappers.NewsRecordMapper;
 import ru.uruydas.dao.impl.jooq.mappers.UserFilterRecordMapper;
 import ru.uruydas.dao.impl.jooq.mappers.UserRecordMapper;
+import ru.uruydas.dao.impl.jooq.mappers.AdsCategoryRecordMapper;
+import ru.uruydas.dao.impl.jooq.mappers.AdsRecordMapper;
 
 import javax.sql.DataSource;
 
@@ -97,8 +99,9 @@ public class  DaoConfig {
                 newsRecordMapper(),
                 newsCategoryRecordMapper(),
                 commentRecordMapper(),
-                imageRecordMapper()
-        );
+                imageRecordMapper(),
+                adsRecordMapper(),
+                adsCategoryRecordMapper());
     }
 
     @Bean
@@ -134,5 +137,15 @@ public class  DaoConfig {
     @Bean
     public TransactionProvider transactionProvider() {
         return new JooqTransactionProvider();
+    }
+
+    @Bean
+    public AdsRecordMapper adsRecordMapper() {
+        return new AdsRecordMapper();
+    }
+    
+    @Bean
+    public AdsCategoryRecordMapper adsCategoryRecordMapper() {
+        return new AdsCategoryRecordMapper();
     }
 }

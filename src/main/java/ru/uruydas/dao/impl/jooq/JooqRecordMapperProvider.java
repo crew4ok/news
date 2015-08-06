@@ -4,18 +4,22 @@ import org.jooq.Record;
 import org.jooq.RecordMapper;
 import org.jooq.RecordMapperProvider;
 import org.jooq.RecordType;
+import ru.uruydas.dao.impl.jooq.mappers.CommentRecordMapper;
+import ru.uruydas.dao.impl.jooq.mappers.ImageRecordMapper;
 import ru.uruydas.dao.impl.jooq.mappers.NewsCategoryRecordMapper;
+import ru.uruydas.dao.impl.jooq.mappers.NewsRecordMapper;
 import ru.uruydas.dao.impl.jooq.mappers.UserFilterRecordMapper;
+import ru.uruydas.dao.impl.jooq.mappers.UserRecordMapper;
 import ru.uruydas.model.comments.Comment;
 import ru.uruydas.model.images.Image;
 import ru.uruydas.model.news.News;
-import ru.uruydas.model.users.User;
-import ru.uruydas.dao.impl.jooq.mappers.CommentRecordMapper;
-import ru.uruydas.dao.impl.jooq.mappers.ImageRecordMapper;
-import ru.uruydas.dao.impl.jooq.mappers.NewsRecordMapper;
-import ru.uruydas.dao.impl.jooq.mappers.UserRecordMapper;
 import ru.uruydas.model.news.NewsCategory;
+import ru.uruydas.model.users.User;
 import ru.uruydas.model.users.UserFilter;
+import ru.uruydas.dao.impl.jooq.mappers.AdsCategoryRecordMapper;
+import ru.uruydas.dao.impl.jooq.mappers.AdsRecordMapper;
+import ru.uruydas.model.ads.Ads;
+import ru.uruydas.model.ads.AdsCategory;
 
 public class JooqRecordMapperProvider implements RecordMapperProvider {
 
@@ -25,13 +29,17 @@ public class JooqRecordMapperProvider implements RecordMapperProvider {
     private final NewsCategoryRecordMapper newsCategoryRecordMapper;
     private final CommentRecordMapper commentRecordMapper;
     private final ImageRecordMapper imageRecordMapper;
+    private final AdsRecordMapper adsRecordMapper;
+    private final AdsCategoryRecordMapper adsCategoryRecordMapper;
 
     public JooqRecordMapperProvider(UserRecordMapper userRecordMapper,
                                     UserFilterRecordMapper userFilterRecordMapper,
                                     NewsRecordMapper newsRecordMapper,
                                     NewsCategoryRecordMapper newsCategoryRecordMapper,
                                     CommentRecordMapper commentRecordMapper,
-                                    ImageRecordMapper imageRecordMapper) {
+                                    ImageRecordMapper imageRecordMapper,
+                                    AdsRecordMapper adsRecordMapper,
+                                    AdsCategoryRecordMapper adsCategoryRecordMapper) {
 
         this.userRecordMapper = userRecordMapper;
         this.userFilterRecordMapper = userFilterRecordMapper;
@@ -39,6 +47,8 @@ public class JooqRecordMapperProvider implements RecordMapperProvider {
         this.newsCategoryRecordMapper = newsCategoryRecordMapper;
         this.commentRecordMapper = commentRecordMapper;
         this.imageRecordMapper = imageRecordMapper;
+        this.adsRecordMapper = adsRecordMapper;
+        this.adsCategoryRecordMapper = adsCategoryRecordMapper;
     }
 
     @SuppressWarnings("unchecked")
@@ -66,6 +76,14 @@ public class JooqRecordMapperProvider implements RecordMapperProvider {
 
         if (Image.class.equals(type)) {
             return (RecordMapper<R, E>) imageRecordMapper;
+        }
+
+        if (Ads.class.equals(type)) {
+            return (RecordMapper<R, E>) adsRecordMapper;
+        }
+
+        if (AdsCategory.class.equals(type)) {
+            return (RecordMapper<R, E>) adsCategoryRecordMapper;
         }
 
         throw new RuntimeException("Mapper for type " + type.getName() + " is not found");
