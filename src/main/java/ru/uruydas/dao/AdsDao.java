@@ -15,7 +15,7 @@ public interface AdsDao {
 
     List<Ads> searchByTitle(String title);
 
-    void create(Ads ads);
+    Ads create(Ads ads);
 
-    void update(Ads ads);
+    Ads update(Ads ads);
 }

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.uruydas.model.ads.AdsCategory;
 import ru.uruydas.service.AdsService;
-import urujdas.web.common.WebCommons;
+import ru.uruydas.web.common.WebCommons;
 
 import java.util.List;
 

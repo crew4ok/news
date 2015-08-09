@@ -3,13 +3,14 @@ package ru.uruydas.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import ru.uruydas.config.DaoConfig;
+import ru.uruydas.model.ads.AdsCategory;
 import ru.uruydas.model.news.News;
+import ru.uruydas.model.news.NewsCategory;
+import ru.uruydas.model.users.Gender;
 import ru.uruydas.model.users.GenderPreferences;
 import ru.uruydas.model.users.RelationsPreferences;
 import ru.uruydas.model.users.User;
-import ru.uruydas.config.DaoConfig;
-import ru.uruydas.model.news.NewsCategory;
-import ru.uruydas.model.users.Gender;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -37,6 +38,12 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
 
     @Autowired
     protected ImageDao imageDao;
+
+    @Autowired
+    protected AdsDao adsDao;
+
+    @Autowired
+    protected AdsCategoryDao adsCategoryDao;
 
     protected User defaultUser;
     protected NewsCategory defaultNewsCategory;
@@ -92,5 +99,10 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
         return User.fromUser(user)
                 .withPassword(null)
                 .build();
+    }
+
+    protected AdsCategory createDefaultAdsCategory() {
+        AdsCategory category = new AdsCategory("default category");
+        return adsCategoryDao.create(category);
     }
 }

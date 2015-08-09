@@ -5,16 +5,18 @@ import org.jooq.RecordMapper;
 import ru.uruydas.model.ads.Ads;
 import ru.uruydas.model.ads.AdsCategory;
 import ru.uruydas.model.ads.AdsType;
+import ru.uruydas.model.users.User;
 
 import java.sql.Timestamp;
 
 import static ru.uruydas.tables.AdsTable.ADS;
-import static urujdas.util.MapperUtils.fromNullable;
+import static ru.uruydas.util.MapperUtils.fromNullable;
 
 public class AdsRecordMapper implements RecordMapper<Record, Ads> {
     @Override
     public Ads map(Record record) {
         AdsCategory category = record.into(AdsCategory.class);
+        User author = record.into(User.class);
 
         return Ads.builder()
                 .withId(record.getValue(ADS.ID))
@@ -25,6 +27,8 @@ public class AdsRecordMapper implements RecordMapper<Record, Ads> {
                 .withPhone(record.getValue(ADS.PHONE))
                 .withEmail(record.getValue(ADS.EMAIL))
                 .withCity(record.getValue(ADS.CITY))
+                .withPrice(record.getValue(ADS.PRICE))
+                .withAuthor(author)
                 .withAdsCategory(category)
                 .build();
     }

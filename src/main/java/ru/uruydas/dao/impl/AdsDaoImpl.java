@@ -8,10 +8,9 @@ import org.jooq.SelectOnConditionStep;
 import org.jooq.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.uruydas.model.ads.Ads;
-import ru.uruydas.tables.AdsCategoriesTable;
 import ru.uruydas.dao.AdsDao;
-import urujdas.dao.exception.NotFoundException;
+import ru.uruydas.dao.exception.NotFoundException;
+import ru.uruydas.model.ads.Ads;
 import ru.uruydas.model.ads.AdsCategory;
 
 import java.util.ArrayList;
@@ -24,7 +23,9 @@ import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static ru.uruydas.tables.AdsCategoriesTable.ADS_CATEGORIES;
 import static ru.uruydas.tables.AdsTable.ADS;
+import static ru.uruydas.tables.UsersTable.USERS;
 
 @Repository
 public class AdsDaoImpl implements AdsDao {
@@ -81,7 +82,9 @@ public class AdsDaoImpl implements AdsDao {
 
         SelectOnConditionStep<Record> step = ctx.select(fields())
                 .from(ADS)
-                .join(AdsCategoriesTable.ADS_CATEGORIES).on(ADS.CATEGORY_ID.equal(AdsCategoriesTable.ADS_CATEGORIES.ID));
+                .join(ADS_CATEGORIES).on(ADS.CATEGORY_ID.equal(ADS_CATEGORIES.ID))
+                .join(USERS).on(ADS.AUTHOR.equal(USERS.ID))
+                ;
 
         joins.forEach((t, c) -> step.join(t).on(c));
 
@@ -98,23 +101,32 @@ public class AdsDaoImpl implements AdsDao {
 
     private List<Field<?>> fields() {
         List<Field<?>> fields = new ArrayList<>(Arrays.asList(ADS.fields()));
-        fields.addAll(Arrays.asList(AdsCategoriesTable.ADS_CATEGORIES.fields()));
+        fields.addAll(Arrays.asList(ADS_CATEGORIES.fields()));
+        fields.addAll(Arrays.asList(USERS.fields()));
         return fields;
     }
 
     @Override
-    public void create(Ads ads) {
-        ctx.insertInto(ADS)
+    public Ads create(Ads ads) {
+        Long id = ctx.insertInto(ADS)
                 .set(getMapping(ads))
-                .execute();
+                .returning(ADS.ID)
+                .fetchOne()
+                .getId();
+
+        return getById(id);
     }
 
     @Override
-    public void update(Ads ads) {
-        ctx.update(ADS)
+    public Ads update(Ads ads) {
+        Long id = ctx.update(ADS)
                 .set(getMapping(ads))
                 .where(ADS.ID.equal(ads.getId()))
-                .execute();
+                .returning(ADS.ID)
+                .fetchOne()
+                .getId();
+
+        return getById(id);
     }
 
     private Map<Field<?>, Object> getMapping(Ads ads) {
@@ -125,7 +137,9 @@ public class AdsDaoImpl implements AdsDao {
         mapping.put(ADS.PHONE, ads.getPhone());
         mapping.put(ADS.EMAIL, ads.getEmail());
         mapping.put(ADS.CITY, ads.getCity());
+        mapping.put(ADS.PRICE, ads.getPrice());
         mapping.put(ADS.CATEGORY_ID, ads.getAdsCategory().getId());
+        mapping.put(ADS.AUTHOR, ads.getAuthor().getId());
         return mapping;
     }
 }

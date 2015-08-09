@@ -26,3 +26,4 @@
 26. Provide consistent naming to all services' methods.
 27. Tests for VK auth and ads.
 28. User photo is not imported from VK profile.
+29. Consider usage of ModelMapper instead of custom mappers.

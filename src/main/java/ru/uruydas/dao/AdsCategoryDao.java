@@ -9,4 +9,6 @@ public interface AdsCategoryDao {
     AdsCategory getById(Long id);
 
     List<AdsCategory> getAll();
+
+    AdsCategory create(AdsCategory category);
 }

@@ -6,7 +6,9 @@ import ru.uruydas.model.ads.Ads;
 import ru.uruydas.model.ads.AdsCategory;
 import ru.uruydas.model.ads.AdsType;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 public class CreateAdsRequest {
     @NotNull
@@ -22,6 +24,11 @@ public class CreateAdsRequest {
     private final String email;
     private final String city;
 
+    @Min(0)
+    private final Long price;
+
+    private final List<Long> imageIds;
+
     @NotNull
     private final Long categoryId;
 
@@ -32,6 +39,8 @@ public class CreateAdsRequest {
                             @JsonProperty("phone") String phone,
                             @JsonProperty("email") String email,
                             @JsonProperty("city") String city,
+                            @JsonProperty("price") Long price,
+                            @JsonProperty("imageIds") List<Long> imageIds,
                             @JsonProperty("categoryId") Long categoryId) {
         this.title = title;
         this.description = description;
@@ -39,6 +48,8 @@ public class CreateAdsRequest {
         this.phone = phone;
         this.email = email;
         this.city = city;
+        this.price = price;
+        this.imageIds = imageIds;
         this.categoryId = categoryId;
     }
 
@@ -66,6 +77,14 @@ public class CreateAdsRequest {
         return city;
     }
 
+    public Long getPrice() {
+        return price;
+    }
+
+    public List<Long> getImageIds() {
+        return imageIds;
+    }
+
     public Long getCategoryId() {
         return categoryId;
     }
@@ -78,6 +97,8 @@ public class CreateAdsRequest {
                 .withPhone(phone)
                 .withEmail(email)
                 .withCity(city)
+                .withPrice(price)
+                .withImageIds(imageIds)
                 .withAdsCategory(new AdsCategory(categoryId))
                 .build();
     }

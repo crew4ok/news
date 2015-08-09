@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.uruydas.dao.ImageDao;
 import ru.uruydas.dao.exception.NotFoundException;
+import ru.uruydas.model.ads.Ads;
 import ru.uruydas.model.comments.Comment;
 import ru.uruydas.model.images.Image;
 import ru.uruydas.model.news.News;
@@ -104,5 +105,23 @@ public class ImageDaoImpl implements ImageDao {
 
         return Optional.ofNullable(imageRecord)
                 .map(r -> r.into(Image.class));
+    }
+
+    @Override
+    public void linkToAds(Image image, Ads ads, int ordering) {
+        ctx.update(IMAGES)
+                .set(IMAGES.ADS_ID, ads.getId())
+                .set(IMAGES.ORDERING, ordering)
+                .where(IMAGES.ID.equal(image.getId()))
+                .execute();
+    }
+
+    @Override
+    public List<Image> getByAds(Ads ads) {
+        return ctx.selectFrom(IMAGES)
+                .where(IMAGES.ADS_ID.equal(ads.getId()))
+                .orderBy(IMAGES.ORDERING.asc())
+                .fetch()
+                .into(Image.class);
     }
 }

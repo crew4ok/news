@@ -16,7 +16,7 @@ public interface AdsService {
 
     Ads getById(Long adsId);
 
-    void create(Ads ads);
+    Ads create(Ads ads);
 
-    void update(Ads ads);
+    Ads update(Ads ads);
 }
