@@ -12,7 +12,11 @@ public interface AdsService {
 
     List<Ads> getFromIdByCategory(Long categoryId, Long adsId, int count);
 
+    List<Ads> searchByTitle(String title);
+
     Ads getById(Long adsId);
 
     void create(Ads ads);
+
+    void update(Ads ads);
 }

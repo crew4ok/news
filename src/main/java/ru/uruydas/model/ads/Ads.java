@@ -33,6 +33,19 @@ public class Ads {
         return new AdsBuilder();
     }
 
+    public static AdsBuilder from(Ads ads) {
+        return builder()
+                .withId(ads.id)
+                .withTitle(ads.title)
+                .withDescription(ads.description)
+                .withAdsType(ads.adsType)
+                .withCreationDate(ads.creationDate)
+                .withPhone(ads.phone)
+                .withEmail(ads.email)
+                .withCity(ads.city)
+                .withAdsCategory(ads.adsCategory);
+    }
+
     public Long getId() {
         return id;
     }

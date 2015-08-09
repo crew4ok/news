@@ -46,6 +46,13 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
+    public List<Ads> searchByTitle(String title) {
+        Validation.isNotEmpty(title);
+
+        return adsDao.searchByTitle(title);
+    }
+
+    @Override
     public Ads getById(Long adsId) {
         Validation.isGreaterThanZero(adsId);
 
@@ -58,5 +65,12 @@ public class AdsServiceImpl implements AdsService {
         adsCategoryDao.getById(ads.getAdsCategory().getId());
 
         adsDao.create(ads);
+    }
+
+    @Override
+    public void update(Ads ads) {
+        Validation.isNotNull(ads.getId());
+
+        adsDao.update(ads);
     }
 }

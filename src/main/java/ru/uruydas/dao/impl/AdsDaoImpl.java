@@ -17,6 +17,7 @@ import ru.uruydas.model.ads.AdsCategory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -61,6 +62,14 @@ public class AdsDaoImpl implements AdsDao {
         );
     }
 
+    @Override
+    public List<Ads> searchByTitle(String title) {
+        return select(
+                singletonList(ADS.TITLE.like(title + "%")),
+                Optional.<Integer>empty()
+        );
+    }
+
     private List<Ads> select(List<Condition> conditions,
                              Optional<Integer> count) {
         return select(Collections.emptyMap(), conditions, count);
@@ -96,13 +105,27 @@ public class AdsDaoImpl implements AdsDao {
     @Override
     public void create(Ads ads) {
         ctx.insertInto(ADS)
-                .set(ADS.TITLE, ads.getTitle())
-                .set(ADS.DESCRIPTION, ads.getDescription())
-                .set(ADS.ADS_TYPE, ads.getAdsType().name())
-                .set(ADS.PHONE, ads.getPhone())
-                .set(ADS.EMAIL, ads.getEmail())
-                .set(ADS.CITY, ads.getCity())
-                .set(ADS.CATEGORY_ID, ads.getAdsCategory().getId())
+                .set(getMapping(ads))
                 .execute();
+    }
+
+    @Override
+    public void update(Ads ads) {
+        ctx.update(ADS)
+                .set(getMapping(ads))
+                .where(ADS.ID.equal(ads.getId()))
+                .execute();
+    }
+
+    private Map<Field<?>, Object> getMapping(Ads ads) {
+        Map<Field<?>, Object> mapping = new HashMap<>();
+        mapping.put(ADS.TITLE, ads.getTitle());
+        mapping.put(ADS.DESCRIPTION, ads.getDescription());
+        mapping.put(ADS.ADS_TYPE, ads.getAdsType().name());
+        mapping.put(ADS.PHONE, ads.getPhone());
+        mapping.put(ADS.EMAIL, ads.getEmail());
+        mapping.put(ADS.CITY, ads.getCity());
+        mapping.put(ADS.CATEGORY_ID, ads.getAdsCategory().getId());
+        return mapping;
     }
 }

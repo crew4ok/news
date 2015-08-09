@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.uruydas.model.ads.Ads;
-import ru.uruydas.web.ads.model.CreateAdsRequest;
 import ru.uruydas.service.AdsService;
-import urujdas.web.common.WebCommons;
-import urujdas.web.common.exception.ValidationException;
+import ru.uruydas.web.ads.model.CreateAdsRequest;
+import ru.uruydas.web.ads.model.UpdateAdsRequest;
+import ru.uruydas.web.common.WebCommons;
+import ru.uruydas.web.common.exception.ValidationException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -38,6 +39,23 @@ public class AdsController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<String> updateAds(@PathVariable("id") Long id,
+                                            @RequestBody @Valid UpdateAdsRequest request,
+                                            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new ValidationException(bindingResult);
+        }
+
+        Ads ads = Ads.from(request.toModel())
+                .withId(id)
+                .build();
+
+        adsService.update(ads);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Ads getById(@PathVariable("id") Long adsId) {
         return adsService.getById(adsId);
@@ -52,5 +70,10 @@ public class AdsController {
     public List<Ads> getFromIdByCategory(@RequestParam("categoryId") Long categoryId,
                                          @RequestParam("adsId") Long adsId) {
         return adsService.getFromIdByCategory(categoryId, adsId, WebCommons.PAGING_COUNT);
+    }
+
+    @RequestMapping(value = "/search/{title}", method = RequestMethod.GET)
+    public List<Ads> searchByTitle(@PathVariable("title") String title) {
+        return adsService.searchByTitle(title);
     }
 }

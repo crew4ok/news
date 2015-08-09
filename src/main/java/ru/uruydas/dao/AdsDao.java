@@ -13,5 +13,9 @@ public interface AdsDao {
 
     List<Ads> getFromIdByCategory(AdsCategory category, Long adsId, int count);
 
+    List<Ads> searchByTitle(String title);
+
     void create(Ads ads);
+
+    void update(Ads ads);
 }
