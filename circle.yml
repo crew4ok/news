@@ -12,24 +12,24 @@ deployment:
   production:
     branch: master
     codedeploy:
-      urujdas:
+      uruydas:
         application_root: /
         revision_location:
           revision_type: S3
           s3_location:
-            bucket: urujdas-deployment
-            key_pattern: urujdas-{BUILD_NUM}
+            bucket: uruydas-deployment
+            key_pattern: uruydas-{BUILD_NUM}
         region: eu-west-1
-        deployment_group: urujdas
+        deployment_group: uruydas
   staging:
     branch: /features.*/
     codedeploy:
-      urujdas:
+      uruydas:
         application_root: /
         revision_location:
           revision_type: S3
           s3_location:
-            bucket: urujdas-deployment
-            key_pattern: urujdas-{BUILD_NUM}
+            bucket: uruydas-deployment
+            key_pattern: uruydas-{BUILD_NUM}
         region: eu-west-1
-        deployment_group: urujdas-dev
+        deployment_group: uruydas-dev

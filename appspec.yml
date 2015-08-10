@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /tmp/urujdas-deployment/
+    destination: /tmp/uruydas-deployment/
 hooks:
   ApplicationStop:
     - location: scripts/stop_app.sh
