@@ -3,6 +3,8 @@ package ru.uruydas.dao;
 import org.jooq.exception.DataAccessException;
 import org.testng.annotations.Test;
 import ru.uruydas.dao.exception.NotFoundException;
+import ru.uruydas.model.ads.Ads;
+import ru.uruydas.model.ads.AdsCategory;
 import ru.uruydas.model.comments.Comment;
 import ru.uruydas.model.images.Image;
 import ru.uruydas.model.news.News;
@@ -317,5 +319,24 @@ public class ImageDaoTest extends DaoBaseTest {
         Optional<Image> image = imageDao.getByUser(user);
 
         assertFalse(image.isPresent());
+    }
+
+    @Test
+    public void linkToAds_hp() throws Exception {
+        AdsCategory adsCategory = createDefaultAdsCategory();
+        User author = createDefaultUser();
+        Ads ads = createDefaultAds(adsCategory, author);
+
+        Image image = Image.builder()
+                .withContentType("contentType")
+                .build();
+
+        image = imageDao.save(image);
+        imageDao.linkToAds(image, ads, 0);
+
+        List<Image> images = imageDao.getByAds(ads);
+
+        assertFalse(images.isEmpty());
+        assertEquals(images.get(0), image);
     }
 }

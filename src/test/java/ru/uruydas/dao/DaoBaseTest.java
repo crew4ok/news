@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import ru.uruydas.config.DaoConfig;
+import ru.uruydas.model.ads.Ads;
 import ru.uruydas.model.ads.AdsCategory;
+import ru.uruydas.model.ads.AdsType;
 import ru.uruydas.model.news.News;
 import ru.uruydas.model.news.NewsCategory;
 import ru.uruydas.model.users.Gender;
@@ -104,5 +106,16 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
     protected AdsCategory createDefaultAdsCategory() {
         AdsCategory category = new AdsCategory("default category");
         return adsCategoryDao.create(category);
+    }
+
+    protected Ads createDefaultAds(AdsCategory adsCategory, User author) {
+        Ads ads = Ads.builder()
+                .withTitle("title")
+                .withDescription("description")
+                .withAdsType(AdsType.BUY)
+                .withAuthor(author)
+                .withAdsCategory(adsCategory)
+                .build();
+        return adsDao.create(ads);
     }
 }

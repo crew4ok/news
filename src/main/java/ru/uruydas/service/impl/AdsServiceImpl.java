@@ -86,7 +86,9 @@ public class AdsServiceImpl implements AdsService {
                 .build();
 
         // create ads
-        Ads createdAds = adsDao.create(ads);
+        Ads createdAds = Ads.from(adsDao.create(ads))
+                .withImageIds(ads.getImageIds())
+                .build();
 
         // link images
         return linkImages(createdAds);
@@ -108,7 +110,9 @@ public class AdsServiceImpl implements AdsService {
         }
 
         // update ads
-        Ads updatedAds = adsDao.update(newAds);
+        Ads updatedAds = Ads.from(adsDao.update(newAds))
+                .withImageIds(newAds.getImageIds())
+                .build();
 
         // update images
         return linkImages(updatedAds);
