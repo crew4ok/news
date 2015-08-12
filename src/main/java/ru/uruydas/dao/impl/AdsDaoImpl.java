@@ -101,7 +101,6 @@ public class AdsDaoImpl implements AdsDao {
 
     private List<Field<?>> fields() {
         List<Field<?>> fields = new ArrayList<>(Arrays.asList(ADS.fields()));
-        fields.addAll(Arrays.asList(ADS_CATEGORIES.fields()));
         fields.addAll(Arrays.asList(USERS.fields()));
         return fields;
     }

@@ -3,7 +3,6 @@ package ru.uruydas.dao.impl.jooq.mappers;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
 import ru.uruydas.model.ads.Ads;
-import ru.uruydas.model.ads.AdsCategory;
 import ru.uruydas.model.ads.AdsType;
 import ru.uruydas.model.users.User;
 
@@ -15,7 +14,6 @@ import static ru.uruydas.util.MapperUtils.fromNullable;
 public class AdsRecordMapper implements RecordMapper<Record, Ads> {
     @Override
     public Ads map(Record record) {
-        AdsCategory category = record.into(AdsCategory.class);
         User author = record.into(User.class);
 
         return Ads.builder()
@@ -29,7 +27,6 @@ public class AdsRecordMapper implements RecordMapper<Record, Ads> {
                 .withCity(record.getValue(ADS.CITY))
                 .withPrice(record.getValue(ADS.PRICE))
                 .withAuthor(author)
-                .withAdsCategory(category)
                 .build();
     }
 }
