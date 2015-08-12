@@ -1,6 +1,7 @@
 CREATE TABLE ads_categories (
   id   BIGSERIAL PRIMARY KEY,
-  name VARCHAR NOT NULL
+  name VARCHAR NOT NULL,
+  parent_category BIGINT REFERENCES ads_categories (id)
 );
 
 CREATE TABLE ads (
@@ -14,7 +15,7 @@ CREATE TABLE ads (
   city          VARCHAR,
   price         BIGINT,
   author        BIGINT REFERENCES users (id),
-  category_id   BIGINT REFERENCES ads_categories (id)
+  subcategory_id   BIGINT REFERENCES ads_categories (id)
 );
 
 ALTER TABLE images

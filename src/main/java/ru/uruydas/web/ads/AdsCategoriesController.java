@@ -1,6 +1,7 @@
 package ru.uruydas.web.ads;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +19,12 @@ public class AdsCategoriesController {
     private AdsService adsService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<AdsCategory> getAll() {
+    public List<AdsCategory> getAllCategories() {
         return adsService.getAllCategories();
+    }
+
+    @RequestMapping(value = "/{id}/subcategories", method = RequestMethod.GET)
+    public List<AdsCategory> getAllSubCategories(@PathVariable("id") Long categoryId) {
+        return adsService.getAllSubCategories(categoryId);
     }
 }

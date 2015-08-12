@@ -8,6 +8,8 @@ import java.util.List;
 public interface AdsService {
     List<AdsCategory> getAllCategories();
 
+    List<AdsCategory> getAllSubCategories(Long categoryId);
+
     List<Ads> getLatestByCategory(Long categoryId, int count);
 
     List<Ads> getFromIdByCategory(Long categoryId, Long adsId, int count);

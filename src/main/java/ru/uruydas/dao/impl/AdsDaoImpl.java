@@ -82,7 +82,7 @@ public class AdsDaoImpl implements AdsDao {
 
         SelectOnConditionStep<Record> step = ctx.select(fields())
                 .from(ADS)
-                .join(ADS_CATEGORIES).on(ADS.CATEGORY_ID.equal(ADS_CATEGORIES.ID))
+                .join(ADS_CATEGORIES).on(ADS.SUBCATEGORY_ID.equal(ADS_CATEGORIES.ID))
                 .join(USERS).on(ADS.AUTHOR.equal(USERS.ID))
                 ;
 
@@ -138,7 +138,7 @@ public class AdsDaoImpl implements AdsDao {
         mapping.put(ADS.EMAIL, ads.getEmail());
         mapping.put(ADS.CITY, ads.getCity());
         mapping.put(ADS.PRICE, ads.getPrice());
-        mapping.put(ADS.CATEGORY_ID, ads.getAdsCategory().getId());
+        mapping.put(ADS.SUBCATEGORY_ID, ads.getAdsCategory().getId());
         mapping.put(ADS.AUTHOR, ads.getAuthor().getId());
         return mapping;
     }

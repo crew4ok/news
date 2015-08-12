@@ -30,7 +30,7 @@ public class CreateAdsRequest {
     private final List<Long> imageIds;
 
     @NotNull
-    private final Long categoryId;
+    private final Long subCategoryId;
 
     @JsonCreator
     public CreateAdsRequest(@JsonProperty("title") String title,
@@ -41,7 +41,7 @@ public class CreateAdsRequest {
                             @JsonProperty("city") String city,
                             @JsonProperty("price") Long price,
                             @JsonProperty("imageIds") List<Long> imageIds,
-                            @JsonProperty("categoryId") Long categoryId) {
+                            @JsonProperty("subCategoryId") Long subCategoryId) {
         this.title = title;
         this.description = description;
         this.adsType = adsType;
@@ -50,7 +50,7 @@ public class CreateAdsRequest {
         this.city = city;
         this.price = price;
         this.imageIds = imageIds;
-        this.categoryId = categoryId;
+        this.subCategoryId = subCategoryId;
     }
 
     public String getTitle() {
@@ -85,8 +85,8 @@ public class CreateAdsRequest {
         return imageIds;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Long getSubCategoryId() {
+        return subCategoryId;
     }
 
     public Ads toModel() {
@@ -99,7 +99,7 @@ public class CreateAdsRequest {
                 .withCity(city)
                 .withPrice(price)
                 .withImageIds(imageIds)
-                .withAdsCategory(new AdsCategory(categoryId))
+                .withAdsCategory(new AdsCategory(subCategoryId))
                 .build();
     }
 }

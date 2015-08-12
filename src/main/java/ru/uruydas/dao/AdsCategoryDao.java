@@ -8,7 +8,9 @@ public interface AdsCategoryDao {
 
     AdsCategory getById(Long id);
 
-    List<AdsCategory> getAll();
+    List<AdsCategory> getAllCategories();
+
+    List<AdsCategory> getAllSubCategories(AdsCategory category);
 
     AdsCategory create(AdsCategory category);
 }

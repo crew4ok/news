@@ -33,7 +33,16 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public List<AdsCategory> getAllCategories() {
-        return adsCategoryDao.getAll();
+        return adsCategoryDao.getAllCategories();
+    }
+
+    @Override
+    public List<AdsCategory> getAllSubCategories(Long categoryId) {
+        Validation.isGreaterThanZero(categoryId);
+
+        AdsCategory category = adsCategoryDao.getById(categoryId);
+
+        return adsCategoryDao.getAllSubCategories(category);
     }
 
     @Override
