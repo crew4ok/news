@@ -48,7 +48,6 @@ public class AdsDaoTest extends DaoBaseTest {
         assertEquals(createdAds.getCity(), ads.getCity());
         assertEquals(createdAds.getPrice(), ads.getPrice());
         assertEquals(createdAds.getAuthor(), ads.getAuthor());
-        assertEquals(createdAds.getAdsCategory(), ads.getAdsCategory());
     }
 
     @Test
