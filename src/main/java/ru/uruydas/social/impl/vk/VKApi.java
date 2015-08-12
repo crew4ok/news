@@ -10,6 +10,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import ru.uruydas.model.social.SocialNetworkType;
 import ru.uruydas.social.impl.vk.model.VkResponseWrapper;
 import ru.uruydas.social.impl.vk.model.VkUser;
+import ru.uruydas.social.security.exception.SocialAuthenticationException;
 import ru.uruydas.social.service.SocialNetworkApi;
 
 public class VKApi implements SocialNetworkApi {
@@ -39,26 +40,21 @@ public class VKApi implements SocialNetworkApi {
 
     @Override
     public VkUser getUser(SocialNetworkType socialNetworkType, String accessToken) {
-        try {
-            UriComponents uriComponents = UriComponentsBuilder.newInstance()
-                    .uriComponents(requestTemplate)
-                    .pathSegment(GET_USER_METHOD)
-                    .queryParam(ACCESS_TOKEN_PARAM, accessToken)
-                    .queryParam(USER_FIELDS_PARAM, USER_FIELDS)
-                    .build();
+        UriComponents uriComponents = UriComponentsBuilder.newInstance()
+                .uriComponents(requestTemplate)
+                .pathSegment(GET_USER_METHOD)
+                .queryParam(ACCESS_TOKEN_PARAM, accessToken)
+                .queryParam(USER_FIELDS_PARAM, USER_FIELDS)
+                .build();
 
-            ResponseEntity<VkResponseWrapper> vkUserEntity = restTemplate.getForEntity(
-                    uriComponents.toUri(), VkResponseWrapper.class
-            );
+        ResponseEntity<VkResponseWrapper> vkUserEntity = restTemplate.getForEntity(
+                uriComponents.toUri(), VkResponseWrapper.class
+        );
 
-            if (vkUserEntity.getStatusCode() != HttpStatus.OK) {
-                throw new RuntimeException("Status code: " + vkUserEntity.getStatusCode());
-            }
-
-            return vkUserEntity.getBody().getResponse()[0];
-        } catch (Exception e) {
-            LOGGER.error("Error while retrieving VK user id", e);
-            throw new RuntimeException(e);
+        if (vkUserEntity.getStatusCode() != HttpStatus.OK) {
+            throw new SocialAuthenticationException("Status code: " + vkUserEntity.getStatusCode());
         }
+
+        return vkUserEntity.getBody().getResponse()[0];
     }
 }

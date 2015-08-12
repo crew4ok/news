@@ -7,7 +7,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import ru.uruydas.model.social.SocialNetworkType;
 import ru.uruydas.model.users.User;
-import ru.uruydas.social.security.exception.SocialAuthenticationException;
 import ru.uruydas.social.service.SocialNetworkUserService;
 
 public class SocialNetworkAuthenticationProvider implements AuthenticationProvider {
@@ -23,18 +22,13 @@ public class SocialNetworkAuthenticationProvider implements AuthenticationProvid
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         SocialNetworkUserAuthentication auth = (SocialNetworkUserAuthentication) authentication;
 
-        try {
-            SocialNetworkType socialNetworkType = auth.getSocialNetworkType();
+        SocialNetworkType socialNetworkType = auth.getSocialNetworkType();
 
-            User user = socialNetworkUserService.findOrCreate(socialNetworkType, auth.getAccessToken());
+        User user = socialNetworkUserService.findOrCreate(socialNetworkType, auth.getAccessToken());
 
-            auth.setUserId(user.getId());
+        auth.setUserId(user.getId());
 
-            return auth;
-        } catch (Exception e) {
-            LOGGER.warn("Exception while authenticating by VK", e);
-        }
-        throw new SocialAuthenticationException("Authentication failed");
+        return auth;
     }
 
     @Override
