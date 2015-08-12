@@ -1,5 +1,6 @@
 package ru.uruydas.dao;
 
+import ru.uruydas.model.ads.Ads;
 import ru.uruydas.model.ads.AdsCategory;
 
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.List;
 public interface AdsCategoryDao {
 
     AdsCategory getById(Long id);
+
+    AdsCategory getByAds(Ads ads);
 
     List<AdsCategory> getAllCategories();
 

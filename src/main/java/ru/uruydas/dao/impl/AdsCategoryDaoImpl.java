@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.uruydas.dao.AdsCategoryDao;
 import ru.uruydas.dao.exception.NotFoundException;
+import ru.uruydas.model.ads.Ads;
 import ru.uruydas.model.ads.AdsCategory;
 import ru.uruydas.tables.AdsCategoriesTable;
 
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static ru.uruydas.tables.AdsCategoriesTable.ADS_CATEGORIES;
+import static ru.uruydas.tables.AdsTable.ADS;
 import static ru.uruydas.util.MapperUtils.fromNullable;
 
 @Repository
@@ -40,6 +42,26 @@ public class AdsCategoryDaoImpl implements AdsCategoryDao {
         }
 
         throw new NotFoundException(AdsCategory.class, id);
+    }
+
+    @Override
+    public AdsCategory getByAds(Ads ads) {
+        AdsCategoriesTable t1 = ADS_CATEGORIES.as("t1");
+        AdsCategoriesTable t2 = ADS_CATEGORIES.as("t2");
+
+        Record record = ctx
+                .select(combineFields(t1.fields(), t2.fields()))
+                .from(ADS)
+                .join(t1).on(ADS.SUBCATEGORY_ID.equal(t1.ID))
+                .leftOuterJoin(t2).on(t1.PARENT_CATEGORY.equal(t2.ID))
+                .where(ADS.ID.equal(ads.getId()))
+                .fetchOne();
+
+        if (record != null) {
+            return record.into(AdsCategory.class);
+        }
+
+        throw new NotFoundException(AdsCategory.class, ads);
     }
 
     private List<Field<?>> combineFields(Field<?>[] arr1, Field<?>[] arr2) {

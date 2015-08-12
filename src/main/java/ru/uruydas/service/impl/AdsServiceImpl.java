@@ -15,6 +15,7 @@ import ru.uruydas.service.exception.NotAnAuthorException;
 import ru.uruydas.util.Validation;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,7 +54,7 @@ public class AdsServiceImpl implements AdsService {
         AdsCategory category = adsCategoryDao.getById(categoryId);
 
         List<Ads> ads = adsDao.getLatestByCategory(category, count);
-        return insertImages(ads);
+        return buildAds(ads);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class AdsServiceImpl implements AdsService {
         AdsCategory category = adsCategoryDao.getById(categoryId);
 
         List<Ads> ads = adsDao.getFromIdByCategory(category, adsId, count);
-        return insertImages(ads);
+        return buildAds(ads);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class AdsServiceImpl implements AdsService {
         Validation.isNotEmpty(title);
 
         List<Ads> ads = adsDao.searchByTitle(title);
-        return insertImages(ads);
+        return buildAds(ads);
     }
 
     @Override
@@ -81,7 +82,7 @@ public class AdsServiceImpl implements AdsService {
         Validation.isGreaterThanZero(adsId);
 
         Ads ads = adsDao.getById(adsId);
-        return insertImages(ads);
+        return buildAds(ads);
     }
 
     @Override
@@ -100,7 +101,7 @@ public class AdsServiceImpl implements AdsService {
                 .build();
 
         // link images
-        return linkImages(createdAds);
+        return buildAds(linkImages(createdAds));
     }
 
     @Override
@@ -124,7 +125,7 @@ public class AdsServiceImpl implements AdsService {
                 .build();
 
         // update images
-        return linkImages(updatedAds);
+        return buildAds(linkImages(updatedAds));
     }
 
     private Ads linkImages(Ads ads) {
@@ -138,6 +139,19 @@ public class AdsServiceImpl implements AdsService {
         return Ads.from(ads)
                 .withImageIds(imageIds)
                 .build();
+    }
+
+    private List<Ads> buildAds(List<Ads> ads) {
+        return ads.stream()
+                .map(this::buildAds)
+                .collect(Collectors.toList());
+    }
+
+    private Ads buildAds(Ads ads) {
+        return Optional.ofNullable(ads)
+                .map(this::insertImages)
+                .map(this::insertCategory)
+                .get();
     }
 
     private List<Ads> insertImages(List<Ads> ads) {
@@ -157,6 +171,13 @@ public class AdsServiceImpl implements AdsService {
                 .withAuthor(author)
                 .withImageIds(images)
                 .build();
+    }
 
+    private Ads insertCategory(Ads ads) {
+        AdsCategory category = adsCategoryDao.getByAds(ads);
+
+        return Ads.from(ads)
+                .withAdsCategory(category)
+                .build();
     }
 }
