@@ -19,6 +19,8 @@ import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.stereotype.Repository;
 import ru.uruydas.config.dao.jooq.JooqRecordMapperProvider;
 import ru.uruydas.config.dao.jooq.JooqTransactionProvider;
+import ru.uruydas.config.dao.jooq.mappers.AdsCategoryRecordMapper;
+import ru.uruydas.config.dao.jooq.mappers.AdsRecordMapper;
 import ru.uruydas.config.dao.jooq.mappers.CommentRecordMapper;
 import ru.uruydas.config.dao.jooq.mappers.ImageRecordMapper;
 import ru.uruydas.config.dao.jooq.mappers.NewsCategoryRecordMapper;
@@ -103,8 +105,9 @@ public class  DaoConfig {
                 newsRecordMapper(),
                 newsCategoryRecordMapper(),
                 commentRecordMapper(),
-                imageRecordMapper()
-        );
+                imageRecordMapper(),
+                adsRecordMapper(),
+                adsCategoryRecordMapper());
     }
 
     @Bean
@@ -140,5 +143,15 @@ public class  DaoConfig {
     @Bean
     public TransactionProvider transactionProvider() {
         return new JooqTransactionProvider();
+    }
+
+    @Bean
+    public AdsRecordMapper adsRecordMapper() {
+        return new AdsRecordMapper();
+    }
+    
+    @Bean
+    public AdsCategoryRecordMapper adsCategoryRecordMapper() {
+        return new AdsCategoryRecordMapper();
     }
 }

@@ -35,4 +35,12 @@ public final class Validation {
             throw new InvalidParamException("Range is invalid: " + lower + " is bigger than " + higher);
         }
     }
+
+    public static void isNotEmpty(String title) {
+        isNotNull(title);
+
+        if (title.isEmpty()) {
+            throw new InvalidParamException("Value is empty");
+        }
+    }
 }

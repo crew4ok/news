@@ -22,3 +22,8 @@
 22. Image thumbnails.
 23. Make Create* and Update* requests share the fields.
 24. Deal with duplication of user construction in NewsServiceImpl and CommentServiceImpl.
+25. Consider implementing some form of abstract dao.
+26. Provide consistent naming to all services' methods.
+27. Tests for VK auth and ads.
+28. User photo is not imported from VK profile.
+29. Consider usage of ModelMapper instead of custom mappers.

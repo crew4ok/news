@@ -2,6 +2,7 @@ package ru.uruydas.images.dao;
 
 import ru.uruydas.comments.model.Comment;
 import ru.uruydas.images.model.Image;
+import ru.uruydas.model.ads.Ads;
 import ru.uruydas.news.model.News;
 import ru.uruydas.users.model.User;
 
@@ -25,4 +26,8 @@ public interface ImageDao {
     void linkToUser(Image image, User user);
 
     Optional<Image> getByUser(User user);
+
+    void linkToAds(Image image, Ads ads, int ordering);
+
+    List<Image> getByAds(Ads ads);
 }

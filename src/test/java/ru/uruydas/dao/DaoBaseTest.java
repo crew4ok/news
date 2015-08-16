@@ -3,10 +3,15 @@ package ru.uruydas.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import ru.uruydas.ads.dao.AdsCategoryDao;
+import ru.uruydas.ads.dao.AdsDao;
 import ru.uruydas.comments.dao.CommentDao;
 import ru.uruydas.config.dao.DaoConfig;
 import ru.uruydas.dating.dao.DatingDao;
 import ru.uruydas.images.dao.ImageDao;
+import ru.uruydas.model.ads.Ads;
+import ru.uruydas.model.ads.AdsCategory;
+import ru.uruydas.model.ads.AdsType;
 import ru.uruydas.news.dao.NewsCategoryDao;
 import ru.uruydas.news.dao.NewsDao;
 import ru.uruydas.news.model.News;
@@ -44,6 +49,12 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
 
     @Autowired
     protected ImageDao imageDao;
+
+    @Autowired
+    protected AdsDao adsDao;
+
+    @Autowired
+    protected AdsCategoryDao adsCategoryDao;
 
     protected User defaultUser;
     protected NewsCategory defaultNewsCategory;
@@ -99,5 +110,21 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
         return User.fromUser(user)
                 .withPassword(null)
                 .build();
+    }
+
+    protected AdsCategory createDefaultAdsCategory() {
+        AdsCategory category = new AdsCategory("default category");
+        return adsCategoryDao.create(category);
+    }
+
+    protected Ads createDefaultAds(AdsCategory adsCategory, User author) {
+        Ads ads = Ads.builder()
+                .withTitle("title")
+                .withDescription("description")
+                .withAdsType(AdsType.BUY)
+                .withAuthor(author)
+                .withAdsCategory(adsCategory)
+                .build();
+        return adsDao.create(ads);
     }
 }

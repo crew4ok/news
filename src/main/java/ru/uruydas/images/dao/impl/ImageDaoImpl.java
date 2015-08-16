@@ -7,6 +7,7 @@ import ru.uruydas.comments.model.Comment;
 import ru.uruydas.common.dao.exception.NotFoundException;
 import ru.uruydas.images.dao.ImageDao;
 import ru.uruydas.images.model.Image;
+import ru.uruydas.model.ads.Ads;
 import ru.uruydas.news.model.News;
 import ru.uruydas.tables.records.ImagesRecord;
 import ru.uruydas.users.model.User;
@@ -104,5 +105,23 @@ public class ImageDaoImpl implements ImageDao {
 
         return Optional.ofNullable(imageRecord)
                 .map(r -> r.into(Image.class));
+    }
+
+    @Override
+    public void linkToAds(Image image, Ads ads, int ordering) {
+        ctx.update(IMAGES)
+                .set(IMAGES.ADS_ID, ads.getId())
+                .set(IMAGES.ORDERING, ordering)
+                .where(IMAGES.ID.equal(image.getId()))
+                .execute();
+    }
+
+    @Override
+    public List<Image> getByAds(Ads ads) {
+        return ctx.selectFrom(IMAGES)
+                .where(IMAGES.ADS_ID.equal(ads.getId()))
+                .orderBy(IMAGES.ORDERING.asc())
+                .fetch()
+                .into(Image.class);
     }
 }
