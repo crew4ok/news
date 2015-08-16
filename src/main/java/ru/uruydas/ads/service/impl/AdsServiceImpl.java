@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.uruydas.ads.dao.AdsCategoryDao;
 import ru.uruydas.ads.dao.AdsDao;
+import ru.uruydas.ads.model.Ads;
+import ru.uruydas.ads.model.AdsCategory;
 import ru.uruydas.ads.service.AdsService;
 import ru.uruydas.ads.service.exception.NotAnAuthorException;
 import ru.uruydas.common.util.Validation;
 import ru.uruydas.images.dao.ImageDao;
 import ru.uruydas.images.model.Image;
-import ru.uruydas.model.ads.Ads;
-import ru.uruydas.model.ads.AdsCategory;
 import ru.uruydas.users.model.User;
 import ru.uruydas.users.service.UserService;
 

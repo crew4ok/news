@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.uruydas.ads.model.Ads;
 import ru.uruydas.ads.service.AdsService;
 import ru.uruydas.ads.web.model.CreateAdsRequest;
 import ru.uruydas.ads.web.model.UpdateAdsRequest;
 import ru.uruydas.common.web.WebCommons;
 import ru.uruydas.common.web.exception.ValidationException;
-import ru.uruydas.model.ads.Ads;
 
 import javax.validation.Valid;
 import java.util.List;

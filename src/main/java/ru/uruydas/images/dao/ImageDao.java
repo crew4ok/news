@@ -1,8 +1,8 @@
 package ru.uruydas.images.dao;
 
+import ru.uruydas.ads.model.Ads;
 import ru.uruydas.comments.model.Comment;
 import ru.uruydas.images.model.Image;
-import ru.uruydas.model.ads.Ads;
 import ru.uruydas.news.model.News;
 import ru.uruydas.users.model.User;
 

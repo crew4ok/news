@@ -1,7 +1,7 @@
 package ru.uruydas.ads.web.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.uruydas.model.ads.AdsType;
+import ru.uruydas.ads.model.AdsType;
 
 import java.util.List;
 

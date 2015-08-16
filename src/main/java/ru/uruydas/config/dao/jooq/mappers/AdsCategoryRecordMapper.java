@@ -2,7 +2,7 @@ package ru.uruydas.config.dao.jooq.mappers;
 
 import org.jooq.Record;
 import org.jooq.RecordMapper;
-import ru.uruydas.model.ads.AdsCategory;
+import ru.uruydas.ads.model.AdsCategory;
 import ru.uruydas.tables.AdsCategoriesTable;
 
 import static ru.uruydas.tables.AdsCategoriesTable.ADS_CATEGORIES;

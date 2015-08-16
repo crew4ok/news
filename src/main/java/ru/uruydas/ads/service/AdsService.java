@@ -1,7 +1,7 @@
 package ru.uruydas.ads.service;
 
-import ru.uruydas.model.ads.Ads;
-import ru.uruydas.model.ads.AdsCategory;
+import ru.uruydas.ads.model.Ads;
+import ru.uruydas.ads.model.AdsCategory;
 
 import java.util.List;
 

@@ -9,9 +9,9 @@ import org.jooq.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.uruydas.ads.dao.AdsDao;
+import ru.uruydas.ads.model.Ads;
+import ru.uruydas.ads.model.AdsCategory;
 import ru.uruydas.common.dao.exception.NotFoundException;
-import ru.uruydas.model.ads.Ads;
-import ru.uruydas.model.ads.AdsCategory;
 
 import java.util.ArrayList;
 import java.util.Arrays;

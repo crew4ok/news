@@ -2,9 +2,9 @@ package ru.uruydas.ads.web.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.uruydas.model.ads.Ads;
-import ru.uruydas.model.ads.AdsCategory;
-import ru.uruydas.model.ads.AdsType;
+import ru.uruydas.ads.model.Ads;
+import ru.uruydas.ads.model.AdsCategory;
+import ru.uruydas.ads.model.AdsType;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;

@@ -2,8 +2,8 @@ package ru.uruydas.config.dao.jooq.mappers;
 
 import org.jooq.Record;
 import org.jooq.RecordMapper;
-import ru.uruydas.model.ads.Ads;
-import ru.uruydas.model.ads.AdsType;
+import ru.uruydas.ads.model.Ads;
+import ru.uruydas.ads.model.AdsType;
 import ru.uruydas.users.model.User;
 
 import java.sql.Timestamp;

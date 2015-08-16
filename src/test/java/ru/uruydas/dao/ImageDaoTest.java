@@ -2,11 +2,11 @@ package ru.uruydas.dao;
 
 import org.jooq.exception.DataAccessException;
 import org.testng.annotations.Test;
+import ru.uruydas.ads.model.Ads;
+import ru.uruydas.ads.model.AdsCategory;
 import ru.uruydas.comments.model.Comment;
 import ru.uruydas.common.dao.exception.NotFoundException;
 import ru.uruydas.images.model.Image;
-import ru.uruydas.model.ads.Ads;
-import ru.uruydas.model.ads.AdsCategory;
 import ru.uruydas.news.model.News;
 import ru.uruydas.news.model.NewsCategory;
 import ru.uruydas.users.model.User;

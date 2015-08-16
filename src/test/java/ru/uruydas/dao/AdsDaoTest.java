@@ -2,9 +2,9 @@ package ru.uruydas.dao;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import ru.uruydas.ads.model.Ads;
+import ru.uruydas.ads.model.AdsType;
 import ru.uruydas.common.dao.exception.NotFoundException;
-import ru.uruydas.model.ads.Ads;
-import ru.uruydas.model.ads.AdsType;
 
 import java.time.LocalDateTime;
 

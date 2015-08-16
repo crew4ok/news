@@ -1,7 +1,7 @@
 package ru.uruydas.dao;
 
 import org.testng.annotations.Test;
-import ru.uruydas.model.ads.AdsCategory;
+import ru.uruydas.ads.model.AdsCategory;
 
 import java.util.List;
 

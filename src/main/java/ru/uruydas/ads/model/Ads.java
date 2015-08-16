@@ -1,4 +1,4 @@
-package ru.uruydas.model.ads;
+package ru.uruydas.ads.model;
 
 import net.karneim.pojobuilder.GeneratePojoBuilder;
 import ru.uruydas.users.model.User;
