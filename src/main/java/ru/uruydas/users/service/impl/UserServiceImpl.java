@@ -12,6 +12,7 @@ import ru.uruydas.common.service.exception.UserAlreadyExistsException;
 import ru.uruydas.common.util.Validation;
 import ru.uruydas.images.dao.ImageDao;
 import ru.uruydas.images.model.Image;
+import ru.uruydas.rememberme.security.RememberMeAuthentication;
 import ru.uruydas.social.security.SocialNetworkUserAuthentication;
 import ru.uruydas.users.dao.UserDao;
 import ru.uruydas.users.model.User;
@@ -45,6 +46,10 @@ public class UserServiceImpl implements UserService {
 
             return userDao.getByUsername(username);
          } else if (authentication instanceof SocialNetworkUserAuthentication) {
+            Long userId = (Long) authentication.getPrincipal();
+
+            return userDao.getById(userId);
+        } else if (authentication instanceof RememberMeAuthentication) {
             Long userId = (Long) authentication.getPrincipal();
 
             return userDao.getById(userId);

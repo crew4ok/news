@@ -16,6 +16,8 @@ import org.springframework.security.web.authentication.Http403ForbiddenEntryPoin
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import ru.uruydas.rememberme.security.PersistentRememberMeServices;
+import ru.uruydas.rememberme.security.RememberMeAuthenticationProvider;
 import ru.uruydas.social.security.SocialAuthenticationFilter;
 import ru.uruydas.social.security.SocialNetworkAuthenticationProvider;
 import ru.uruydas.social.service.SocialNetworkUserService;
@@ -49,7 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usersByUsernameQuery("select username, password, 1 from users where username = ?")
                 .authoritiesByUsernameQuery("select ?, 'ROLE_USER'")
             .and()
-                .authenticationProvider(new SocialNetworkAuthenticationProvider(socialNetworkUserService));
+                .authenticationProvider(new SocialNetworkAuthenticationProvider(socialNetworkUserService))
+                .authenticationProvider(new RememberMeAuthenticationProvider());
     }
 
     @Override
@@ -73,6 +76,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .passwordParameter("password")
                     .failureHandler(authenticationFailureHandler())
                     .successHandler(authenticationSuccessHandler())
+                .and()
+                    .rememberMe()
+                    .rememberMeServices(persistentRememberMeServices())
                 .and()
                     .logout()
                     .logoutUrl(VERSION_PREFIX + "/logout")
@@ -112,5 +118,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public LogoutSuccessHandler logoutSuccessHandler() {
         return (req, resp, auth) -> resp.setStatus(HttpServletResponse.SC_OK);
+    }
+
+    @Bean
+    public PersistentRememberMeServices persistentRememberMeServices() {
+        return new PersistentRememberMeServices();
     }
 }
