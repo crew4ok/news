@@ -12,6 +12,7 @@ import ru.uruydas.ads.dao.AdsDao;
 import ru.uruydas.ads.model.Ads;
 import ru.uruydas.ads.model.AdsCategory;
 import ru.uruydas.common.dao.exception.NotFoundException;
+import ru.uruydas.users.model.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +60,25 @@ public class AdsDaoImpl implements AdsDao {
     public List<Ads> getFromIdByCategory(AdsCategory category, Long adsId, int count) {
         return select(
                 singletonList(ADS.ID.lessThan(adsId)),
+                Optional.of(count)
+        );
+    }
+
+    @Override
+    public List<Ads> getLatestUserAds(User currentUser, int count) {
+        return select(
+                singletonList(ADS.AUTHOR.equal(currentUser.getId())),
+                Optional.of(count)
+        );
+    }
+
+    @Override
+    public List<Ads> getFromIdUserAds(User currentUser, Long id, int count) {
+        return select(
+                Arrays.asList(
+                        ADS.AUTHOR.equal(currentUser.getId()),
+                        ADS.ID.lessThan(id)
+                ),
                 Optional.of(count)
         );
     }

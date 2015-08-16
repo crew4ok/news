@@ -70,6 +70,29 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
+    public List<Ads> getLatestUserAds(int count) {
+        Validation.isGreaterThanZero(count);
+
+        User currentUser = userService.getCurrentUser();
+
+        List<Ads> ads = adsDao.getLatestUserAds(currentUser, count);
+
+        return buildAds(ads);
+    }
+
+    @Override
+    public List<Ads> getFromIdUserAds(Long id, int count) {
+        Validation.isGreaterThanZero(id);
+        Validation.isGreaterThanZero(count);
+
+        User currentUser = userService.getCurrentUser();
+
+        List<Ads> ads = adsDao.getFromIdUserAds(currentUser, id, count);
+
+        return buildAds(ads);
+    }
+
+    @Override
     public List<Ads> searchByTitle(String title) {
         Validation.isNotEmpty(title);
 

@@ -72,6 +72,16 @@ public class AdsController {
         return adsService.getFromIdByCategory(categoryId, adsId, WebCommons.PAGING_COUNT);
     }
 
+    @RequestMapping(value = "/my", method = RequestMethod.GET)
+    public List<Ads> getLatestUserAds() {
+        return adsService.getLatestUserAds(WebCommons.PAGING_COUNT);
+    }
+
+    @RequestMapping(value = "/my", method = RequestMethod.GET, params = { "adsId" })
+    public List<Ads> getLatestUserAds(@RequestParam("adsId") Long adsId) {
+        return adsService.getFromIdUserAds(adsId, WebCommons.PAGING_COUNT);
+    }
+
     @RequestMapping(value = "/search/{title}", method = RequestMethod.GET)
     public List<Ads> searchByTitle(@PathVariable("title") String title) {
         return adsService.searchByTitle(title);

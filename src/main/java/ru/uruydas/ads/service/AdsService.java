@@ -14,6 +14,10 @@ public interface AdsService {
 
     List<Ads> getFromIdByCategory(Long categoryId, Long adsId, int count);
 
+    List<Ads> getLatestUserAds(int count);
+
+    List<Ads> getFromIdUserAds(Long id, int count);
+
     List<Ads> searchByTitle(String title);
 
     Ads getById(Long adsId);
