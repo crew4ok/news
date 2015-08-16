@@ -15,12 +15,12 @@ public class AdsCategoryDaoTest extends DaoBaseTest {
         AdsCategory category = this.adsCategoryDao.create(new AdsCategory(categoryName));
 
         String subCategoryName = "test subcategory";
-        AdsCategory subCategory = this.adsCategoryDao.create(new AdsCategory(subCategoryName, category));
+        AdsCategory subCategory = this.adsCategoryDao.create(new AdsCategory(subCategoryName, category.getId()));
 
         assertEquals(category.getName(), categoryName);
 
         assertEquals(subCategory.getName(), subCategoryName);
-        assertEquals(subCategory.getParentCategory(), category);
+        assertEquals(subCategory.getParentCategoryId(), category.getId());
     }
 
     @Test
@@ -29,12 +29,12 @@ public class AdsCategoryDaoTest extends DaoBaseTest {
         AdsCategory category = this.adsCategoryDao.create(new AdsCategory(categoryName));
 
         String subCategoryName = "test subcategory";
-        AdsCategory subCategory = this.adsCategoryDao.create(new AdsCategory(subCategoryName, category));
+        AdsCategory subCategory = this.adsCategoryDao.create(new AdsCategory(subCategoryName, category.getId()));
 
         subCategory = this.adsCategoryDao.getById(subCategory.getId());
 
         assertEquals(subCategory.getName(), subCategoryName);
-        assertEquals(subCategory.getParentCategory(), category);
+        assertEquals(subCategory.getParentCategoryId(), category.getId());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class AdsCategoryDaoTest extends DaoBaseTest {
         AdsCategory category = this.adsCategoryDao.create(new AdsCategory(categoryName));
 
         String subCategoryName = "test subcategory";
-        AdsCategory subCategory = this.adsCategoryDao.create(new AdsCategory(subCategoryName, category));
+        AdsCategory subCategory = this.adsCategoryDao.create(new AdsCategory(subCategoryName, category.getId()));
 
         List<AdsCategory> categories = this.adsCategoryDao.getAllCategories();
 
@@ -57,7 +57,7 @@ public class AdsCategoryDaoTest extends DaoBaseTest {
         AdsCategory category = this.adsCategoryDao.create(new AdsCategory(categoryName));
 
         String subCategoryName = "test subcategory";
-        AdsCategory subCategory = this.adsCategoryDao.create(new AdsCategory(subCategoryName, category));
+        AdsCategory subCategory = this.adsCategoryDao.create(new AdsCategory(subCategoryName, category.getId()));
 
         List<AdsCategory> categories = this.adsCategoryDao.getAllSubCategories(category);
 

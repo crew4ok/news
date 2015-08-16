@@ -9,13 +9,12 @@ import ru.uruydas.ads.dao.AdsCategoryDao;
 import ru.uruydas.ads.model.Ads;
 import ru.uruydas.ads.model.AdsCategory;
 import ru.uruydas.common.dao.exception.NotFoundException;
-import ru.uruydas.tables.AdsCategoriesTable;
+import ru.uruydas.tables.records.AdsCategoriesRecord;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static ru.uruydas.common.util.MapperUtils.fromNullable;
 import static ru.uruydas.tables.AdsCategoriesTable.ADS_CATEGORIES;
 import static ru.uruydas.tables.AdsTable.ADS;
 
@@ -27,14 +26,8 @@ public class AdsCategoryDaoImpl implements AdsCategoryDao {
 
     @Override
     public AdsCategory getById(Long id) {
-        AdsCategoriesTable t1 = ADS_CATEGORIES.as("t1");
-        AdsCategoriesTable t2 = ADS_CATEGORIES.as("t2");
-
-        Record record = ctx
-                .select(combineFields(t1.fields(), t2.fields()))
-                .from(t1)
-                .leftOuterJoin(t2).on(t1.PARENT_CATEGORY.equal(t2.ID))
-                .where(t1.ID.equal(id))
+        AdsCategoriesRecord record = ctx.selectFrom(ADS_CATEGORIES)
+                .where(ADS_CATEGORIES.ID.equal(id))
                 .fetchOne();
 
         if (record != null) {
@@ -46,14 +39,9 @@ public class AdsCategoryDaoImpl implements AdsCategoryDao {
 
     @Override
     public AdsCategory getByAds(Ads ads) {
-        AdsCategoriesTable t1 = ADS_CATEGORIES.as("t1");
-        AdsCategoriesTable t2 = ADS_CATEGORIES.as("t2");
-
-        Record record = ctx
-                .select(combineFields(t1.fields(), t2.fields()))
-                .from(ADS)
-                .join(t1).on(ADS.SUBCATEGORY_ID.equal(t1.ID))
-                .leftOuterJoin(t2).on(t1.PARENT_CATEGORY.equal(t2.ID))
+        Record record = ctx.select(ADS_CATEGORIES.fields())
+                .from(ADS_CATEGORIES)
+                .join(ADS).on(ADS.SUBCATEGORY_ID.equal(ADS_CATEGORIES.ID))
                 .where(ADS.ID.equal(ads.getId()))
                 .fetchOne();
 
@@ -82,14 +70,9 @@ public class AdsCategoryDaoImpl implements AdsCategoryDao {
 
     @Override
     public List<AdsCategory> getAllSubCategories(AdsCategory category) {
-        AdsCategoriesTable t1 = ADS_CATEGORIES.as("t1");
-        AdsCategoriesTable t2 = ADS_CATEGORIES.as("t2");
-
-        return ctx
-                .select(combineFields(t1.fields(), t2.fields()))
-                .from(t1)
-                .join(t2).on(t1.PARENT_CATEGORY.equal(t2.ID))
-                .orderBy(t1.NAME.asc())
+        return ctx.selectFrom(ADS_CATEGORIES)
+                .where(ADS_CATEGORIES.PARENT_CATEGORY.equal(category.getId()))
+                .orderBy(ADS_CATEGORIES.NAME.asc())
                 .fetch()
                 .into(AdsCategory.class);
     }
@@ -98,7 +81,7 @@ public class AdsCategoryDaoImpl implements AdsCategoryDao {
     public AdsCategory create(AdsCategory category) {
         Long id = ctx.insertInto(ADS_CATEGORIES)
                 .set(ADS_CATEGORIES.NAME, category.getName())
-                .set(ADS_CATEGORIES.PARENT_CATEGORY, fromNullable(category.getParentCategory(), AdsCategory::getId))
+                .set(ADS_CATEGORIES.PARENT_CATEGORY, category.getParentCategoryId())
                 .returning(ADS_CATEGORIES.ID)
                 .fetchOne()
                 .getId();

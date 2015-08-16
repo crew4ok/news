@@ -3,12 +3,12 @@ package ru.uruydas.ads.model;
 public class AdsCategory {
     private final Long id;
     private final String name;
-    private final AdsCategory parentCategory;
+    private final Long parentCategoryId;
 
-    public AdsCategory(Long id, String name, AdsCategory parentCategory) {
+    public AdsCategory(Long id, String name, Long parentCategoryId) {
         this.id = id;
         this.name = name;
-        this.parentCategory = parentCategory;
+        this.parentCategoryId = parentCategoryId;
     }
 
     public AdsCategory(String name) {
@@ -19,8 +19,8 @@ public class AdsCategory {
         this(id, null, null);
     }
 
-    public AdsCategory(String name, AdsCategory category) {
-        this(null, name, category);
+    public AdsCategory(String name, Long parentCategoryId) {
+        this(null, name, parentCategoryId);
     }
 
     public Long getId() {
@@ -31,8 +31,8 @@ public class AdsCategory {
         return name;
     }
 
-    public AdsCategory getParentCategory() {
-        return parentCategory;
+    public Long getParentCategoryId() {
+        return parentCategoryId;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class AdsCategory {
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        return !(parentCategory != null ? !parentCategory.equals(that.parentCategory) : that.parentCategory != null);
+        return !(parentCategoryId != null ? !parentCategoryId.equals(that.parentCategoryId) : that.parentCategoryId != null);
 
     }
 
@@ -52,7 +52,7 @@ public class AdsCategory {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (parentCategory != null ? parentCategory.hashCode() : 0);
+        result = 31 * result + (parentCategoryId != null ? parentCategoryId.hashCode() : 0);
         return result;
     }
 
@@ -61,7 +61,7 @@ public class AdsCategory {
         return "AdsCategory{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", parentCategory=" + parentCategory +
+                ", parentCategoryId=" + parentCategoryId +
                 '}';
     }
 }
