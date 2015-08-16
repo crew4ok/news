@@ -145,6 +145,10 @@ public class AdsServiceImpl implements AdsService {
             throw new NotAnAuthorException("Current user is not an author of the entity");
         }
 
+        newAds = Ads.from(newAds)
+                .withAuthor(currentUser)
+                .build();
+
         // update ads
         Ads updatedAds = Ads.from(adsDao.update(newAds))
                 .withImageIds(newAds.getImageIds())
