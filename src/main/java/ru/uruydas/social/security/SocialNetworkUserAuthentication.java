@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import ru.uruydas.model.social.SocialNetworkType;
+import ru.uruydas.social.model.SocialNetworkType;
 
 import java.util.Collections;
 

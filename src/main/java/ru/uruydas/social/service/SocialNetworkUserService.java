@@ -1,7 +1,7 @@
 package ru.uruydas.social.service;
 
-import ru.uruydas.model.social.SocialNetworkType;
-import ru.uruydas.model.users.User;
+import ru.uruydas.social.model.SocialNetworkType;
+import ru.uruydas.users.model.User;
 
 public interface SocialNetworkUserService {
 

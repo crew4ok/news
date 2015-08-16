@@ -1,6 +1,6 @@
 package ru.uruydas.social.model;
 
-import ru.uruydas.util.Validation;
+import ru.uruydas.common.util.Validation;
 
 public abstract class SocialNetworkUser {
 

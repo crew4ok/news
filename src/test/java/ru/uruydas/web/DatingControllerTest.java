@@ -1,8 +1,6 @@
 package ru.uruydas.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.mockito.Matchers;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,18 +13,18 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
-import ru.uruydas.config.WebConfig;
-import ru.uruydas.service.DatingService;
-import ru.uruydas.service.exception.PullUpTooFrequentException;
-import ru.uruydas.web.common.CommonExceptionHandler;
-import ru.uruydas.web.common.WebCommons;
-import ru.uruydas.web.user.DatingController;
-import ru.uruydas.web.user.model.UserFilterRequest;
-import ru.uruydas.model.users.AgeRange;
-import ru.uruydas.model.users.Gender;
-import ru.uruydas.model.users.GenderPreferences;
-import ru.uruydas.model.users.RelationsPreferences;
-import ru.uruydas.model.users.UserFilter;
+import ru.uruydas.common.service.exception.PullUpTooFrequentException;
+import ru.uruydas.common.web.CommonExceptionHandler;
+import ru.uruydas.common.web.WebCommons;
+import ru.uruydas.config.web.WebConfig;
+import ru.uruydas.dating.service.DatingService;
+import ru.uruydas.dating.web.DatingController;
+import ru.uruydas.users.model.AgeRange;
+import ru.uruydas.users.model.Gender;
+import ru.uruydas.users.model.GenderPreferences;
+import ru.uruydas.users.model.RelationsPreferences;
+import ru.uruydas.users.model.UserFilter;
+import ru.uruydas.users.web.model.UserFilterRequest;
 
 import java.time.LocalDateTime;
 

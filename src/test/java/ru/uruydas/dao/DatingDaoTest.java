@@ -1,12 +1,12 @@
 package ru.uruydas.dao;
 
 import org.testng.annotations.Test;
-import ru.uruydas.model.users.GenderPreferences;
-import ru.uruydas.model.users.RelationsPreferences;
-import ru.uruydas.model.users.User;
-import ru.uruydas.model.users.AgeRange;
-import ru.uruydas.model.users.Gender;
-import ru.uruydas.model.users.UserFilter;
+import ru.uruydas.users.model.AgeRange;
+import ru.uruydas.users.model.Gender;
+import ru.uruydas.users.model.GenderPreferences;
+import ru.uruydas.users.model.RelationsPreferences;
+import ru.uruydas.users.model.User;
+import ru.uruydas.users.model.UserFilter;
 
 import java.time.Clock;
 import java.time.LocalDateTime;

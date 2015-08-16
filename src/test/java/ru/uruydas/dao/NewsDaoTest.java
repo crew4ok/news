@@ -1,13 +1,12 @@
 package ru.uruydas.dao;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import ru.uruydas.model.news.News;
-import ru.uruydas.model.users.User;
-import ru.uruydas.dao.exception.NotFoundException;
-import ru.uruydas.model.news.NewsCategory;
-import ru.uruydas.model.subscriptions.Subscription;
+import ru.uruydas.common.dao.exception.NotFoundException;
+import ru.uruydas.news.model.News;
+import ru.uruydas.news.model.NewsCategory;
+import ru.uruydas.subscriptions.model.Subscription;
+import ru.uruydas.users.model.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;

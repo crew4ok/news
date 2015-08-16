@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-import ru.uruydas.model.social.SocialNetworkType;
 import ru.uruydas.social.impl.vk.model.VkResponseWrapper;
 import ru.uruydas.social.impl.vk.model.VkUser;
+import ru.uruydas.social.model.SocialNetworkType;
 import ru.uruydas.social.security.exception.SocialAuthenticationException;
 import ru.uruydas.social.service.SocialNetworkApi;
 

@@ -8,7 +8,7 @@
 
     <logger name="org.springframework" level="WARN"/>
 
-    <logger name="uruydas" level="DEBUG"/>
+    <logger name="ru.uruydas" level="DEBUG"/>
 
     <root level="info">
         <appender-ref ref="STDOUT"/>

@@ -7,14 +7,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
-import ru.uruydas.dao.ImageDao;
-import ru.uruydas.dao.UserDao;
-import ru.uruydas.model.users.GenderPreferences;
-import ru.uruydas.model.users.RelationsPreferences;
-import ru.uruydas.model.users.User;
-import ru.uruydas.service.exception.UserAlreadyExistsException;
-import ru.uruydas.service.impl.UserServiceImpl;
-import ru.uruydas.model.users.Gender;
+import ru.uruydas.common.service.exception.UserAlreadyExistsException;
+import ru.uruydas.images.dao.ImageDao;
+import ru.uruydas.users.dao.UserDao;
+import ru.uruydas.users.model.Gender;
+import ru.uruydas.users.model.GenderPreferences;
+import ru.uruydas.users.model.RelationsPreferences;
+import ru.uruydas.users.model.User;
+import ru.uruydas.users.service.UserService;
+import ru.uruydas.users.service.impl.UserServiceImpl;
 
 import java.time.LocalDateTime;
 

@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import ru.uruydas.config.ServiceConfig;
+import ru.uruydas.config.service.ServiceConfig;
 
 import static org.mockito.Mockito.mock;
 

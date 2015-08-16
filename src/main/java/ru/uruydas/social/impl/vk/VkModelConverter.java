@@ -1,12 +1,12 @@
 package ru.uruydas.social.impl.vk;
 
-import ru.uruydas.model.social.SocialNetworkType;
-import ru.uruydas.model.users.Gender;
-import ru.uruydas.model.users.User;
 import ru.uruydas.social.impl.vk.model.VkUser;
 import ru.uruydas.social.impl.vk.model.VkUserBirthdayVisibility;
+import ru.uruydas.social.model.SocialNetworkType;
 import ru.uruydas.social.model.SocialNetworkUser;
 import ru.uruydas.social.service.SocialNetworkModelConverter;
+import ru.uruydas.users.model.Gender;
+import ru.uruydas.users.model.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

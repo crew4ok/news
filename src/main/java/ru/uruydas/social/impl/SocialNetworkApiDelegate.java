@@ -1,6 +1,6 @@
 package ru.uruydas.social.impl;
 
-import ru.uruydas.model.social.SocialNetworkType;
+import ru.uruydas.social.model.SocialNetworkType;
 import ru.uruydas.social.model.SocialNetworkUser;
 import ru.uruydas.social.service.SocialNetworkApi;
 

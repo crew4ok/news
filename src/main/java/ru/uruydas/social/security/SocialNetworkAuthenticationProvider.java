@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import ru.uruydas.model.social.SocialNetworkType;
-import ru.uruydas.model.users.User;
+import ru.uruydas.social.model.SocialNetworkType;
 import ru.uruydas.social.service.SocialNetworkUserService;
+import ru.uruydas.users.model.User;
 
 public class SocialNetworkAuthenticationProvider implements AuthenticationProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(SocialNetworkAuthenticationProvider.class);

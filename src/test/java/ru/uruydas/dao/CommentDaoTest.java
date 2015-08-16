@@ -2,9 +2,9 @@ package ru.uruydas.dao;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import ru.uruydas.dao.exception.NotFoundException;
-import ru.uruydas.model.comments.Comment;
-import ru.uruydas.model.news.News;
+import ru.uruydas.comments.model.Comment;
+import ru.uruydas.common.dao.exception.NotFoundException;
+import ru.uruydas.news.model.News;
 
 import java.util.ArrayList;
 import java.util.List;

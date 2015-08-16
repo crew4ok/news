@@ -2,8 +2,8 @@ package ru.uruydas.dao;
 
 import org.jooq.exception.DataAccessException;
 import org.testng.annotations.Test;
-import ru.uruydas.model.users.User;
-import ru.uruydas.model.subscriptions.Subscription;
+import ru.uruydas.subscriptions.model.Subscription;
+import ru.uruydas.users.model.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;

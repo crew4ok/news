@@ -2,14 +2,14 @@ package ru.uruydas.social.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.uruydas.dao.UserDao;
-import ru.uruydas.model.social.SocialNetworkType;
-import ru.uruydas.model.users.User;
-import ru.uruydas.social.model.SocialNetworkUser;
-import ru.uruydas.social.service.SocialNetworkUserService;
 import ru.uruydas.social.dao.SocialNetworkUserDao;
+import ru.uruydas.social.model.SocialNetworkType;
+import ru.uruydas.social.model.SocialNetworkUser;
 import ru.uruydas.social.service.SocialNetworkApi;
 import ru.uruydas.social.service.SocialNetworkModelConverter;
+import ru.uruydas.social.service.SocialNetworkUserService;
+import ru.uruydas.users.dao.UserDao;
+import ru.uruydas.users.model.User;
 
 @Service
 public class SocialNetworkUserServiceImpl implements SocialNetworkUserService {

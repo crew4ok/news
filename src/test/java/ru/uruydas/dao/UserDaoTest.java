@@ -2,12 +2,12 @@ package ru.uruydas.dao;
 
 import org.jooq.exception.DataAccessException;
 import org.testng.annotations.Test;
-import ru.uruydas.model.users.GenderPreferences;
-import ru.uruydas.model.users.RelationsPreferences;
-import ru.uruydas.model.users.User;
-import ru.uruydas.dao.exception.NotFoundException;
-import ru.uruydas.dao.exception.UpdateFailedException;
-import ru.uruydas.model.users.Gender;
+import ru.uruydas.common.dao.exception.NotFoundException;
+import ru.uruydas.common.dao.exception.UpdateFailedException;
+import ru.uruydas.users.model.Gender;
+import ru.uruydas.users.model.GenderPreferences;
+import ru.uruydas.users.model.RelationsPreferences;
+import ru.uruydas.users.model.User;
 
 import java.time.LocalDateTime;
 
