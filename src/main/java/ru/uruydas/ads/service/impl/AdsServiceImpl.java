@@ -6,6 +6,7 @@ import ru.uruydas.ads.dao.AdsCategoryDao;
 import ru.uruydas.ads.dao.AdsDao;
 import ru.uruydas.ads.model.Ads;
 import ru.uruydas.ads.model.AdsCategory;
+import ru.uruydas.ads.model.AdsSearchCriteria;
 import ru.uruydas.ads.service.AdsService;
 import ru.uruydas.ads.service.exception.NotAnAuthorException;
 import ru.uruydas.common.util.Validation;
@@ -93,10 +94,12 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public List<Ads> searchByTitle(String title) {
-        Validation.isNotEmpty(title);
+    public List<Ads> search(AdsSearchCriteria searchCriteria, int count) {
+        Validation.isNotNull(searchCriteria);
+        Validation.isGreaterThanZero(count);
 
-        List<Ads> ads = adsDao.searchByTitle(title);
+        List<Ads> ads = adsDao.search(searchCriteria, count);
+
         return buildAds(ads);
     }
 

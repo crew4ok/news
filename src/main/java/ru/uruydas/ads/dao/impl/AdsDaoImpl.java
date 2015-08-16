@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import ru.uruydas.ads.dao.AdsDao;
 import ru.uruydas.ads.model.Ads;
 import ru.uruydas.ads.model.AdsCategory;
+import ru.uruydas.ads.model.AdsSearchCriteria;
 import ru.uruydas.common.dao.exception.NotFoundException;
 import ru.uruydas.users.model.User;
 
@@ -84,10 +85,28 @@ public class AdsDaoImpl implements AdsDao {
     }
 
     @Override
-    public List<Ads> searchByTitle(String title) {
+    public List<Ads> search(AdsSearchCriteria searchCriteria, int count) {
+        List<Condition> conditions = new ArrayList<>();
+
+        if (searchCriteria.getAdsId().isPresent()) {
+            conditions.add(ADS.ID.lessThan(searchCriteria.getAdsId().get()));
+        }
+
+        if (searchCriteria.getCategoryId().isPresent()) {
+            conditions.add(ADS.SUBCATEGORY_ID.equal(searchCriteria.getCategoryId().get()));
+        }
+
+        if (searchCriteria.getCity().isPresent()) {
+            conditions.add(ADS.CITY.contains(searchCriteria.getCity().get()));
+        }
+
+        if (searchCriteria.getTitle().isPresent()) {
+            conditions.add(ADS.TITLE.contains(searchCriteria.getTitle().get()));
+        }
+
         return select(
-                singletonList(ADS.TITLE.like(title + "%")),
-                Optional.<Integer>empty()
+                conditions,
+                Optional.of(count)
         );
     }
 

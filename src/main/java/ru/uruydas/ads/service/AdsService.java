@@ -2,6 +2,7 @@ package ru.uruydas.ads.service;
 
 import ru.uruydas.ads.model.Ads;
 import ru.uruydas.ads.model.AdsCategory;
+import ru.uruydas.ads.model.AdsSearchCriteria;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface AdsService {
 
     List<Ads> getFromIdUserAds(Long id, int count);
 
-    List<Ads> searchByTitle(String title);
+    List<Ads> search(AdsSearchCriteria searchCriteria, int count);
 
     Ads getById(Long adsId);
 
