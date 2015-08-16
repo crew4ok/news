@@ -6,6 +6,7 @@ import ru.uruydas.ads.dao.AdsCategoryDao;
 import ru.uruydas.ads.dao.AdsDao;
 import ru.uruydas.ads.model.Ads;
 import ru.uruydas.ads.model.AdsCategory;
+import ru.uruydas.ads.model.AdsSearchCriteria;
 import ru.uruydas.ads.service.AdsService;
 import ru.uruydas.ads.service.exception.NotAnAuthorException;
 import ru.uruydas.common.util.Validation;
@@ -70,10 +71,35 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public List<Ads> searchByTitle(String title) {
-        Validation.isNotEmpty(title);
+    public List<Ads> getLatestUserAds(int count) {
+        Validation.isGreaterThanZero(count);
 
-        List<Ads> ads = adsDao.searchByTitle(title);
+        User currentUser = userService.getCurrentUser();
+
+        List<Ads> ads = adsDao.getLatestUserAds(currentUser, count);
+
+        return buildAds(ads);
+    }
+
+    @Override
+    public List<Ads> getFromIdUserAds(Long id, int count) {
+        Validation.isGreaterThanZero(id);
+        Validation.isGreaterThanZero(count);
+
+        User currentUser = userService.getCurrentUser();
+
+        List<Ads> ads = adsDao.getFromIdUserAds(currentUser, id, count);
+
+        return buildAds(ads);
+    }
+
+    @Override
+    public List<Ads> search(AdsSearchCriteria searchCriteria, int count) {
+        Validation.isNotNull(searchCriteria);
+        Validation.isGreaterThanZero(count);
+
+        List<Ads> ads = adsDao.search(searchCriteria, count);
+
         return buildAds(ads);
     }
 
@@ -118,6 +144,10 @@ public class AdsServiceImpl implements AdsService {
         if (!oldAds.getAuthor().getId().equals(currentUser.getId())) {
             throw new NotAnAuthorException("Current user is not an author of the entity");
         }
+
+        newAds = Ads.from(newAds)
+                .withAuthor(currentUser)
+                .build();
 
         // update ads
         Ads updatedAds = Ads.from(adsDao.update(newAds))

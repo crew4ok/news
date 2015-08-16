@@ -2,6 +2,8 @@ package ru.uruydas.ads.dao;
 
 import ru.uruydas.ads.model.Ads;
 import ru.uruydas.ads.model.AdsCategory;
+import ru.uruydas.ads.model.AdsSearchCriteria;
+import ru.uruydas.users.model.User;
 
 import java.util.List;
 
@@ -13,7 +15,11 @@ public interface AdsDao {
 
     List<Ads> getFromIdByCategory(AdsCategory category, Long adsId, int count);
 
-    List<Ads> searchByTitle(String title);
+    List<Ads> getLatestUserAds(User currentUser, int count);
+
+    List<Ads> getFromIdUserAds(User currentUser, Long id, int count);
+
+    List<Ads> search(AdsSearchCriteria searchCriteria, int count);
 
     Ads create(Ads ads);
 
