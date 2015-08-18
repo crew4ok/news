@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static ru.uruydas.tables.AdsCategoriesTable.ADS_CATEGORIES;
@@ -52,7 +53,7 @@ public class AdsDaoImpl implements AdsDao {
     @Override
     public List<Ads> getLatestByCategory(AdsCategory category, int count) {
         return select(
-                emptyList(),
+                singletonList(ADS.SUBCATEGORY_ID.equal(category.getId())),
                 Optional.of(count)
         );
     }
@@ -60,7 +61,7 @@ public class AdsDaoImpl implements AdsDao {
     @Override
     public List<Ads> getFromIdByCategory(AdsCategory category, Long adsId, int count) {
         return select(
-                singletonList(ADS.ID.lessThan(adsId)),
+                asList(ADS.SUBCATEGORY_ID.equal(category.getId()), ADS.ID.lessThan(adsId)),
                 Optional.of(count)
         );
     }
@@ -76,7 +77,7 @@ public class AdsDaoImpl implements AdsDao {
     @Override
     public List<Ads> getFromIdUserAds(User currentUser, Long id, int count) {
         return select(
-                Arrays.asList(
+                asList(
                         ADS.AUTHOR.equal(currentUser.getId()),
                         ADS.ID.lessThan(id)
                 ),
@@ -139,8 +140,8 @@ public class AdsDaoImpl implements AdsDao {
     }
 
     private List<Field<?>> fields() {
-        List<Field<?>> fields = new ArrayList<>(Arrays.asList(ADS.fields()));
-        fields.addAll(Arrays.asList(USERS.fields()));
+        List<Field<?>> fields = new ArrayList<>(asList(ADS.fields()));
+        fields.addAll(asList(USERS.fields()));
         return fields;
     }
 
