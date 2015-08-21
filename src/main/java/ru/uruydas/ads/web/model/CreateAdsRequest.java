@@ -18,7 +18,7 @@ public class CreateAdsRequest {
     private final String description;
 
     @NotNull
-    private final AdsType adsType;
+    private final Long adsTypeId;
 
     private final String phone;
     private final String email;
@@ -35,7 +35,7 @@ public class CreateAdsRequest {
     @JsonCreator
     public CreateAdsRequest(@JsonProperty("title") String title,
                             @JsonProperty("description") String description,
-                            @JsonProperty("type") AdsType adsType,
+                            @JsonProperty("adsTypeId") Long adsTypeId,
                             @JsonProperty("phone") String phone,
                             @JsonProperty("email") String email,
                             @JsonProperty("city") String city,
@@ -44,7 +44,7 @@ public class CreateAdsRequest {
                             @JsonProperty("categoryId") Long categoryId) {
         this.title = title;
         this.description = description;
-        this.adsType = adsType;
+        this.adsTypeId = adsTypeId;
         this.phone = phone;
         this.email = email;
         this.city = city;
@@ -61,8 +61,8 @@ public class CreateAdsRequest {
         return description;
     }
 
-    public AdsType getAdsType() {
-        return adsType;
+    public Long getAdsTypeId() {
+        return adsTypeId;
     }
 
     public String getPhone() {
@@ -85,7 +85,7 @@ public class CreateAdsRequest {
         return imageIds;
     }
 
-    public Long getcategoryId() {
+    public Long getCategoryId() {
         return categoryId;
     }
 
@@ -93,7 +93,7 @@ public class CreateAdsRequest {
         return Ads.builder()
                 .withTitle(title)
                 .withDescription(description)
-                .withAdsType(adsType)
+                .withAdsType(new AdsType(adsTypeId))
                 .withPhone(phone)
                 .withEmail(email)
                 .withCity(city)

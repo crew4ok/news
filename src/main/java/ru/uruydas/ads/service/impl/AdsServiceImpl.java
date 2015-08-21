@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.uruydas.ads.dao.AdsCategoryDao;
 import ru.uruydas.ads.dao.AdsDao;
+import ru.uruydas.ads.dao.AdsTypeDao;
 import ru.uruydas.ads.model.Ads;
 import ru.uruydas.ads.model.AdsCategory;
 import ru.uruydas.ads.model.AdsSearchCriteria;
+import ru.uruydas.ads.model.AdsType;
 import ru.uruydas.ads.service.AdsService;
 import ru.uruydas.ads.service.exception.NotAnAuthorException;
 import ru.uruydas.common.util.Validation;
@@ -28,6 +30,9 @@ public class AdsServiceImpl implements AdsService {
     private AdsCategoryDao adsCategoryDao;
 
     @Autowired
+    private AdsTypeDao adsTypeDao;
+
+    @Autowired
     private ImageDao imageDao;
 
     @Autowired
@@ -45,6 +50,15 @@ public class AdsServiceImpl implements AdsService {
         AdsCategory category = adsCategoryDao.getById(categoryId);
 
         return adsCategoryDao.getAllSubCategories(category);
+    }
+
+    @Override
+    public List<AdsType> getTypesByCategory(Long categoryId) {
+        Validation.isGreaterThanZero(categoryId);
+
+        AdsCategory category = adsCategoryDao.getById(categoryId);
+
+        return adsTypeDao.getByCategory(category);
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import ru.uruydas.ads.dao.AdsCategoryDao;
 import ru.uruydas.ads.dao.AdsDao;
+import ru.uruydas.ads.dao.AdsTypeDao;
 import ru.uruydas.ads.model.Ads;
 import ru.uruydas.ads.model.AdsCategory;
 import ru.uruydas.ads.model.AdsType;
@@ -55,6 +56,9 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
 
     @Autowired
     protected AdsCategoryDao adsCategoryDao;
+
+    @Autowired
+    protected AdsTypeDao adsTypeDao;
 
     protected User defaultUser;
     protected NewsCategory defaultNewsCategory;
@@ -117,11 +121,16 @@ public abstract class DaoBaseTest extends AbstractTransactionalTestNGSpringConte
         return adsCategoryDao.create(category);
     }
 
-    protected Ads createDefaultAds(AdsCategory adsCategory, User author) {
+    protected AdsType createDefaultAdsType(AdsCategory adsCategory) {
+        AdsType adsType = new AdsType("default ads type", adsCategory.getId());
+        return adsTypeDao.create(adsType);
+    }
+
+    protected Ads createDefaultAds(AdsCategory adsCategory, AdsType adsType, User author) {
         Ads ads = Ads.builder()
                 .withTitle("title")
                 .withDescription("description")
-                .withAdsType(AdsType.BUY)
+                .withAdsType(adsType)
                 .withAuthor(author)
                 .withAdsCategory(adsCategory)
                 .build();

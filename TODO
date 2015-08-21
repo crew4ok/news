@@ -27,3 +27,4 @@
 27. Tests for VK auth and ads.
 28. User photo is not imported from VK profile.
 29. Consider usage of ModelMapper instead of custom mappers.
+30. Implement jooq converters for Java8 datetime API.

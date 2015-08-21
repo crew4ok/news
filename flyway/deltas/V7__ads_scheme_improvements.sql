@@ -1,0 +1,3 @@
+ALTER TABLE ads
+  ALTER COLUMN subcategory_id SET NOT NULL,
+  ALTER COLUMN author SET NOT NULL;

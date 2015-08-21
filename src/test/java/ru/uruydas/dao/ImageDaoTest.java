@@ -4,6 +4,7 @@ import org.jooq.exception.DataAccessException;
 import org.testng.annotations.Test;
 import ru.uruydas.ads.model.Ads;
 import ru.uruydas.ads.model.AdsCategory;
+import ru.uruydas.ads.model.AdsType;
 import ru.uruydas.comments.model.Comment;
 import ru.uruydas.common.dao.exception.NotFoundException;
 import ru.uruydas.images.model.Image;
@@ -324,8 +325,9 @@ public class ImageDaoTest extends DaoBaseTest {
     @Test
     public void linkToAds_hp() throws Exception {
         AdsCategory adsCategory = createDefaultAdsCategory();
+        AdsType adsType = createDefaultAdsType(adsCategory);
         User author = createDefaultUser();
-        Ads ads = createDefaultAds(adsCategory, author);
+        Ads ads = createDefaultAds(adsCategory, adsType, author);
 
         Image image = Image.builder()
                 .withContentType("contentType")

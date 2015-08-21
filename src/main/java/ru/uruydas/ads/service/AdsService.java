@@ -3,6 +3,7 @@ package ru.uruydas.ads.service;
 import ru.uruydas.ads.model.Ads;
 import ru.uruydas.ads.model.AdsCategory;
 import ru.uruydas.ads.model.AdsSearchCriteria;
+import ru.uruydas.ads.model.AdsType;
 
 import java.util.List;
 
@@ -10,6 +11,8 @@ public interface AdsService {
     List<AdsCategory> getAllCategories();
 
     List<AdsCategory> getAllSubCategories(Long categoryId);
+
+    List<AdsType> getTypesByCategory(Long categoryId);
 
     List<Ads> getLatestByCategory(Long categoryId, int count);
 

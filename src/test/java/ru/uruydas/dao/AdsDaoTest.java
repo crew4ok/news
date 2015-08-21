@@ -3,6 +3,7 @@ package ru.uruydas.dao;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.uruydas.ads.model.Ads;
+import ru.uruydas.ads.model.AdsCategory;
 import ru.uruydas.ads.model.AdsType;
 import ru.uruydas.common.dao.exception.NotFoundException;
 
@@ -21,18 +22,21 @@ public class AdsDaoTest extends DaoBaseTest {
 
     @Test
     public void create_hp() throws Exception {
+        AdsCategory defaultAdsCategory = createDefaultAdsCategory();
+        AdsType defaultAdsType = createDefaultAdsType(defaultAdsCategory);
+
         Ads ads = Ads.builder()
                 .withId(-1L)
                 .withTitle("title")
                 .withDescription("description")
-                .withAdsType(AdsType.BUY)
+                .withAdsType(defaultAdsType)
                 .withCreationDate(LocalDateTime.now().minusDays(1))
                 .withPhone("phone")
                 .withEmail("email")
                 .withCity("city")
                 .withPrice(100L)
                 .withAuthor(defaultUser)
-                .withAdsCategory(createDefaultAdsCategory())
+                .withAdsCategory(defaultAdsCategory)
                 .build();
 
         Ads createdAds = adsDao.create(ads);
@@ -52,16 +56,19 @@ public class AdsDaoTest extends DaoBaseTest {
 
     @Test
     public void getById_hp() throws Exception {
+        AdsCategory defaultAdsCategory = createDefaultAdsCategory();
+        AdsType defaultAdsType = createDefaultAdsType(defaultAdsCategory);
+
         Ads ads = Ads.builder()
                 .withTitle("title")
                 .withDescription("description")
-                .withAdsType(AdsType.BUY)
+                .withAdsType(defaultAdsType)
                 .withPhone("phone")
                 .withEmail("email")
                 .withCity("city")
                 .withPrice(100L)
                 .withAuthor(defaultUser)
-                .withAdsCategory(createDefaultAdsCategory())
+                .withAdsCategory(defaultAdsCategory)
                 .build();
 
         Ads createdAds = adsDao.create(ads);

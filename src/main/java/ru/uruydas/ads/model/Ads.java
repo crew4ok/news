@@ -115,7 +115,7 @@ public class Ads {
         if (id != null ? !id.equals(ads.id) : ads.id != null) return false;
         if (title != null ? !title.equals(ads.title) : ads.title != null) return false;
         if (description != null ? !description.equals(ads.description) : ads.description != null) return false;
-        if (adsType != ads.adsType) return false;
+        if (adsType != null ? !adsType.equals(ads.adsType) : ads.adsType != null) return false;
         if (creationDate != null ? !creationDate.equals(ads.creationDate) : ads.creationDate != null) return false;
         if (phone != null ? !phone.equals(ads.phone) : ads.phone != null) return false;
         if (email != null ? !email.equals(ads.email) : ads.email != null) return false;
@@ -124,7 +124,6 @@ public class Ads {
         if (imageIds != null ? !imageIds.equals(ads.imageIds) : ads.imageIds != null) return false;
         if (author != null ? !author.equals(ads.author) : ads.author != null) return false;
         return !(adsCategory != null ? !adsCategory.equals(ads.adsCategory) : ads.adsCategory != null);
-
     }
 
     @Override

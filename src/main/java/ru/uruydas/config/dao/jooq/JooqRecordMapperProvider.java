@@ -6,9 +6,11 @@ import org.jooq.RecordMapperProvider;
 import org.jooq.RecordType;
 import ru.uruydas.ads.model.Ads;
 import ru.uruydas.ads.model.AdsCategory;
+import ru.uruydas.ads.model.AdsType;
 import ru.uruydas.comments.model.Comment;
 import ru.uruydas.config.dao.jooq.mappers.AdsCategoryRecordMapper;
 import ru.uruydas.config.dao.jooq.mappers.AdsRecordMapper;
+import ru.uruydas.config.dao.jooq.mappers.AdsTypeRecordMapper;
 import ru.uruydas.config.dao.jooq.mappers.CommentRecordMapper;
 import ru.uruydas.config.dao.jooq.mappers.ImageRecordMapper;
 import ru.uruydas.config.dao.jooq.mappers.NewsCategoryRecordMapper;
@@ -33,6 +35,7 @@ public class JooqRecordMapperProvider implements RecordMapperProvider {
     private final ImageRecordMapper imageRecordMapper;
     private final AdsRecordMapper adsRecordMapper;
     private final AdsCategoryRecordMapper adsCategoryRecordMapper;
+    private final AdsTypeRecordMapper adsTypeRecordMapper;
     private final PersistentUserSessionRecordMapper persistentUserSessionRecordMapper;
 
     public JooqRecordMapperProvider(UserRecordMapper userRecordMapper,
@@ -43,6 +46,7 @@ public class JooqRecordMapperProvider implements RecordMapperProvider {
                                     ImageRecordMapper imageRecordMapper,
                                     AdsRecordMapper adsRecordMapper,
                                     AdsCategoryRecordMapper adsCategoryRecordMapper,
+                                    AdsTypeRecordMapper adsTypeRecordMapper,
                                     PersistentUserSessionRecordMapper persistentUserSessionRecordMapper) {
 
         this.userRecordMapper = userRecordMapper;
@@ -53,6 +57,7 @@ public class JooqRecordMapperProvider implements RecordMapperProvider {
         this.imageRecordMapper = imageRecordMapper;
         this.adsRecordMapper = adsRecordMapper;
         this.adsCategoryRecordMapper = adsCategoryRecordMapper;
+        this.adsTypeRecordMapper = adsTypeRecordMapper;
         this.persistentUserSessionRecordMapper = persistentUserSessionRecordMapper;
     }
 
@@ -89,6 +94,10 @@ public class JooqRecordMapperProvider implements RecordMapperProvider {
 
         if (AdsCategory.class.equals(type)) {
             return (RecordMapper<R, E>) adsCategoryRecordMapper;
+        }
+
+        if (AdsType.class.equals(type)) {
+            return (RecordMapper<R, E>) adsTypeRecordMapper;
         }
 
         if (PersistentUserSession.class.equals(type)) {

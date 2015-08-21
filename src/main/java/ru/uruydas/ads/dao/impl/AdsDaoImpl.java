@@ -16,7 +16,6 @@ import ru.uruydas.common.dao.exception.NotFoundException;
 import ru.uruydas.users.model.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -24,10 +23,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static ru.uruydas.tables.AdsCategoriesTable.ADS_CATEGORIES;
 import static ru.uruydas.tables.AdsTable.ADS;
+import static ru.uruydas.tables.AdsTypesTable.ADS_TYPES;
 import static ru.uruydas.tables.UsersTable.USERS;
 
 @Repository
@@ -123,8 +122,8 @@ public class AdsDaoImpl implements AdsDao {
         SelectOnConditionStep<Record> step = ctx.select(fields())
                 .from(ADS)
                 .join(ADS_CATEGORIES).on(ADS.SUBCATEGORY_ID.equal(ADS_CATEGORIES.ID))
-                .join(USERS).on(ADS.AUTHOR.equal(USERS.ID))
-                ;
+                .join(ADS_TYPES).on(ADS.ADS_TYPE.equal(ADS_TYPES.ID))
+                .join(USERS).on(ADS.AUTHOR.equal(USERS.ID));
 
         joins.forEach((t, c) -> step.join(t).on(c));
 
@@ -142,6 +141,7 @@ public class AdsDaoImpl implements AdsDao {
     private List<Field<?>> fields() {
         List<Field<?>> fields = new ArrayList<>(asList(ADS.fields()));
         fields.addAll(asList(USERS.fields()));
+        fields.addAll(asList(ADS_TYPES.fields()));
         return fields;
     }
 
@@ -172,7 +172,7 @@ public class AdsDaoImpl implements AdsDao {
         Map<Field<?>, Object> mapping = new HashMap<>();
         mapping.put(ADS.TITLE, ads.getTitle());
         mapping.put(ADS.DESCRIPTION, ads.getDescription());
-        mapping.put(ADS.ADS_TYPE, ads.getAdsType().name());
+        mapping.put(ADS.ADS_TYPE, ads.getAdsType().getId());
         mapping.put(ADS.PHONE, ads.getPhone());
         mapping.put(ADS.EMAIL, ads.getEmail());
         mapping.put(ADS.CITY, ads.getCity());

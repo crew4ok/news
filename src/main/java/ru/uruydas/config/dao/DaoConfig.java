@@ -21,6 +21,7 @@ import ru.uruydas.config.dao.jooq.JooqRecordMapperProvider;
 import ru.uruydas.config.dao.jooq.JooqTransactionProvider;
 import ru.uruydas.config.dao.jooq.mappers.AdsCategoryRecordMapper;
 import ru.uruydas.config.dao.jooq.mappers.AdsRecordMapper;
+import ru.uruydas.config.dao.jooq.mappers.AdsTypeRecordMapper;
 import ru.uruydas.config.dao.jooq.mappers.CommentRecordMapper;
 import ru.uruydas.config.dao.jooq.mappers.ImageRecordMapper;
 import ru.uruydas.config.dao.jooq.mappers.NewsCategoryRecordMapper;
@@ -109,6 +110,7 @@ public class  DaoConfig {
                 imageRecordMapper(),
                 adsRecordMapper(),
                 adsCategoryRecordMapper(),
+                adsTypeRecordMapper(),
                 persistentUserSessionRecordMapper());
     }
 
@@ -155,6 +157,11 @@ public class  DaoConfig {
     @Bean
     public AdsCategoryRecordMapper adsCategoryRecordMapper() {
         return new AdsCategoryRecordMapper();
+    }
+
+    @Bean
+    public AdsTypeRecordMapper adsTypeRecordMapper() {
+        return new AdsTypeRecordMapper();
     }
 
     @Bean
