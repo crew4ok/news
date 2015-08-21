@@ -1,4 +1,14 @@
 insert into ads_categories (name) values ('Авто');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id))
+  , ('Возьму в аренду', (select * from parent_id))
+  , ('Сдаю в аренду', (select * from parent_id))
+  , ('Другое', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Легковые авто', (select * from parent_id))
@@ -9,7 +19,14 @@ insert into ads_categories (name, parent_category) values
   , ('Инструменты и оборудование', (select * from parent_id))
   , ('Разное', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Аренда посуточно');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Возьму в аренду', (select * from parent_id))
+  , ('Сдаю в аренду', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Квартиры', (select * from parent_id))
@@ -18,7 +35,15 @@ insert into ads_categories (name, parent_category) values
   , ('Дачи', (select * from parent_id))
   , ('Коттеджи', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Бытовая электроника');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Аудиотехника', (select * from parent_id))
@@ -30,7 +55,16 @@ insert into ads_categories (name, parent_category) values
   , ('Комплектующие, аксессуары', (select * from parent_id))
   , ('Другая бытовая техника', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Вело, Мото');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id))
+  , ('Меняю', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Вело', (select * from parent_id))
@@ -38,7 +72,18 @@ insert into ads_categories (name, parent_category) values
   ,('Запчасти', (select * from parent_id))
   ,('Аксессуары', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Детский мир');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id))
+  , ('Ищу', (select * from parent_id))
+  , ('Предлагаю', (select * from parent_id))
+  , ('Другое', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Детское питание', (select * from parent_id))
@@ -46,7 +91,15 @@ insert into ads_categories (name, parent_category) values
   , ('Игрушки', (select * from parent_id))
   , ('Разное', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Дом и дача');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Бытовая химия', (select * from parent_id))
@@ -55,7 +108,22 @@ insert into ads_categories (name, parent_category) values
   , ('Растения', (select * from parent_id))
   , ('Разное', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Животные');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Отдам', (select * from parent_id))
+  , ('Возьму', (select * from parent_id))
+  , ('Обмен', (select * from parent_id))
+  , ('Оказываю услуги', (select * from parent_id))
+  , ('Воспользуюсь услугами', (select * from parent_id))
+  , ('Найдены животные', (select * from parent_id))
+  , ('Потеряны животные', (select * from parent_id))
+  , ('Другое', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Домашние животные', (select * from parent_id))
@@ -66,7 +134,16 @@ insert into ads_categories (name, parent_category) values
   , ('Товары, корм для животных', (select * from parent_id))
   , ('Разное', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Компьютеры и ПО');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id))
+  , ('Прокат', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Настольные компьютеры', (select * from parent_id))
@@ -79,26 +156,59 @@ insert into ads_categories (name, parent_category) values
   , ('Игры', (select * from parent_id))
   , ('Разное', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Красота');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Косметика, парфюмерия', (select * from parent_id))
   , ('БАДы', (select * from parent_id))
   , ('Товары для здоровья', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Мебель и интерьер');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Мебель', (select * from parent_id))
   , ('Предметы интерьера', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Находки, потери');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Ищу', (select * from parent_id))
+  , ('Найдено', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Утеряно', (select * from parent_id))
   , ('Найдено', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Недвижимость');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Возьму в аренду', (select * from parent_id))
+  , ('Сдаю в аренду', (select * from parent_id))
+  , ('Обмен', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Квартиры', (select * from parent_id))
@@ -110,7 +220,15 @@ insert into ads_categories (name, parent_category) values
   , ('Гаражи', (select * from parent_id))
   , ('Коммерческая недвижимость', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Одежда, Обувь, Аксессуары');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Мужская одежда', (select * from parent_id))
@@ -122,7 +240,16 @@ insert into ads_categories (name, parent_category) values
   , ('Аксессуары, галантерея', (select * from parent_id))
   , ('Головные уборы', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Оргтехника, Кацтовары');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id))
+  , ('Другое', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Оргтехника', (select * from parent_id))
@@ -130,20 +257,45 @@ insert into ads_categories (name, parent_category) values
   , ('Канцтовары', (select * from parent_id))
   , ('Разное', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Отдам, Возьму бесплатно, Обменяю');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Отдам бесплатно', (select * from parent_id))
+  , ('Возьму бесплатно', (select * from parent_id))
+  , ('Обмен', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Отдам бесплатно', (select * from parent_id))
   , ('Возьму бесплатно', (select * from parent_id))
   , ('Обмен', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Продукты питания');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('В розницу', (select * from parent_id))
   , ('Оптом', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Профессиональное оборудование');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id))
+  , ('Другое', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Для магазинов', (select * from parent_id))
@@ -152,7 +304,14 @@ insert into ads_categories (name, parent_category) values
   , ('Для предприятий бытовых услуг', (select * from parent_id))
   , ('Разное', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Работа');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Вакансии', (select * from parent_id))
+  , ('Резюме', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Топ-менеджмент, руководство', (select * from parent_id))
@@ -189,7 +348,15 @@ insert into ads_categories (name, parent_category) values
   , ('Юриспруденция', (select * from parent_id))
   , ('Другое', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Ремонт и строительство');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Стройматериалы', (select * from parent_id))
@@ -197,7 +364,16 @@ insert into ads_categories (name, parent_category) values
   , ('Инструменты и оборудование', (select * from parent_id))
   , ('Разное', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Спорт и здоровье');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id))
+  , ('Другое', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Спортинвентарь', (select * from parent_id))
@@ -207,7 +383,15 @@ insert into ads_categories (name, parent_category) values
   , ('Товары для здоровья', (select * from parent_id))
   , ('Разное', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Телефоны и связь');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Сотовые телефоны', (select * from parent_id))
@@ -216,14 +400,30 @@ insert into ads_categories (name, parent_category) values
   , ('Станционарные телефоны', (select * from parent_id))
   , ('SIM-карты', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Транспортировка, Услуги спецтехники');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Оказываю услуги', (select * from parent_id))
+  , ('Воспользуюсь услугами', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Пассажирские перевозки', (select * from parent_id))
   , ('Грузовые перевозки', (select * from parent_id))
   , ('Спецтехника', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Туризм, Охота, Рыбалка');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id))
+  , ('Другое', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Турснаряжение', (select * from parent_id))
@@ -231,13 +431,28 @@ insert into ads_categories (name, parent_category) values
   , ('Лодки, катера, моторы', (select * from parent_id))
   , ('Разное', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Украшения, Часы');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Украшения', (select * from parent_id))
   , ('Часы', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Услуги');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Оказываю услуги', (select * from parent_id))
+  , ('Воспользуюсь услугами', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Авто', (select * from parent_id))
@@ -271,7 +486,16 @@ insert into ads_categories (name, parent_category) values
   , ('Юридические услуги', (select * from parent_id))
   , ('Другое', (select * from parent_id));
 
+------------------------------------------------------------------------------------------------------------------------
 insert into ads_categories (name) values ('Хобби, Диски, Литература');
+
+with parent_id as (SELECT currval('ads_categories_id_seq'))
+insert into ads_types (name, category_id) values
+  ('Продаю', (select * from parent_id))
+  , ('Куплю', (select * from parent_id))
+  , ('Обмен', (select * from parent_id))
+  , ('Другое', (select * from parent_id));
+
 with parent_id as (SELECT currval('ads_categories_id_seq'))
 insert into ads_categories (name, parent_category) values
   ('Антиквариат, коллекционные издания', (select * from parent_id))
