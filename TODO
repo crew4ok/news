@@ -1,30 +1,24 @@
 1. Extract logic from NewsDaoImpl
 2. Write tests for controllers
-3. Remember me.
-4. Comments count in the news.
-5. Add length validation for username and password in registration.
-6. Fix getCurrentUser returning null after server restart.
-7. Fix news paging - use lesserThan instead of lesserThanOrEqualTo.
-8. Add new user fields to creation methods.
-9. Add user update method.
-10. Write thorough tests for UserDao.
-11. Move minimum pull up interval from DatingServiceImpl into property file or another settings source.
-12. Remove hardcoded DB schema name from DatingDaoImpl.
-13. Fix DatingDaoTest.getUsersByFilterFromDate_hp for CI env.
-14. Fix test annotations in controller tests (now junit annotations are used).
-15. Replace manual string conversion in DatingController.getUsersByFilterFromDate.
-16. Remove hardcoded AWS Region from ServiceConfig and hardcoded bucket name from S3ImageService
-17. Move pullUpDate parameter in DatingController.getUsersByFilterFromDate into the request POJO.
-18. Deal with duplication of image injection in DatingServiceImpl and UserServiceImpl.
-19. Consider more thorough testing of S3ImageService.
-20. Cleanup exception handlers in controllers.
-21. Move all the settings into JNDI.
-22. Image thumbnails.
-23. Make Create* and Update* requests share the fields.
-24. Deal with duplication of user construction in NewsServiceImpl and CommentServiceImpl.
-25. Consider implementing some form of abstract dao.
-26. Provide consistent naming to all services' methods.
-27. Tests for VK auth and ads.
-28. User photo is not imported from VK profile.
-29. Consider usage of ModelMapper instead of custom mappers.
-30. Implement jooq converters for Java8 datetime API.
+3. Comments count in the news.
+4. Add length validation for username and password in registration.
+5. Add new user fields to creation methods.
+6. Write thorough tests for UserDao.
+7. Move minimum pull up interval from DatingServiceImpl into property file or another settings source.
+8. Remove hardcoded DB schema name from DatingDaoImpl.
+9. Fix DatingDaoTest.getUsersByFilterFromDate_hp for CI env.
+10. Replace manual string conversion in DatingController.getUsersByFilterFromDate.
+11. Remove hardcoded AWS Region from ServiceConfig and hardcoded bucket name from S3ImageService
+12. Move pullUpDate parameter in DatingController.getUsersByFilterFromDate into the request POJO.
+13. Deal with duplication of image injection in DatingServiceImpl and UserServiceImpl.
+14. Consider more thorough testing of S3ImageService.
+15. Cleanup exception handlers in controllers.
+16. Image thumbnails.
+17. Make Create* and Update* requests share the fields.
+18. Deal with duplication of user construction in NewsServiceImpl and CommentServiceImpl.
+19. Consider implementing some form of abstract dao.
+20. Provide consistent naming to all services' methods.
+21. Tests for VK auth and ads.
+22. User photo is not imported from VK profile.
+23. Consider usage of ModelMapper instead of custom mappers.
+34. Implement jooq converters for Java8 datetime API.
