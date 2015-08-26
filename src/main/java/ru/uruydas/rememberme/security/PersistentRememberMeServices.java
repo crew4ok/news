@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class PersistentRememberMeServices implements RememberMeServices {
-    private static final String TOKEN_HEADER_NAME = "X-Remember-Me-Token";
+    public static final String TOKEN_HEADER_NAME = "X-Remember-Me-Token";
 
     @Autowired
     private PersistentUserSessionDao persistentUserSessionDao;
