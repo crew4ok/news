@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import ru.uruydas.rememberme.dao.PersistentUserSessionDao;
 import ru.uruydas.rememberme.model.PersistentUserSession;
 import ru.uruydas.users.model.User;
@@ -15,8 +16,8 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class PersistentRememberMeServices implements RememberMeServices {
-    public static final String TOKEN_HEADER_NAME = "X-Remember-Me-Token";
+public class PersistentRememberMeServices implements RememberMeServices, LogoutHandler {
+    private static final String TOKEN_HEADER_NAME = "X-Remember-Me-Token";
 
     @Autowired
     private PersistentUserSessionDao persistentUserSessionDao;
@@ -56,6 +57,15 @@ public class PersistentRememberMeServices implements RememberMeServices {
 
     @Override
     public void loginFail(HttpServletRequest request, HttpServletResponse response) {
+        String token = request.getHeader(TOKEN_HEADER_NAME);
+
+        if (token != null) {
+            persistentUserSessionDao.deleteByToken(token);
+        }
+    }
+
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication auth) {
         String token = request.getHeader(TOKEN_HEADER_NAME);
 
         if (token != null) {
