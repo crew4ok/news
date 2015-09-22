@@ -9,14 +9,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import ru.uruydas.rememberme.dao.PersistentUserSessionDao;
 import ru.uruydas.rememberme.security.PersistentRememberMeServices;
@@ -89,7 +87,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logout()
                     .logoutUrl(VERSION_PREFIX + "/logout")
                     .logoutSuccessHandler(logoutSuccessHandler())
-                .addLogoutHandler(logoutHandler())
                 .and()
                     .headers()
                     .cacheControl().disable();
@@ -125,18 +122,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public LogoutSuccessHandler logoutSuccessHandler() {
         return (req, resp, auth) -> resp.setStatus(HttpServletResponse.SC_OK);
-    }
-
-    @Bean
-    public LogoutHandler logoutHandler() {
-        return (req, resp, auth) -> {
-            SecurityContextHolder.getContext().setAuthentication(null);
-
-            String token = req.getHeader(PersistentRememberMeServices.TOKEN_HEADER_NAME);
-            if (token != null) {
-                persistentUserSessionDao.deleteByToken(token);
-            }
-        };
     }
 
     @Bean

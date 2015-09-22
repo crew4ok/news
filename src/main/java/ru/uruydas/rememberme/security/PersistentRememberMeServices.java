@@ -2,6 +2,7 @@ package ru.uruydas.rememberme.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -68,6 +69,7 @@ public class PersistentRememberMeServices implements RememberMeServices, LogoutH
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication auth) {
         String token = request.getHeader(TOKEN_HEADER_NAME);
 
+        SecurityContextHolder.getContext().setAuthentication(null);
         if (token != null) {
             persistentUserSessionDao.deleteByToken(token);
         }
