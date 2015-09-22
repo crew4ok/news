@@ -41,21 +41,26 @@ public class UserServiceImpl implements UserService {
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        User user = null;
         if (authentication instanceof UsernamePasswordAuthenticationToken) {
             String username = ((UserDetails) authentication.getPrincipal()).getUsername();
 
-            return userDao.getByUsername(username);
+            user = userDao.getByUsername(username);
          } else if (authentication instanceof SocialNetworkUserAuthentication) {
             Long userId = (Long) authentication.getPrincipal();
 
-            return userDao.getById(userId);
+            user = userDao.getById(userId);
         } else if (authentication instanceof RememberMeAuthentication) {
             Long userId = (Long) authentication.getPrincipal();
 
-            return userDao.getById(userId);
+            user = userDao.getById(userId);
         }
 
-        throw new RuntimeException("Unknown authentication class: " + authentication.getClass());
+        if (user != null) {
+            return constructUser(user);
+        } else {
+            throw new RuntimeException("Unknown authentication class: " + authentication.getClass());
+        }
     }
 
     @Override
