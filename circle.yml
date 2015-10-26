@@ -21,15 +21,3 @@ deployment:
             key_pattern: uruydas-{BUILD_NUM}
         region: eu-west-1
         deployment_group: uruydas
-  staging:
-    branch: /features.*/
-    codedeploy:
-      uruydas:
-        application_root: /
-        revision_location:
-          revision_type: S3
-          s3_location:
-            bucket: uruydas-deployment
-            key_pattern: uruydas-{BUILD_NUM}
-        region: eu-west-1
-        deployment_group: uruydas-dev
