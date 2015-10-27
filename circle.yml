@@ -20,4 +20,4 @@ deployment:
             bucket: uruydas-deployment
             key_pattern: uruydas-{BUILD_NUM}
         region: eu-west-1
-        deployment_group: uruydas
+        deployment_group: uruydas-prod
